@@ -1,1 +1,1 @@
-export const mainURl = 'https://stimuli.forebearpro.co.in/api/v1/';
+export const mainURl = 'https://stimuli.craftsweb.co.in/api/v1/';

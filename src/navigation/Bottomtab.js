@@ -52,7 +52,7 @@ const MyTabs = () => {
   return (
     <View style={{flex: 1, backgroundColor: '#191919'}}>
       <Tab.Navigator
-        initialRouteName="Home"
+        initialRouteName="home"
         screenOptions={{
           headerShown: false,
           tabBarShowLabel: false,

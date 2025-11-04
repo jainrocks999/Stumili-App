@@ -24,9 +24,9 @@ export const affirmations = [
         created_at: '2024-04-12T11:35:47.000000Z',
         updated_at: '2024-04-12T11:36:01.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/72/blender.mp3',
+          'https://stimuli.craftsweb.co.in/storage/app/public/72/blender.mp3',
         preview_url: '',
-        url: 'https://stimuli.forebearpro.co.in/storage/app/public/72/blender.mp3',
+        url: 'https://stimuli.craftsweb.co.in/storage/app/public/72/blender.mp3',
       },
     ],
     voice_two: [
@@ -50,9 +50,9 @@ export const affirmations = [
         created_at: '2024-04-12T11:35:49.000000Z',
         updated_at: '2024-04-12T11:36:01.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/73/circle.mp3',
+          'https://stimuli.craftsweb.co.in/storage/app/public/73/circle.mp3',
         preview_url: '',
-        url: 'https://stimuli.forebearpro.co.in/storage/app/public/73/circle.mp3',
+        url: 'https://stimuli.craftsweb.co.in/storage/app/public/73/circle.mp3',
       },
     ],
     voice_three: [
@@ -76,9 +76,9 @@ export const affirmations = [
         created_at: '2024-04-12T11:35:53.000000Z',
         updated_at: '2024-04-12T11:36:01.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/74/blender.mp3',
+          'https://stimuli.craftsweb.co.in/storage/app/public/74/blender.mp3',
         preview_url: '',
-        url: 'https://stimuli.forebearpro.co.in/storage/app/public/74/blender.mp3',
+        url: 'https://stimuli.craftsweb.co.in/storage/app/public/74/blender.mp3',
       },
     ],
     voice_four: [
@@ -102,9 +102,9 @@ export const affirmations = [
         created_at: '2024-04-12T11:35:57.000000Z',
         updated_at: '2024-04-12T11:36:01.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/75/circle.mp3',
+          'https://stimuli.craftsweb.co.in/storage/app/public/75/circle.mp3',
         preview_url: '',
-        url: 'https://stimuli.forebearpro.co.in/storage/app/public/75/circle.mp3',
+        url: 'https://stimuli.craftsweb.co.in/storage/app/public/75/circle.mp3',
       },
     ],
     status: '1',
@@ -143,7 +143,7 @@ export const affirmations = [
         created_at: '2024-04-12T11:35:47.000000Z',
         updated_at: '2024-04-12T11:36:01.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/72/blender.mp3',
+          'https://stimuli.craftsweb.co.in/storage/app/public/72/blender.mp3',
         preview_url: '',
       },
       {
@@ -166,7 +166,7 @@ export const affirmations = [
         created_at: '2024-04-12T11:35:49.000000Z',
         updated_at: '2024-04-12T11:36:01.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/73/circle.mp3',
+          'https://stimuli.craftsweb.co.in/storage/app/public/73/circle.mp3',
         preview_url: '',
       },
       {
@@ -189,7 +189,7 @@ export const affirmations = [
         created_at: '2024-04-12T11:35:53.000000Z',
         updated_at: '2024-04-12T11:36:01.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/74/blender.mp3',
+          'https://stimuli.craftsweb.co.in/storage/app/public/74/blender.mp3',
         preview_url: '',
       },
       {
@@ -212,7 +212,7 @@ export const affirmations = [
         created_at: '2024-04-12T11:35:57.000000Z',
         updated_at: '2024-04-12T11:36:01.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/75/circle.mp3',
+          'https://stimuli.craftsweb.co.in/storage/app/public/75/circle.mp3',
         preview_url: '',
       },
     ],

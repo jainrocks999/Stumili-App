@@ -26,9 +26,9 @@ const affimations = {
           created_at: '2024-04-12T11:35:47.000000Z',
           updated_at: '2024-05-17T13:53:59.000000Z',
           original_url:
-            'https://stimuli.forebearpro.co.in/storage/app/public/72/blender.mp3',
+            'https://stimuli.craftsweb.co.in/storage/app/public/72/blender.mp3',
           preview_url: '',
-          url: 'https://stimuli.forebearpro.co.in/storage/app/public/72/blender.mp3',
+          url: 'https://stimuli.craftsweb.co.in/storage/app/public/72/blender.mp3',
         },
       ],
       voice_two: [
@@ -52,9 +52,9 @@ const affimations = {
           created_at: '2024-04-12T11:35:49.000000Z',
           updated_at: '2024-05-17T13:53:59.000000Z',
           original_url:
-            'https://stimuli.forebearpro.co.in/storage/app/public/73/circle.mp3',
+            'https://stimuli.craftsweb.co.in/storage/app/public/73/circle.mp3',
           preview_url: '',
-          url: 'https://stimuli.forebearpro.co.in/storage/app/public/73/circle.mp3',
+          url: 'https://stimuli.craftsweb.co.in/storage/app/public/73/circle.mp3',
         },
       ],
       voice_three: [
@@ -78,9 +78,9 @@ const affimations = {
           created_at: '2024-04-12T11:35:53.000000Z',
           updated_at: '2024-05-17T13:53:59.000000Z',
           original_url:
-            'https://stimuli.forebearpro.co.in/storage/app/public/74/blender.mp3',
+            'https://stimuli.craftsweb.co.in/storage/app/public/74/blender.mp3',
           preview_url: '',
-          url: 'https://stimuli.forebearpro.co.in/storage/app/public/74/blender.mp3',
+          url: 'https://stimuli.craftsweb.co.in/storage/app/public/74/blender.mp3',
         },
       ],
       voice_four: [
@@ -104,9 +104,9 @@ const affimations = {
           created_at: '2024-04-12T11:35:57.000000Z',
           updated_at: '2024-05-17T13:53:59.000000Z',
           original_url:
-            'https://stimuli.forebearpro.co.in/storage/app/public/75/circle.mp3',
+            'https://stimuli.craftsweb.co.in/storage/app/public/75/circle.mp3',
           preview_url: '',
-          url: 'https://stimuli.forebearpro.co.in/storage/app/public/75/circle.mp3',
+          url: 'https://stimuli.craftsweb.co.in/storage/app/public/75/circle.mp3',
         },
       ],
       status: '1',
@@ -150,7 +150,7 @@ const affimations = {
           created_at: '2024-04-12T11:35:47.000000Z',
           updated_at: '2024-05-17T13:53:59.000000Z',
           original_url:
-            'https://stimuli.forebearpro.co.in/storage/app/public/72/blender.mp3',
+            'https://stimuli.craftsweb.co.in/storage/app/public/72/blender.mp3',
           preview_url: '',
         },
         {
@@ -173,7 +173,7 @@ const affimations = {
           created_at: '2024-04-12T11:35:49.000000Z',
           updated_at: '2024-05-17T13:53:59.000000Z',
           original_url:
-            'https://stimuli.forebearpro.co.in/storage/app/public/73/circle.mp3',
+            'https://stimuli.craftsweb.co.in/storage/app/public/73/circle.mp3',
           preview_url: '',
         },
         {
@@ -196,7 +196,7 @@ const affimations = {
           created_at: '2024-04-12T11:35:53.000000Z',
           updated_at: '2024-05-17T13:53:59.000000Z',
           original_url:
-            'https://stimuli.forebearpro.co.in/storage/app/public/74/blender.mp3',
+            'https://stimuli.craftsweb.co.in/storage/app/public/74/blender.mp3',
           preview_url: '',
         },
         {
@@ -219,7 +219,7 @@ const affimations = {
           created_at: '2024-04-12T11:35:57.000000Z',
           updated_at: '2024-05-17T13:53:59.000000Z',
           original_url:
-            'https://stimuli.forebearpro.co.in/storage/app/public/75/circle.mp3',
+            'https://stimuli.craftsweb.co.in/storage/app/public/75/circle.mp3',
           preview_url: '',
         },
       ],
@@ -648,9 +648,9 @@ const affimations = {
           created_at: '2024-05-01T07:24:46.000000Z',
           updated_at: '2024-05-01T07:25:16.000000Z',
           original_url:
-            'https://stimuli.forebearpro.co.in/storage/app/public/100/1714547844703qkqetrfg-voicemaker.in-speech.mp3',
+            'https://stimuli.craftsweb.co.in/storage/app/public/100/1714547844703qkqetrfg-voicemaker.in-speech.mp3',
           preview_url: '',
-          url: 'https://stimuli.forebearpro.co.in/storage/app/public/100/1714547844703qkqetrfg-voicemaker.in-speech.mp3',
+          url: 'https://stimuli.craftsweb.co.in/storage/app/public/100/1714547844703qkqetrfg-voicemaker.in-speech.mp3',
         },
       ],
       voice_two: [],
@@ -675,9 +675,9 @@ const affimations = {
           created_at: '2024-05-01T07:25:13.000000Z',
           updated_at: '2024-05-01T07:25:16.000000Z',
           original_url:
-            'https://stimuli.forebearpro.co.in/storage/app/public/101/मुझे-खुद-पर-विश्वास-.m4a',
+            'https://stimuli.craftsweb.co.in/storage/app/public/101/मुझे-खुद-पर-विश्वास-.m4a',
           preview_url: '',
-          url: 'https://stimuli.forebearpro.co.in/storage/app/public/101/मुझे-खुद-पर-विश्वास-.m4a',
+          url: 'https://stimuli.craftsweb.co.in/storage/app/public/101/मुझे-खुद-पर-विश्वास-.m4a',
         },
       ],
       voice_four: [],
@@ -722,7 +722,7 @@ const affimations = {
           created_at: '2024-05-01T07:24:46.000000Z',
           updated_at: '2024-05-01T07:25:16.000000Z',
           original_url:
-            'https://stimuli.forebearpro.co.in/storage/app/public/100/1714547844703qkqetrfg-voicemaker.in-speech.mp3',
+            'https://stimuli.craftsweb.co.in/storage/app/public/100/1714547844703qkqetrfg-voicemaker.in-speech.mp3',
           preview_url: '',
         },
         {
@@ -745,7 +745,7 @@ const affimations = {
           created_at: '2024-05-01T07:25:13.000000Z',
           updated_at: '2024-05-01T07:25:16.000000Z',
           original_url:
-            'https://stimuli.forebearpro.co.in/storage/app/public/101/मुझे-खुद-पर-विश्वास-.m4a',
+            'https://stimuli.craftsweb.co.in/storage/app/public/101/मुझे-खुद-पर-विश्वास-.m4a',
           preview_url: '',
         },
       ],

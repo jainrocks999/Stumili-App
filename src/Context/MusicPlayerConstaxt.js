@@ -1,7 +1,7 @@
 import React, {createContext, useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Tts from 'react-native-tts';
-import TrackPlayer from 'react-native-track-player';
+// import TrackPlayer from 'react-native-track-player';
 import {Alert} from 'react-native';
 import affirmations from './affirmation';
 
@@ -62,17 +62,17 @@ export const MusicPlayerProvider = ({children}) => {
           setProgress(100);
           setIsPaused(true);
           Tts.stop();
-          await TrackPlayer.pause();
+          // await TrackPlayer.pause();
         }
       } else {
         Tts.pause();
-        await TrackPlayer.pause();
+        // await TrackPlayer.pause();
       }
     }, 1000);
 
     if (!isPaused) {
       readText(affirmations[visibleIndex].affirmation_text);
-      TrackPlayer.play();
+      // TrackPlayer.play();
     }
 
     return () => {
@@ -113,13 +113,14 @@ export const MusicPlayerProvider = ({children}) => {
     };
 
     Tts.getInitStatus().then(initTts);
-    Tts.addEventListener('tts-finish', handleTTSFinish);
+   const remove= Tts.addEventListener('tts-finish', handleTTSFinish);
     Tts.setDefaultRate(speechRate);
     Tts.setDefaultPitch(speechPitch);
-    TrackPlayer.setVolume(0.5);
+    // TrackPlayer.setVolume(0.5);
 
     return () => {
-      Tts.removeEventListener('tts-finish', handleTTSFinish);
+      remove()
+      // Tts.removeEventListener('tts-finish', handleTTSFinish);
     };
   }, []);
 
@@ -157,21 +158,21 @@ export const MusicPlayerProvider = ({children}) => {
     const isSetup = await setupPlayer();
     if (isSetup) {
       const track = {
-        url: 'https://stimuli.forebearpro.co.in/storage/app/public/98/BGFOUR.mp3',
+        url: 'https://stimuli.craftsweb.co.in/storage/app/public/98/BGFOUR.mp3',
         title: 'Titel',
         artist: 'Innertune',
         artwork: `asset:/files/backOne.wav`,
         duration: null,
       };
-      await TrackPlayer.reset();
-      await TrackPlayer.add(sound?.music ?? track);
-      await TrackPlayer.setRepeatMode(1);
-      await TrackPlayer.play();
+      // await TrackPlayer.reset();
+      // await TrackPlayer.add(sound?.music ?? track);
+      // await TrackPlayer.setRepeatMode(1);
+      // await TrackPlayer.play();
     }
   };
 
   const setVolume = async value => {
-    await TrackPlayer.setVolume(value);
+    // await TrackPlayer.setVolume(value);
   };
 
   const updateSpeechRate = async rate => {

@@ -73,7 +73,7 @@
 //     let config = {
 //       method: 'post',
 //       maxBodyLength: Infinity,
-//       url: 'https://stimuli.forebearpro.co.in/api/v1/login',
+//       url: 'https://stimuli.craftsweb.co.in/api/v1/login',
 //       headers: {
 //         'Content-Type': 'multipart/form-data',
 //         'Accept': 'application/json'
@@ -223,7 +223,7 @@ const Login = () => {
     console.log('Debug Object:', debugData);
     try {
       const response = await axios.post(
-        'https://stimuli.forebearpro.co.in/api/v1/login',
+        'https://stimuli.craftsweb.co.in/api/v1/login',
         formData,
         {
           headers: {

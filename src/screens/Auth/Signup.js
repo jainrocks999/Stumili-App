@@ -117,7 +117,7 @@ const Signup = () => {
 
     let config = {
       method: 'post',
-      url: 'https://stimuli.forebearpro.co.in/api/v1/registration',
+      url: 'https://stimuli.craftsweb.co.in/api/v1/registration',
       headers: {
         'Content-Type': 'multipart/form-data',
         'Accept': 'application/json',
@@ -141,6 +141,8 @@ const Signup = () => {
         if (error.response?.data?.errors) {
           Toast.show(error.response.data.errors.join('\n')); 
         } else {
+          console.log("this is the eror",error);
+          
           Toast.show('Signup error! Please try again.');
         }
       });

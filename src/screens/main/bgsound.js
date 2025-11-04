@@ -29,13 +29,13 @@
         created_at: '2024-03-21T10:59:20.000000Z',
         updated_at: '2024-04-30T10:04:08.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/7/gugsali8_happy-faces_625x300_20_March_23.png',
+          'https://stimuli.craftsweb.co.in/storage/app/public/7/gugsali8_happy-faces_625x300_20_March_23.png',
         preview_url: '',
-        url: 'https://stimuli.forebearpro.co.in/storage/app/public/7/gugsali8_happy-faces_625x300_20_March_23.png',
+        url: 'https://stimuli.craftsweb.co.in/storage/app/public/7/gugsali8_happy-faces_625x300_20_March_23.png',
         thumbnail:
-          'https://stimuli.forebearpro.co.in/storage/app/public/7/conversions/gugsali8_happy-faces_625x300_20_March_23-thumbnail.jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/7/conversions/gugsali8_happy-faces_625x300_20_March_23-thumbnail.jpg',
         preview_thumbnail:
-          'https://stimuli.forebearpro.co.in/storage/app/public/7/conversions/gugsali8_happy-faces_625x300_20_March_23-preview_thumbnail.jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/7/conversions/gugsali8_happy-faces_625x300_20_March_23-preview_thumbnail.jpg',
       },
     ],
     media: [
@@ -59,7 +59,7 @@
         created_at: '2024-03-21T10:59:20.000000Z',
         updated_at: '2024-04-30T10:04:08.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/7/gugsali8_happy-faces_625x300_20_March_23.png',
+          'https://stimuli.craftsweb.co.in/storage/app/public/7/gugsali8_happy-faces_625x300_20_March_23.png',
         preview_url: '',
       },
       {
@@ -82,7 +82,7 @@
         created_at: '2024-04-30T10:04:05.000000Z',
         updated_at: '2024-04-30T10:04:08.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/85/backOne.mp3',
+          'https://stimuli.craftsweb.co.in/storage/app/public/85/backOne.mp3',
         preview_url: '',
       },
     ],
@@ -117,13 +117,13 @@
         created_at: '2024-03-21T11:00:10.000000Z',
         updated_at: '2024-04-30T11:58:36.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/8/hollybood1.jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/8/hollybood1.jpg',
         preview_url: '',
-        url: 'https://stimuli.forebearpro.co.in/storage/app/public/8/hollybood1.jpg',
+        url: 'https://stimuli.craftsweb.co.in/storage/app/public/8/hollybood1.jpg',
         thumbnail:
-          'https://stimuli.forebearpro.co.in/storage/app/public/8/conversions/hollybood1-thumbnail.jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/8/conversions/hollybood1-thumbnail.jpg',
         preview_thumbnail:
-          'https://stimuli.forebearpro.co.in/storage/app/public/8/conversions/hollybood1-preview_thumbnail.jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/8/conversions/hollybood1-preview_thumbnail.jpg',
       },
     ],
     media: [
@@ -147,7 +147,7 @@
         created_at: '2024-03-21T11:00:10.000000Z',
         updated_at: '2024-04-30T11:58:36.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/8/hollybood1.jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/8/hollybood1.jpg',
         preview_url: '',
       },
       {
@@ -170,7 +170,7 @@
         created_at: '2024-04-30T11:58:32.000000Z',
         updated_at: '2024-04-30T11:58:36.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/98/BGFOUR.mp3',
+          'https://stimuli.craftsweb.co.in/storage/app/public/98/BGFOUR.mp3',
         preview_url: '',
       },
     ],
@@ -205,13 +205,13 @@
         created_at: '2024-04-30T10:12:54.000000Z',
         updated_at: '2024-04-30T11:56:51.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/87/download-(1).png',
+          'https://stimuli.craftsweb.co.in/storage/app/public/87/download-(1).png',
         preview_url: '',
-        url: 'https://stimuli.forebearpro.co.in/storage/app/public/87/download-(1).png',
+        url: 'https://stimuli.craftsweb.co.in/storage/app/public/87/download-(1).png',
         thumbnail:
-          'https://stimuli.forebearpro.co.in/storage/app/public/87/conversions/download-(1)-thumbnail.jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/87/conversions/download-(1)-thumbnail.jpg',
         preview_thumbnail:
-          'https://stimuli.forebearpro.co.in/storage/app/public/87/conversions/download-(1)-preview_thumbnail.jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/87/conversions/download-(1)-preview_thumbnail.jpg',
       },
     ],
     media: [
@@ -235,7 +235,7 @@
         created_at: '2024-04-30T10:12:54.000000Z',
         updated_at: '2024-04-30T11:56:51.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/87/download-(1).png',
+          'https://stimuli.craftsweb.co.in/storage/app/public/87/download-(1).png',
         preview_url: '',
       },
       {
@@ -258,7 +258,7 @@
         created_at: '2024-04-30T11:56:47.000000Z',
         updated_at: '2024-04-30T11:56:51.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/96/BGTHREE.mp3',
+          'https://stimuli.craftsweb.co.in/storage/app/public/96/BGTHREE.mp3',
         preview_url: '',
       },
     ],
@@ -293,13 +293,13 @@
         created_at: '2024-04-30T10:16:19.000000Z',
         updated_at: '2024-04-30T11:55:59.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/89/download-(8).jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/89/download-(8).jpg',
         preview_url: '',
-        url: 'https://stimuli.forebearpro.co.in/storage/app/public/89/download-(8).jpg',
+        url: 'https://stimuli.craftsweb.co.in/storage/app/public/89/download-(8).jpg',
         thumbnail:
-          'https://stimuli.forebearpro.co.in/storage/app/public/89/conversions/download-(8)-thumbnail.jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/89/conversions/download-(8)-thumbnail.jpg',
         preview_thumbnail:
-          'https://stimuli.forebearpro.co.in/storage/app/public/89/conversions/download-(8)-preview_thumbnail.jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/89/conversions/download-(8)-preview_thumbnail.jpg',
       },
     ],
     media: [
@@ -323,7 +323,7 @@
         created_at: '2024-04-30T10:16:19.000000Z',
         updated_at: '2024-04-30T11:55:59.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/89/download-(8).jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/89/download-(8).jpg',
         preview_url: '',
       },
       {
@@ -346,7 +346,7 @@
         created_at: '2024-04-30T11:55:54.000000Z',
         updated_at: '2024-04-30T11:55:59.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/95/BGTWO.mp3',
+          'https://stimuli.craftsweb.co.in/storage/app/public/95/BGTWO.mp3',
         preview_url: '',
       },
     ],
@@ -381,13 +381,13 @@
         created_at: '2024-04-30T11:16:09.000000Z',
         updated_at: '2024-04-30T11:55:05.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/92/[FREE---HDconvert.com]-dkfk.png',
+          'https://stimuli.craftsweb.co.in/storage/app/public/92/[FREE---HDconvert.com]-dkfk.png',
         preview_url: '',
-        url: 'https://stimuli.forebearpro.co.in/storage/app/public/92/[FREE---HDconvert.com]-dkfk.png',
+        url: 'https://stimuli.craftsweb.co.in/storage/app/public/92/[FREE---HDconvert.com]-dkfk.png',
         thumbnail:
-          'https://stimuli.forebearpro.co.in/storage/app/public/92/conversions/[FREE---HDconvert.com]-dkfk-thumbnail.jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/92/conversions/[FREE---HDconvert.com]-dkfk-thumbnail.jpg',
         preview_thumbnail:
-          'https://stimuli.forebearpro.co.in/storage/app/public/92/conversions/[FREE---HDconvert.com]-dkfk-preview_thumbnail.jpg',
+          'https://stimuli.craftsweb.co.in/storage/app/public/92/conversions/[FREE---HDconvert.com]-dkfk-preview_thumbnail.jpg',
       },
     ],
     media: [
@@ -411,7 +411,7 @@
         created_at: '2024-04-30T11:16:09.000000Z',
         updated_at: '2024-04-30T11:55:05.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/92/[FREE---HDconvert.com]-dkfk.png',
+          'https://stimuli.craftsweb.co.in/storage/app/public/92/[FREE---HDconvert.com]-dkfk.png',
         preview_url: '',
       },
       {
@@ -434,7 +434,7 @@
         created_at: '2024-04-30T11:54:54.000000Z',
         updated_at: '2024-04-30T11:55:05.000000Z',
         original_url:
-          'https://stimuli.forebearpro.co.in/storage/app/public/94/BGONE.mp3',
+          'https://stimuli.craftsweb.co.in/storage/app/public/94/BGONE.mp3',
         preview_url: '',
       },
     ],

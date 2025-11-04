@@ -18,7 +18,7 @@ export default class Api {
       redirect: 'follow',
     };
     const response = await fetch(
-      'https://stimuli.forebearpro.co.in/oauth/token',
+      'https://stimuli.craftsweb.co.in/oauth/token',
       requestOptions,
     )
       .then(response => response.text())

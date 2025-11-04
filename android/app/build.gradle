@@ -113,10 +113,17 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.android.exoplayer:exoplayer-core:2.18.7")
+    implementation("com.google.android.exoplayer:exoplayer-ui:2.18.7")
+    implementation("androidx.media:media:1.6.0")
 
+    // AndroidX Core - सर्विस के लिए
+    implementation("androidx.core:core-ktx:1.9.0")
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
     }
 }
+
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")

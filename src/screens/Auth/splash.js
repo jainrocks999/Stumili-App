@@ -42,7 +42,7 @@ const Splash = () => {
     };
 
     const res = fetch(
-      'https://stimuli.forebearpro.co.in/api/v1/version-update',
+      'https://stimuli.craftsweb.co.in/api/v1/version-update',
       requestOptions,
     )
       .then(response => response.text())

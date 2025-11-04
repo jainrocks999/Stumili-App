@@ -112,7 +112,7 @@ const Popularplaylist = ({route}) => {
           renderItem={({item}) => {
             let image =
               item.categories_image[0]?.original_url ??
-              'https://stimuli.forebearpro.co.in/storage/app/public/3/download-(8).jpg';
+              'https://stimuli.craftsweb.co.in/storage/app/public/3/download-(8).jpg';
             return (
               <View
                 style={{

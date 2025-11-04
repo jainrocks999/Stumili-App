@@ -29,7 +29,7 @@ import {} from 'react-native-gesture-handler';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import {useDispatch} from 'react-redux';
 import {setupPlayer} from '../../utils/Setup';
-import TrackPlayer from 'react-native-track-player';
+// import TrackPlayer from 'react-native-track-player';
 import RNFS from 'react-native-fs';
 import {fonts} from '../../Context/Conctants';
 import storage from '../../utils/StorageService';
@@ -145,7 +145,7 @@ const Playsong = ({route}) => {
   });
 
   const setVovluem = async value => {
-    await TrackPlayer.setVolume(value);
+    // await TrackPlayer.setVolume(value);
     setBgVolume(value);
   };
   const getmodified = (array, indexs, bool) => {
