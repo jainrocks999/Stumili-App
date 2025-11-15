@@ -6,6 +6,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ViewManager
 
 class SoundPackage : ReactPackage {
+
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
         // Make sure SoundModule implements ReactContextBaseJavaModule
         return listOf<NativeModule>(SoundModule(reactContext))
