@@ -588,12 +588,13 @@ function* fetchAffirmationByCategory(action) {
       url: action.url,
       params,
     });
-    // console.log('this', JSON.stringify(res));
+    console.log("this is resdpss",res.data);
+    
 
-    if (res.status) {
+    if (res?.status) {
       yield put({
         type: 'home/affirmationBYCategory_success',
-        payload: res.data.categoryByAffermation,
+        payload: res.data?.[0]?.affirmation,
       });
       if (action.item) {
         yield put({
@@ -601,7 +602,7 @@ function* fetchAffirmationByCategory(action) {
           payload: {from: false, isFroiut: false, ...action.item},
         });
       }
-      if (action.navigation && res.data.categoryByAffermation.length > 0)
+      if (action.navigation && res.data?.[0]?.affirmation.length > 0)
         action.navigation.navigate(action.page);
       else {
         Toast.show('No affiramtion is this playlist');

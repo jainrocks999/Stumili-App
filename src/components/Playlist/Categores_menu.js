@@ -42,12 +42,8 @@ const Categores_menu = ({
       icon: 'share',
     },
   ];
-  console.log('this is item', item.is_favorite, item.categories_name);
-  console.log("Received Props in Categores_menu:", {
-    onPressDelete,
-    onPressEdit,
-    onPressListen
-  });
+
+
 
   return (
     <Modal animationType="fade" visible={visible} transparent={true}>

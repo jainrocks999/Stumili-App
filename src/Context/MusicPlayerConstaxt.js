@@ -24,6 +24,8 @@ export const MusicPlayerProvider = ({children}) => {
   const [visibleIndex, setVisibleIndex] = useState(0);
   const visibleIndexRef = useRef(visibleIndex);
   visibleIndexRef.current = visibleIndex;
+ 
+  
 
   const readText = async text => {
     if (!isPaused && text) {
@@ -33,8 +35,9 @@ export const MusicPlayerProvider = ({children}) => {
   };
 
   const handleTTSFinish = () => {
+   
     // if (affirmations.length === 0) return;
-    if (!affirmations || affirmations.length === 0) return; 
+    if (!affirmations || affirmations?.length === 0) return; 
     setVisibleIndex(prevIndex => {
       const newIndex = (prevIndex + 1) % affirmations.length;
       readText(affirmations[newIndex]?.affirmation_text);
@@ -43,7 +46,7 @@ export const MusicPlayerProvider = ({children}) => {
   };
 
   useEffect(() => {
-    if (affirmations.length === 0) return; // Early return if affirmations array is empty
+    if (affirmations?.length === 0) return; // Early return if affirmations array is empty
 
     const maxTimeInSeconds = maxTimeInMinutes * 60;
     let currentTime = currentTimeRef.current || 0;
@@ -79,11 +82,11 @@ export const MusicPlayerProvider = ({children}) => {
       clearInterval(intervalForProgress);
       Tts.stop();
     };
-  }, [maxTimeInMinutes, isPaused, affirmations.length, visibleIndex]);
+  }, [maxTimeInMinutes, isPaused, affirmations?.length, visibleIndex]);
 
   useEffect(() => {
     const initTts = async () => {
-      const voices = await Tts.voices();
+      const voices = await Tts.voices()      
       const availableVoices = voices
         .filter(v => !v.networkConnectionRequired && !v.notInstalled)
         .map(v => {
@@ -91,7 +94,7 @@ export const MusicPlayerProvider = ({children}) => {
         });
 
       let selectedVoice = null;
-      if (voices && voices.length > 0) {
+      if (voices && voices?.length > 0) {
         selectedVoice = 'en-au-x-auc-local';
         try {
           await Tts.setDefaultLanguage('en-AU');
@@ -100,7 +103,7 @@ export const MusicPlayerProvider = ({children}) => {
         }
 
         await Tts.setDefaultVoice('en-au-x-auc-local');
-        if (affirmations.length > 0) {
+        if (affirmations?.length > 0) {
           readText(affirmations[0].affirmation_text);
           player('sleeping.waw');
         }
@@ -113,23 +116,24 @@ export const MusicPlayerProvider = ({children}) => {
     };
 
     Tts.getInitStatus().then(initTts);
-   const remove= Tts.addEventListener('tts-finish', handleTTSFinish);
+   const remove= Tts.addEventListener('tts-finish',handleTTSFinish)
     Tts.setDefaultRate(speechRate);
     Tts.setDefaultPitch(speechPitch);
+     
     // TrackPlayer.setVolume(0.5);
 
     return () => {
-      remove()
+    if(remove) remove.remove()
       // Tts.removeEventListener('tts-finish', handleTTSFinish);
     };
-  }, []);
+  }, [playItem]);
 
   useEffect(() => {
     // Ensure the useEffect hook for automatic scrolling is triggered when visibleIndex changes
     if (
       flatListRef.current &&
       visibleIndex >= 0 &&
-      visibleIndex < affirmations.length
+      visibleIndex < affirmations?.length
     ) {
       flatListRef.current.scrollToIndex({
         animated: true,
@@ -139,10 +143,10 @@ export const MusicPlayerProvider = ({children}) => {
         duration: 500,
       });
     }
-  }, [visibleIndex, affirmations.length]);
+  }, [visibleIndex, affirmations?.length]);
 
   const handlePlayPauseClick = () => {
-    if (affirmations.length === 0) return; // Early return if affirmations array is empty
+    if (affirmations?.length === 0) return; // Early return if affirmations array is empty
 
     setIsPaused(prevIsPaused => !prevIsPaused);
     if (isPaused && progress >= 100) {
@@ -153,7 +157,7 @@ export const MusicPlayerProvider = ({children}) => {
   };
 
   const player = async sound => {
-    if (affirmations.length === 0) return; // Early return if affirmations array is empty
+    if (affirmations?.length === 0) return; // Early return if affirmations array is empty
 
     const isSetup = await setupPlayer();
     if (isSetup) {

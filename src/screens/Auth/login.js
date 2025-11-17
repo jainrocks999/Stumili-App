@@ -233,8 +233,7 @@ const Login = () => {
         }
       );
     
-      console.log('Full Response:', JSON.stringify(response?.data, null, 2));
-    
+
       const userData = response?.data?.data;
     
       if (userData?.id && userData?.token) {

@@ -46,6 +46,7 @@ export default class Api {
       .catch(error => console.log('error', error));
   };
   static API_GET = async data => {
+    try{
     let params = data.params;
     var myHeaders = {
       Authorization: `Bearer ${data.token}`,
@@ -61,13 +62,19 @@ export default class Api {
       headers: myHeaders,
       redirect: 'follow',
     };
-    console.log(`${mainURl}${data.url}?${queryString}`);
+  ;
+  
 
-    return await fetch(`${mainURl}${data.url}?${queryString}`, requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        return JSON.parse(result);
-      })
-      .catch(error => error);
+    const response= await fetch(`${mainURl}${data.url}?${queryString}`, requestOptions)
+    console.log("thsisiis",response);
+    
+    return await response.json()
+  }catch(err){
+    
+    console.log("error in Api ===>",err)
+    return null
+  }
+  
+    
   };
 }

@@ -250,7 +250,7 @@ const Playsong = ({route}) => {
                   fontFamily: fonts.medium,
                 }}>
                 Affirmations
-              </Text>
+              </Text>₹₹₹₹₹``
             </View>
             <View
               style={{

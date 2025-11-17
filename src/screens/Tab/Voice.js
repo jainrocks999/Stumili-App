@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Modal,
   View,
@@ -18,7 +18,8 @@ import {
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Slider from '@react-native-community/slider';
 import Tts from 'react-native-tts';
-import {fonts} from '../../Context/Conctants';
+import { fonts } from '../../Context/Conctants';
+import { vociesss } from '../../Context/vocies';
 const Img = [
   {
     id: '1',
@@ -41,15 +42,25 @@ const Img = [
     title: 'Max',
   },
 ];
-const Voice = ({voice, onPress, selectedVoice}) => {
+const Voice = ({ voice, onPress, selectedVoice }) => {
   function filterByLanguage(array, languages) {
     return array.filter(item => languages.includes(item.language));
   }
-  const myvoice = [
+  const myvoice = vociesss
+    .filter((item, index) => {
+      return item.language == 'en-IN';
+    })
+    .map((item, index) => ({
+      id: item.id,
+      name: 'Lily' + index,
+      language: item.language,
+      image: require('../../assets/profilepic/profile4.jpg'),
+    }));
+  const myvoice1 = [
     {
-      id: 'en-au-x-auc-local',
+      id: 'en-IN-language',
       name: 'Lily',
-      language: 'en-AU',
+      language: 'en-IN',
       image: require('../../assets/profilepic/profile3.jpg'),
     }, //female //anny
     {
@@ -85,20 +96,22 @@ const Voice = ({voice, onPress, selectedVoice}) => {
   ];
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#191919' }}>
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'center',
           marginTop: hp(2),
-        }}>
+        }}
+      >
         <Text
           style={{
             fontSize: hp(2.5),
             //fontWeight: '500',
             color: 'white',
             fontFamily: fonts.bold,
-          }}>
+          }}
+        >
           Voice Settings
         </Text>
       </View>
@@ -106,25 +119,27 @@ const Voice = ({voice, onPress, selectedVoice}) => {
         style={{
           flexDirection: 'row',
           margin: hp(2),
-        }}>
+        }}
+      >
         <Text
           style={{
             fontSize: hp(2),
             fontWeight: '500',
             color: 'grey',
             fontFamily: fonts.medium,
-          }}>
+          }}
+        >
           Voice Over
         </Text>
       </View>
-      <View style={{margin: hp(1)}}>
+      <View style={{ margin: hp(1) }}>
         <FlatList
           data={myvoice}
           horizontal
           scrollEnabled={true}
           showsHorizontalScrollIndicator={false}
           keyExtractor={item => item.id}
-          renderItem={({item, index}) => (
+          renderItem={({ item, index }) => (
             <TouchableOpacity onPress={() => onPress(item)}>
               <View
                 style={{
@@ -133,13 +148,14 @@ const Voice = ({voice, onPress, selectedVoice}) => {
                   borderRadius: hp(7),
                   backgroundColor: selectedVoice == item.id ? 'black' : 'gray',
                   marginHorizontal: wp(1),
-                  width: selectedVoice == item.id ? wp(40) : wp(30), 
-                  justifyContent: 'center', 
-                }}>
+                  width: selectedVoice == item.id ? wp(40) : wp(30),
+                  justifyContent: 'center',
+                }}
+              >
                 <View style={styles.imageContainer}>
                   <Image source={item.image} style={styles.image} />
                   {
-                    <View style={{marginHorizontal: hp(1)}}>
+                    <View style={{ marginHorizontal: hp(1) }}>
                       <Text style={styles.text}>{item.name}</Text>
                     </View>
                   }
@@ -154,21 +170,23 @@ const Voice = ({voice, onPress, selectedVoice}) => {
         style={{
           flexDirection: 'row',
           margin: hp(2),
-        }}>
+        }}
+      >
         <Text
           style={{
             fontSize: hp(2),
             fontWeight: '500',
             color: 'grey',
             fontFamily: fonts.medium,
-          }}>
+          }}
+        >
           Voice Volume
         </Text>
       </View>
 
-      <View style={[{alignItems: 'center'}]}>
+      <View style={[{ alignItems: 'center' }]}>
         <Slider
-          style={{width: '90%', height: 30}}
+          style={{ width: '90%', height: 30 }}
           minimumValue={0}
           maximumValue={2}
           minimumTrackTintColor="white"
@@ -181,20 +199,22 @@ const Voice = ({voice, onPress, selectedVoice}) => {
           flexDirection: 'row',
           marginHorizontal: hp(2),
           marginTop: hp(2),
-        }}>
+        }}
+      >
         <Text
           style={{
             fontSize: hp(2),
             fontWeight: '500',
             color: 'grey',
             fontFamily: fonts.medium,
-          }}>
+          }}
+        >
           Affirmation Delay
         </Text>
       </View>
-      <View style={{marginTop: hp(3), alignItems: 'center'}}>
+      <View style={{ marginTop: hp(3), alignItems: 'center' }}>
         <Slider
-          style={{width: '90%', height: 30}}
+          style={{ width: '90%', height: 30 }}
           minimumValue={0}
           maximumValue={2}
           minimumTrackTintColor="white"
@@ -220,7 +240,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
     fontWeight: '500',
-    marginLeft:wp(1),
+    marginLeft: wp(1),
     fontFamily: fonts.bold,
   },
 });
