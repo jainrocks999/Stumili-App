@@ -8,30 +8,30 @@ import {
   Image,
   Button,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   heightPercent as hp,
   widthPrecent as wp,
 } from '../../../components/atoms/responsive';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {ScrollView} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+import { ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   launchImageLibrary as _launchImageLibrary,
   launchCamera as _launchCamera,
 } from 'react-native-image-picker';
-import {fonts} from '../../../Context/Conctants';
+import { fonts } from '../../../Context/Conctants';
 import Buttun from '../../Auth/compoents/Buttun';
 import Loader from '../../../components/Loader';
 import storage from '../../../utils/StorageService';
 let launchImageLibrary = _launchImageLibrary;
 
-const Saveplaylist = ({route}) => {
-  const {isEdit} = route.params;
-  const {loading, item, addetItems_to_playlist} = useSelector(
+const Saveplaylist = ({ route }) => {
+  const { isEdit } = route.params;
+  const { loading, item, addetItems_to_playlist } = useSelector(
     state => state.home,
   );
   const editedItem = item.item ?? false;
@@ -110,7 +110,7 @@ const Saveplaylist = ({route}) => {
     }
   };
   return (
-    <View style={{flex: 1, backgroundColor: '#191919'}}>
+    <View style={{ flex: 1, backgroundColor: '#191919' }}>
       <Loader loading={loading} />
       <View
         style={{
@@ -119,8 +119,9 @@ const Saveplaylist = ({route}) => {
 
           alignItems: 'center',
           justifyContent: 'center',
-        }}>
-        <View style={{height: hp(5), marginLeft: '20%'}}>
+        }}
+      >
+        <View style={{ height: hp(5), marginLeft: '20%' }}>
           <Icon
             onPress={() => navigation.goBack()}
             name="arrow-back"
@@ -128,14 +129,15 @@ const Saveplaylist = ({route}) => {
             color="white"
           />
         </View>
-        <View style={{height: hp(5), width: wp(100)}}>
+        <View style={{ height: hp(5), width: wp(100) }}>
           <Text
             style={{
               fontSize: 20,
               fontWeight: '500',
               marginHorizontal: '10%',
               color: 'white',
-            }}>
+            }}
+          >
             Save your Playlist
           </Text>
         </View>
@@ -144,26 +146,32 @@ const Saveplaylist = ({route}) => {
         <TouchableOpacity onPress={openImagePicker}>
           <View
             style={{
-              height: hp(30),
-              width: wp(50),
+              height: wp(55),
+              width: wp(55),
               backgroundColor: '#B72658',
               borderRadius: 20,
               alignSelf: 'center',
               alignItems: 'center',
               marginTop: '15%',
               justifyContent: 'center',
-            }}>
+            }}
+          >
             <Image
               source={require('../../../assets/upload.png')}
               style={{
-                height: hp(15),
-                width: wp(24),
+                height: hp(12),
+                width: hp(12),
                 borderRadius: 20,
                 tintColor: 'white',
               }}
             />
             <Text
-              style={{color: 'white', fontSize: 30, fontFamily: fonts.regular}}>
+              style={{
+                color: 'white',
+                fontSize: 25,
+                fontFamily: fonts.regular,
+              }}
+            >
               Upload File
             </Text>
           </View>
@@ -184,7 +192,7 @@ const Saveplaylist = ({route}) => {
             <TextInput
               style={[
                 styles.input,
-                {marginTop: 10, height: hp(15), textAlignVertical: 'top'},
+                { marginTop: 10, height: hp(15), textAlignVertical: 'top' },
               ]}
               placeholder="Description"
               placeholderTextColor={'#fff'}
@@ -195,12 +203,12 @@ const Saveplaylist = ({route}) => {
             />
           </View>
         </View>
-        <View style={{alignSelf: 'center', margin: hp(5)}}>
+        <View style={{ alignSelf: 'center', margin: hp(5) }}>
           <Buttun
             title={'Create'}
             style={{
-              height: hp(6.7),
-              width: wp(75),
+              height: hp(6),
+              width: wp(90),
             }}
             onPress={handleSubmit}
           />

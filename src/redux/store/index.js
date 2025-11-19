@@ -1,12 +1,27 @@
 import {configureStore} from '@reduxjs/toolkit';
-// import createSagaMiddleware from 'redux-saga';
+
 import rootReducers from '../reducer';
 import rootSaga from '../saga';
 const createSagaMiddleware=require('redux-saga').default
-const saga = createSagaMiddleware();
+const sagaMiddleware = createSagaMiddleware();
+
 const store = configureStore({
   reducer: rootReducers,
-  middleware: () => [saga],
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
 });
-saga.run(rootSaga);
+
+let sagaTask = sagaMiddleware.run(rootSaga);
+
+// 🔥 Hot reload sagas during development
+if (module.hot) {
+  module.hot.accept('../saga', () => {
+    const getNewSagas = require('../saga').default;
+    sagaTask.cancel(); // cancel current saga
+    sagaTask.toPromise().then(() => {
+      sagaTask = sagaMiddleware.run(getNewSagas);
+    });
+  });
+}
+
 export default store;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Modal,
   View,
@@ -20,6 +20,7 @@ import Slider from '@react-native-community/slider';
 import Tts from 'react-native-tts';
 import { fonts } from '../../Context/Conctants';
 import { vociesss } from '../../Context/vocies';
+import VolumeModule, { VolumeEvents } from '../../native/VolumeModule';
 const Img = [
   {
     id: '1',
@@ -43,6 +44,26 @@ const Img = [
   },
 ];
 const Voice = ({ voice, onPress, selectedVoice }) => {
+  const [volume, setVolume] = React.useState(0);
+  useEffect(() => {
+    VolumeModule.startListening();
+    const sub = VolumeEvents.addListener(({ volume }) => {
+      setVolume(volume);
+      console.log('Volume changed →', volume);
+    });
+
+    return () => {
+      VolumeModule.stopListening();
+      sub.remove();
+    };
+  }, []);
+  const getVolume = async() => {
+    const value= await VolumeModule.getVolume()
+    setVolume(value);
+  };
+  useEffect(() => {
+    getVolume();
+  }, []);
   function filterByLanguage(array, languages) {
     return array.filter(item => languages.includes(item.language));
   }
@@ -187,8 +208,11 @@ const Voice = ({ voice, onPress, selectedVoice }) => {
       <View style={[{ alignItems: 'center' }]}>
         <Slider
           style={{ width: '90%', height: 30 }}
-          minimumValue={0}
-          maximumValue={2}
+          value={volume}
+          maximumValue={1}
+          onValueChange={vaule => {
+            VolumeModule.setVolume(vaule);
+          }}
           minimumTrackTintColor="white"
           maximumTrackTintColor="white"
           thumbTintColor="white"

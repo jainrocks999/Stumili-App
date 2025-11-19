@@ -8,28 +8,28 @@ import {
   ImageBackground,
   Alert,
 } from 'react-native';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Header from '../../components/molecules/Header';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Horizontal from '../../components/Home/Horizontal';
-import {Image} from 'react-native';
+import { Image } from 'react-native';
 import {
   heightPercent as hp,
   widthPrecent as wp,
 } from '../../components/atoms/responsive';
-import {ScrollView} from 'react-native';
+import { ScrollView } from 'react-native';
 import Loader from '../../components/Loader';
 import LinearGradient from 'react-native-linear-gradient';
 import Menu from '../../components/Playlist/Menu';
 import Buttun from '../Auth/compoents/Buttun';
-import {fonts} from '../../Context/Conctants';
+import { fonts } from '../../Context/Conctants';
 import storage from '../../utils/StorageService';
 import Categores_menu from '../../components/Playlist/Categores_menu';
-import {MusicPlayerContext} from '../../Context/MusicPlayerConstaxt';
+import { MusicPlayerContext } from '../../Context/MusicPlayerConstaxt';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import PlayPopup from '../../components/PlayPopup';
 const Img = [
@@ -85,11 +85,11 @@ const Img = [
 
 const Playlistdetails = () => {
   const dispatch = useDispatch();
-  const {getNameImage} = useContext(MusicPlayerContext);
-  const {favoriteList} = useSelector(state => state.home);
+  const { getNameImage } = useContext(MusicPlayerContext);
+  const { favoriteList } = useSelector(state => state.home);
 
   console.log('tjhidi', favoriteList.favoritelist);
-  const {loading, affirmations, groups, category, item} = useSelector(
+  const { loading, affirmations, groups, category, item } = useSelector(
     state => state.home,
   );
   const playItem = item;
@@ -106,8 +106,8 @@ const Playlistdetails = () => {
     extrapolate: 'clamp',
   });
   const onScroll = Animated.event(
-    [{nativeEvent: {contentOffset: {y: scrollY}}}],
-    {useNativeDriver: true},
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    { useNativeDriver: true },
   );
   const [modalIndex, setModalIndex] = useState(-1);
   const onClose = () => {
@@ -128,7 +128,7 @@ const Playlistdetails = () => {
       url: 'createFavoriteList',
       navigation,
       token,
-      item: {...playItem, is_favorite: true},
+      item: { ...playItem, is_favorite: true },
     });
   };
   const removeFavroit = async item => {
@@ -146,7 +146,7 @@ const Playlistdetails = () => {
       category_id: item.id,
       token,
       isCat: true,
-      item: {...playItem, is_favorite: false},
+      item: { ...playItem, is_favorite: false },
     });
   };
   // useEffect(() => {
@@ -156,7 +156,7 @@ const Playlistdetails = () => {
     <View style={styles.container}>
       <Loader loading={loading} />
       <Categores_menu
-        onPressListen={() => navigation.navigate('playsong', {index: -1})}
+        onPressListen={() => navigation.navigate('playsong', { index: -1 })}
         item={item}
         onClose={() => {
           setVisible(false);
@@ -173,8 +173,9 @@ const Playlistdetails = () => {
             height: '100%',
             width: '100%',
             zIndex: 100,
-          }}>
-          <View style={{height: '3%'}} />
+          }}
+        >
+          <View style={{ height: '3%' }} />
           <View
             style={{
               height: '100%',
@@ -190,24 +191,25 @@ const Playlistdetails = () => {
               shadowRadius: 4,
               shadowOpacity: 4,
               shadowColor: 'rgba(255,255,255,.5)',
-            }}>
+            }}
+          >
             <LinearGradient
-              start={{x: 0.3, y: 0}}
-              end={{x: 0.3, y: 1}}
+              start={{ x: 0.3, y: 0 }}
+              end={{ x: 0.3, y: 1 }}
               locations={[-3, 0.7, 1]}
               colors={[
                 'rgba(0,0,0,1)',
                 'rgba(0, 0, 0, 0.5)',
                 'rgba(0, 0, 0, 0)',
               ]}
-              style={[styles.gradient, {top: 0}]}
+              style={[styles.gradient, { top: 0 }]}
             />
             <Entypo
               onPress={() => navigation.goBack()}
               name="chevron-left"
               size={30}
               color={'white'}
-              style={{position: 'absolute', zIndex: 8, margin: '4%'}}
+              style={{ position: 'absolute', zIndex: 8, margin: '4%' }}
             />
             <Text
               style={{
@@ -219,29 +221,31 @@ const Playlistdetails = () => {
                 fontWeight: '600',
                 left: '5%',
                 fontFamily: fonts.medium,
-              }}>
+              }}
+            >
               {title}
             </Text>
             <ImageBackground
               source={
                 image == ''
                   ? require('../../assets/profilepic/plalist.png')
-                  : {uri: image}
+                  : { uri: image }
               }
               style={{
                 height: '100%',
                 width: '100%',
-              }}>
+              }}
+            >
               <LinearGradient
-                start={{x: 0.6, y: 0}}
-                end={{x: 0.6, y: 1}}
+                start={{ x: 0.6, y: 0 }}
+                end={{ x: 0.6, y: 1 }}
                 locations={[-3, 0.2, 1]}
                 colors={[
                   'rgba(0, 0, 0, 0)',
                   'rgba(0, 0, 0, 0.5)',
                   'rgba(0, 0, 0, 1)',
                 ]}
-                style={[styles.gradient, {bottom: 0, height: '60%'}]}
+                style={[styles.gradient, { bottom: 0, height: '60%' }]}
               />
             </ImageBackground>
           </View>
@@ -252,7 +256,8 @@ const Playlistdetails = () => {
               alignItems: 'center',
               position: 'absolute',
               zIndex: 5,
-            }}>
+            }}
+          >
             {/* <Entypo
               name="chevron-left"
               size={30}
@@ -295,7 +300,8 @@ const Playlistdetails = () => {
           marginVertical: hp(2),
           paddingHorizontal: wp(7),
           marginTop: '3%',
-        }}>
+        }}
+      >
         <View
           style={{
             marginTop: 10,
@@ -309,7 +315,8 @@ const Playlistdetails = () => {
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection: 'row',
-          }}>
+          }}
+        >
           <Buttun
             style={{
               height: '100%',
@@ -319,7 +326,7 @@ const Playlistdetails = () => {
               shadowColor: '#fff',
             }}
             onPress={() => {
-              navigation.navigate('playsong', {index: -1});
+              navigation.navigate('playsong', { index: -1 });
               dispatch({
                 type: 'home/currentPLaylist',
                 payload: item,
@@ -339,7 +346,8 @@ const Playlistdetails = () => {
             // bottom: '5%',
             justifyContent: 'space-between',
             marginTop: '8%',
-          }}>
+          }}
+        >
           <FontAwesome
             onPress={() => {
               item.is_favorite ? removeFavroit(item) : getFavriote(item);
@@ -365,14 +373,15 @@ const Playlistdetails = () => {
         contentContainerStyle={styles.scrollViewContent}
         onScroll={e => {
           scrollY.setValue(e.nativeEvent.contentOffset.y);
-        }}>
+        }}
+      >
         <FlatList
           data={affirmations}
           keyExtractor={item => item.id}
           contentContainerStyle={{
             marginTop: '3%',
           }}
-          renderItem={({item, index}) => (
+          renderItem={({ item, index }) => (
             <View
               style={{
                 flexDirection: 'row',
@@ -382,7 +391,8 @@ const Playlistdetails = () => {
                 marginVertical: 10,
                 backgroundColor: '#4A4949',
                 borderRadius: 8,
-              }}>
+              }}
+            >
               <Menu
                 onClose={onClose}
                 selectedItem={item}
@@ -393,14 +403,17 @@ const Playlistdetails = () => {
               />
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('playsong', {index: index});
+                  navigation.navigate('playsong', { index: index });
                 }}
-                style={{justifyContent: 'center', marginHorizontal: '10%'}}>
+                style={{ justifyContent: 'center', marginHorizontal: '10%' }}
+              >
                 <Text style={styles.text}>
-                  {item.affirmation_text.substring(0, 40)}
+                  {typeof item?.affirmation_text == 'string'
+                    ? item?.affirmation_text.substring(0, 40)
+                    : ''}
                 </Text>
               </TouchableOpacity>
-              <View style={{justifyContent: 'center'}}>
+              <View style={{ justifyContent: 'center' }}>
                 <Entypo
                   onPress={() => {
                     setModalIndex(index);
@@ -441,7 +454,7 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
   },
-  scrollViewContent: {paddingTop: hp(0)},
+  scrollViewContent: { paddingTop: hp(0) },
   text: {
     width: wp(60),
     marginLeft: 5,

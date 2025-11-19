@@ -355,7 +355,7 @@ const HomeScreen = props => {
         </View>
         <Horizontal
           onPress={items => {
-            getAffetMations(items);
+            getAffetMationsbyCategories(items);
           }}
           data={category}
           onPressHeart={(val, item) => {
@@ -423,14 +423,14 @@ const HomeScreen = props => {
         </View>
         <Horizontal
           onPress={items => {
-            getAffetMations(items);
+            getAffetMationsbyCategories(items);
           }}
           data={category}
           onPressHeart={(val, item) => {
             !val ? addFavoriteNew(item) : removeFavroitNew(item);
           }}
         />
-
+{console.log("this is groups",groups)}
         <FlatList
           data={groups}
           renderItem={({ item, index }) => (

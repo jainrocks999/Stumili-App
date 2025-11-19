@@ -448,7 +448,7 @@ const Toptab = () => {
           )}
         />
       </ScrollView>
-      {affirmations.length > 0 && getNameImage().name != '' ? (
+      {affirmations?.length > 0 && getNameImage().name != '' ? (
         <PlayPopup />
       ) : null}
     </View>

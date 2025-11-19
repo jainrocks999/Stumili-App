@@ -1,7 +1,7 @@
-import {takeEvery, put, call} from 'redux-saga/effects';
+import { takeEvery, put, call } from 'redux-saga/effects';
 import Toast from 'react-native-simple-toast';
 import Api from '../../api';
-import {Alert} from 'react-native';
+import { Alert } from 'react-native';
 function* getplaylist(action) {
   try {
     let params = {
@@ -114,7 +114,7 @@ function* fetchAffirmation(action) {
       if (action.item) {
         yield put({
           type: 'home/playList_item',
-          payload: {from: false, isFroiut: false, ...action.item},
+          payload: { from: false, isFroiut: false, ...action.item },
         });
       }
       if (action.navigation) {
@@ -265,6 +265,7 @@ function* fetchCreatefavriote(action) {
       token: action.token,
       url: action.url,
     });
+    console.log('this is added to firi', res);
 
     if (res.status) {
       yield put({
@@ -588,21 +589,20 @@ function* fetchAffirmationByCategory(action) {
       url: action.url,
       params,
     });
-    console.log("this is resdpss",res.data);
-    
+    console.log('this is resdpss', res.data);
 
     if (res?.status) {
       yield put({
         type: 'home/affirmationBYCategory_success',
-        payload: res.data?.[0]?.affirmation,
+        payload: res.data?.[0]?.affirmation_text,
       });
       if (action.item) {
         yield put({
           type: 'home/playList_item',
-          payload: {from: false, isFroiut: false, ...action.item},
+          payload: { from: false, isFroiut: false, ...action.item },
         });
       }
-      if (action.navigation && res.data?.[0]?.affirmation.length > 0)
+      if (action.navigation && res.data?.[0]?.affirmation_text?.length > 0)
         action.navigation.navigate(action.page);
       else {
         Toast.show('No affiramtion is this playlist');

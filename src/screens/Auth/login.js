@@ -239,21 +239,11 @@ const Login = () => {
       if (userData?.id && userData?.token) {
         const userId = userData.id;
         const token = userData.token;
-    
-        console.log('User ID:', userId);
-        console.log('Token:', token);
-    
         await storage.setItem(storage.USER_ID, userId.toString());
         await storage.setItem(storage.TOKEN, token);
-    
-        console.log('Stored User ID:', await storage.getItem(storage.USER_ID));
-        console.log('Stored Token:', await storage.getItem(storage.TOKEN));
-    
         Toast.show('Login successful!');
-        console.log('Navigating to Welcome2 screen');
         navigation.replace('Welecome2');
       } else {
-        console.log('Login Failed: Missing ID or Token');
         Toast.show('Login failed. Please try again.');
       }
     } catch (error) {

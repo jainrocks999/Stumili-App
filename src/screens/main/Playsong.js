@@ -47,7 +47,7 @@ const data = [
 const Playsong = ({route}) => {
   const indexxxx = route.params.index;
   const {screens} = useSelector(state => state.home);
-  console.log(screens);
+
   const {
     currentTrack,
     setCurrentTrack,
@@ -136,6 +136,8 @@ const Playsong = ({route}) => {
 
   useEffect(() => {
     player('Sleeping.wav');
+    Tts.setDefaultPitch(1)
+    Tts.setDefaultRate(0.35); 
     setIsPaused(false);
   }, []);
 
@@ -177,6 +179,7 @@ const Playsong = ({route}) => {
     });
   };
   const removeFavroit = async (item, index) => {
+  
     const items = await storage.getMultipleItems([
       storage.TOKEN,
       storage.USER_ID,
@@ -250,7 +253,7 @@ const Playsong = ({route}) => {
                   fontFamily: fonts.medium,
                 }}>
                 Affirmations
-              </Text>₹₹₹₹₹``
+              </Text>
             </View>
             <View
               style={{

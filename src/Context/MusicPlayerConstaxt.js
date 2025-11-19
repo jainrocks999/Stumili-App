@@ -1,14 +1,14 @@
-import React, {createContext, useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { createContext, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Tts from 'react-native-tts';
 // import TrackPlayer from 'react-native-track-player';
-import {Alert} from 'react-native';
+import { Alert } from 'react-native';
 import affirmations from './affirmation';
 
 export const MusicPlayerContext = createContext();
 
-export const MusicPlayerProvider = ({children}) => {
-  const {affirmations, playItem} = useSelector(state => state.home);
+export const MusicPlayerProvider = ({ children }) => {
+  const { affirmations, playItem } = useSelector(state => state.home);
   const dispatch = useDispatch();
   const [currentTrack, setCurrentTrack] = useState(null);
   const [maxTimeInMinutes, setMaxTimeInMinutes] = useState(1);
@@ -19,13 +19,11 @@ export const MusicPlayerProvider = ({children}) => {
   const [ttsStatus, setTtsStatus] = useState('initializing');
   const [selectedVoice, setSelectedVoice] = useState(null);
   const [speechRate, setSpeechRate] = useState(0.4);
-  const [speechPitch, setSpeechPitch] = useState(1);
+  const [speechPitch, setSpeechPitch] = useState(1.2);
   const flatListRef = useRef(null);
   const [visibleIndex, setVisibleIndex] = useState(0);
   const visibleIndexRef = useRef(visibleIndex);
   visibleIndexRef.current = visibleIndex;
- 
-  
 
   const readText = async text => {
     if (!isPaused && text) {
@@ -35,9 +33,8 @@ export const MusicPlayerProvider = ({children}) => {
   };
 
   const handleTTSFinish = () => {
-   
     // if (affirmations.length === 0) return;
-    if (!affirmations || affirmations?.length === 0) return; 
+    if (!affirmations || affirmations?.length === 0) return;
     setVisibleIndex(prevIndex => {
       const newIndex = (prevIndex + 1) % affirmations.length;
       readText(affirmations[newIndex]?.affirmation_text);
@@ -74,7 +71,7 @@ export const MusicPlayerProvider = ({children}) => {
     }, 1000);
 
     if (!isPaused) {
-      readText(affirmations[visibleIndex].affirmation_text);
+      readText(affirmations?.[visibleIndex]?.affirmation_text);
       // TrackPlayer.play();
     }
 
@@ -86,11 +83,11 @@ export const MusicPlayerProvider = ({children}) => {
 
   useEffect(() => {
     const initTts = async () => {
-      const voices = await Tts.voices()      
+      const voices = await Tts.voices();
       const availableVoices = voices
         .filter(v => !v.networkConnectionRequired && !v.notInstalled)
         .map(v => {
-          return {id: v.id, name: v.name, language: v.language};
+          return { id: v.id, name: v.name, language: v.language };
         });
 
       let selectedVoice = null;
@@ -116,14 +113,9 @@ export const MusicPlayerProvider = ({children}) => {
     };
 
     Tts.getInitStatus().then(initTts);
-   const remove= Tts.addEventListener('tts-finish',handleTTSFinish)
-    Tts.setDefaultRate(speechRate);
-    Tts.setDefaultPitch(speechPitch);
-     
-    // TrackPlayer.setVolume(0.5);
-
+    const remove = Tts.addEventListener('tts-finish', handleTTSFinish);
     return () => {
-    if(remove) remove.remove()
+      if (remove) remove.remove(handleTTSFinish);
       // Tts.removeEventListener('tts-finish', handleTTSFinish);
     };
   }, [playItem]);
@@ -180,12 +172,11 @@ export const MusicPlayerProvider = ({children}) => {
   };
 
   const updateSpeechRate = async rate => {
-    await Tts.setDefaultRate(rate);
+
     setSpeechRate(rate);
   };
 
   const updateSpeechPitch = async rate => {
-    await Tts.setDefaultPitch(rate);
     setSpeechPitch(rate);
   };
 
@@ -268,7 +259,8 @@ export const MusicPlayerProvider = ({children}) => {
         setVisibleIndex,
         getNameImage,
         reset,
-      }}>
+      }}
+    >
       {children}
     </MusicPlayerContext.Provider>
   );
