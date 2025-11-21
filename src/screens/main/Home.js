@@ -65,7 +65,7 @@ const HomeScreen = props => {
   const { getNameImage, affirmations } = useContext(MusicPlayerContext);
   // console.log(progress);
   const dispatch = useDispatch();
-  const getFavriote = item => { };
+  const getFavriote = item => {};
   const { groups, loading, category, playItem } = useSelector(
     state => state.home,
   );
@@ -131,7 +131,6 @@ const HomeScreen = props => {
     });
   };
   const getAffetMationsbyCategories = async item => {
-   
     const items = await storage.getMultipleItems([
       storage.TOKEN,
       storage.USER_ID,
@@ -155,7 +154,7 @@ const HomeScreen = props => {
       if (index === groupIndex) {
         return {
           ...items,
-          groupByCategory: items.groupByCategory.map((item, idx) => {
+          categories: items.categories.map((item, idx) => {
             if (idx === cateIndex) {
               return { ...item, is_favorite: bool };
             }
@@ -298,7 +297,8 @@ const HomeScreen = props => {
         <View
           style={{
             alignItems: 'center',
-          }}>
+          }}
+        >
           <FlatList
             data={Img}
             numColumns={2}
@@ -313,13 +313,14 @@ const HomeScreen = props => {
                 />
                 <Text
                   style={{
-                    fontSize:12,
+                    fontSize: 12,
                     marginLeft: '5%',
                     fontWeight: '400',
                     fontFamily: 'Poppins-Medium',
                     color: '#ffffff',
                     width: '50%',
-                  }}>
+                  }}
+                >
                   {item.title.substring(0, 10)}...
                 </Text>
               </View>
@@ -342,13 +343,15 @@ const HomeScreen = props => {
             <TouchableOpacity
               onPress={() => {
                 setCurrentVisibleIndex(-10);
-              }}>
+              }}
+            >
               <Text
                 style={{
                   fontSize: 15,
                   color: 'white',
                   fontFamily: fonts.bold,
-                }}>
+                }}
+              >
                 View All
               </Text>
             </TouchableOpacity>
@@ -369,7 +372,8 @@ const HomeScreen = props => {
             end={{ x: 5, y: 0.0 }}
             locations={[0, 0.3, 0.0]}
             colors={['#B72658', '#D485D1']}
-            style={styles.linearGradientt}>
+            style={styles.linearGradientt}
+          >
             <Image
               source={require('../../assets/music1.jpg')}
               style={{ height: hp(13), width: wp(25), borderRadius: 20 }}
@@ -380,14 +384,16 @@ const HomeScreen = props => {
                 alignSelf: 'center',
                 width: wp(50),
                 marginHorizontal: '5%',
-              }}>
+              }}
+            >
               <Text
                 style={{
                   fontSize: 15,
                   fontWeight: '600',
                   color: '#ffffff',
                   backgroundColor: 'transparent',
-                }}>
+                }}
+              >
                 Share Innertunes with your loved...
               </Text>
             </View>
@@ -410,13 +416,15 @@ const HomeScreen = props => {
             <TouchableOpacity
               onPress={() => {
                 setCurrentVisibleIndex(-11);
-              }}>
+              }}
+            >
               <Text
                 style={{
                   ontSize: 15,
                   color: 'white',
                   fontFamily: fonts.bold,
-                }}>
+                }}
+              >
                 View All
               </Text>
             </TouchableOpacity>
@@ -431,16 +439,16 @@ const HomeScreen = props => {
             !val ? addFavoriteNew(item) : removeFavroitNew(item);
           }}
         />
-{console.log("this is groups",groups)}
+
         <FlatList
           data={groups}
           renderItem={({ item, index }) => (
             <>
-              {item.groupByCategory?.length > 0 ? (
+              {item.categories?.length > 0 ? (
                 <>
                   <View style={styles.FeatureContainer}>
                     <CateGoriesModal
-                      data={item.groupByCategory}
+                      data={item.categories}
                       loading={loading}
                       visible={currentVisbleIndex == index}
                       onCLose={() => setCurrentVisibleIndex(-1)}
@@ -457,13 +465,15 @@ const HomeScreen = props => {
                       <TouchableOpacity
                         onPress={() => {
                           setCurrentVisibleIndex(index);
-                        }}>
+                        }}
+                      >
                         <Text
                           style={{
                             ontSize: 15,
                             color: 'white',
                             fontFamily: fonts.bold,
-                          }}>
+                          }}
+                        >
                           View All
                         </Text>
                       </TouchableOpacity>
@@ -478,7 +488,7 @@ const HomeScreen = props => {
                     onPress={items => {
                       getAffetMationsbyCategories(items);
                     }}
-                    data={item.groupByCategory}
+                    data={item.categories}
                   />
                 </>
               ) : null}
@@ -488,7 +498,8 @@ const HomeScreen = props => {
                     width: wp(100),
                     justifyContent: 'space-around',
                     marginVertical: 10,
-                  }}>
+                  }}
+                >
                   <View style={styles.card}>
                     <TouchableOpacity>
                       <LinearGradient
@@ -496,7 +507,8 @@ const HomeScreen = props => {
                         end={{ x: 5, y: 0.0 }}
                         locations={[0, 0.5, 0.3]}
                         colors={['#191919', '#89FFBF']}
-                        style={styles.linearGradient}>
+                        style={styles.linearGradient}
+                      >
                         <Image
                           source={require('../../assets/review.jpg')}
                           style={{
@@ -513,14 +525,16 @@ const HomeScreen = props => {
                             width: wp(35),
                             marginHorizontal: '5%',
                             bottom: hp(2),
-                          }}>
+                          }}
+                        >
                           <Text
                             style={{
                               fontSize: 20,
                               fontWeight: '600',
                               color: '#ffffff',
                               backgroundColor: 'transparent',
-                            }}>
+                            }}
+                          >
                             Leave us review...
                           </Text>
                         </View>
@@ -532,7 +546,8 @@ const HomeScreen = props => {
                         end={{ x: 5, y: 0.0 }}
                         locations={[0, 0.5, 0.3]}
                         colors={['#191919', '#89FFBF']}
-                        style={styles.linearGradient}>
+                        style={styles.linearGradient}
+                      >
                         <Image
                           source={require('../../assets/music1.jpg')}
                           style={{
@@ -549,14 +564,16 @@ const HomeScreen = props => {
                             width: wp(35),
                             marginHorizontal: '5%',
                             bottom: hp(2),
-                          }}>
+                          }}
+                        >
                           <Text
                             style={{
                               fontSize: 15,
                               color: '#ffffff',
                               backgroundColor: 'transparent',
                               fontFamily: fonts.bold,
-                            }}>
+                            }}
+                          >
                             Share Innertunes with your loved...
                           </Text>
                         </View>
@@ -570,7 +587,6 @@ const HomeScreen = props => {
         />
       </ScrollView>
       {affirmations?.length > 0 && getNameImage().name != '' ? (
-       
         <PlayPopup />
       ) : null}
     </SafeAreaView>
@@ -599,7 +615,7 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingHorizontal: 10,
   },
-  scrollView: { paddingBottom: hp(2), paddingRight:5 },
+  scrollView: { paddingBottom: hp(2), paddingRight: 5 },
   imageContainer: {
     padding: 12,
   },

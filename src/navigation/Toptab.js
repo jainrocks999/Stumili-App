@@ -8,7 +8,7 @@ import {
   Alert,
   Clipboard,
 } from 'react-native';
-import React, {useEffect, useState, useContext} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import Entypo from 'react-native-vector-icons/Entypo';
 
@@ -16,17 +16,17 @@ import {
   heightPercent as hp,
   widthPrecent as wp,
 } from '../components/atoms/responsive';
-import {TouchableOpacity} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import { TouchableOpacity } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/native';
-import {fonts} from '../Context/Conctants';
+import { useNavigation } from '@react-navigation/native';
+import { fonts } from '../Context/Conctants';
 import storage from '../utils/StorageService';
 import Loader from '../components/Loader';
 import Playlist_Menu from '../components/Playlist/Playlist_Menu';
 import Categores_menu from '../components/Playlist/Categores_menu';
 import PlayPopup from '../components/PlayPopup';
-import {MusicPlayerContext} from '../Context/MusicPlayerConstaxt';
+import { MusicPlayerContext } from '../Context/MusicPlayerConstaxt';
 
 const Img = [
   {
@@ -89,7 +89,7 @@ const Toptab = () => {
     loading,
     grops,
   } = useSelector(state => state.home);
-  const {getNameImage} = useContext(MusicPlayerContext);
+  const { getNameImage } = useContext(MusicPlayerContext);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   useEffect(() => {
@@ -142,7 +142,6 @@ const Toptab = () => {
     getFavroitCategories(true);
   }, [grops, category]);
   const getAffetMations = async item => {
-  
     const items = await storage.getMultipleItems([
       storage.TOKEN,
       storage.USER_ID,
@@ -185,7 +184,7 @@ const Toptab = () => {
     });
   };
 
-  const getAffetMationsbyCategories = async item => {    
+  const getAffetMationsbyCategories = async item => {
     const items = await storage.getMultipleItems([
       storage.TOKEN,
       storage.USER_ID,
@@ -199,7 +198,7 @@ const Toptab = () => {
       user_id: user,
       navigation,
       url: 'categoryByAffermation',
-      item,
+      item: { ...item, is_favorite: true },
       page: 'Playlistdetails2',
       category_id: item.id,
     });
@@ -221,7 +220,7 @@ const Toptab = () => {
       type: 'home/removeFavriout_request',
       url: 'unlikeCategories',
       user_id: user,
-      favorite_id: item.favorite_id,
+      favorite_id: item?.favorite_id,
       category_id: item.id,
       token,
       isCat: true,
@@ -231,44 +230,49 @@ const Toptab = () => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#191919', height: '100%'}}>
+    <View style={{ flex: 1, backgroundColor: '#191919', height: '100%' }}>
       <Loader loading={loading} />
-      <View style={{marginHorizontal: hp(3), marginTop: 10}}>
+      <View style={{ marginHorizontal: hp(3), marginTop: 10 }}>
         <Text
           style={{
             fontFamily: fonts.bold,
             fontSize: hp(3),
             color: 'white',
             marginVertical: 10,
-          }}>
+          }}
+        >
           My Library
         </Text>
       </View>
       <TouchableOpacity
         onPress={items => {
           getFavroitCategories(false);
-        }}>
+        }}
+      >
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
             top: hp(3),
-          }}>
+          }}
+        >
           <View style={styles.imageContainer}>
             <LinearGradient
-              start={{x: 1, y: 0}}
-              end={{x: -0.2, y: 0}}
+              start={{ x: 1, y: 0 }}
+              end={{ x: -0.2, y: 0 }}
               locations={[0.3, 1]}
               colors={['#D485D1', '#B72658']}
-              style={styles.linearGradient}>
-              <View style={{justifyContent: 'center', marginLeft: '5%'}}>
+              style={styles.linearGradient}
+            >
+              <View style={{ justifyContent: 'center', marginLeft: '5%' }}>
                 <Entypo name="heart" size={30} color="white" />
               </View>
               <View
                 style={{
                   flexDirection: 'column',
                   justifyContent: 'center',
-                }}>
+                }}
+              >
                 <Text
                   style={{
                     width: wp(50),
@@ -276,7 +280,8 @@ const Toptab = () => {
                     fontSize: wp(5),
                     fontWeight: '500',
                     fontFamily: fonts.bold,
-                  }}>
+                  }}
+                >
                   Afffirmation liked
                 </Text>
                 <Text style={styles.text2}>90 affirmations</Text>
@@ -286,24 +291,25 @@ const Toptab = () => {
         </View>
       </TouchableOpacity>
 
-      <View style={{marginHorizontal: hp(3), marginTop: hp(3)}}>
+      <View style={{ marginHorizontal: hp(3), marginTop: hp(3) }}>
         <Text
           style={{
             fontFamily: fonts.bold, // fontFamily: 'Montserrat',
             fontSize: hp(2.5),
             color: 'white',
             marginVertical: 10,
-          }}>
+          }}
+        >
           Playlist
         </Text>
       </View>
-      <ScrollView contentContainerStyle={{paddingBottom: hp(4)}}>
+      <ScrollView contentContainerStyle={{ paddingBottom: hp(4) }}>
         <View>
           <FlatList
             data={favorite_Cat}
             keyExtractor={item => item?.id}
             scrollEnabled={false}
-            renderItem={({item, index}) => {
+            renderItem={({ item, index }) => {
               let image =
                 item.categories_image.length > 0
                   ? item.categories_image[0].original_url
@@ -315,11 +321,12 @@ const Toptab = () => {
                     flexDirection: 'row',
                     alignSelf: 'center',
                     justifyContent: 'center',
-                  }}>
+                  }}
+                >
                   <Categores_menu
                     visible={categoriesIndex == index}
-                    image={{uri: image}}
-                    item={item}
+                    image={{ uri: image }}
+                    item={{ ...item, is_favorite: true }}
                     onClose={() => {
                       setCategoryIndex(-1);
                     }}
@@ -330,7 +337,8 @@ const Toptab = () => {
                   <TouchableOpacity
                     onPress={() => {
                       getAffetMationsbyCategories(item);
-                    }}>
+                    }}
+                  >
                     <View style={styles.imageeContainer}>
                       <View
                         style={{
@@ -341,10 +349,11 @@ const Toptab = () => {
                           borderRadius: wp(2),
                           backgroundColor: 'white',
                           overflow: 'hidden',
-                        }}>
+                        }}
+                      >
                         <Image
-                          source={{uri: image}}
-                          style={{height: '100%', width: '100%'}}
+                          source={{ uri: image }}
+                          style={{ height: '100%', width: '100%' }}
                           resizeMode="stretch"
                         />
                       </View>
@@ -353,12 +362,14 @@ const Toptab = () => {
                           flexDirection: 'column',
                           justifyContent: 'center',
                           marginHorizontal: hp(2.5),
-                        }}>
+                        }}
+                      >
                         <Text style={styles.text}>{item.categories_name}</Text>
                         <Text style={styles.text2}>{'Buy Stimuli '}</Text>
                       </View>
                       <View
-                        style={{justifyContent: 'center', paddingRight: 20}}>
+                        style={{ justifyContent: 'center', paddingRight: 20 }}
+                      >
                         <Entypo
                           onPress={() => {
                             setCategoryIndex(index);
@@ -380,16 +391,17 @@ const Toptab = () => {
           data={playlist[0].playlist}
           keyExtractor={item => item?.id}
           scrollEnabled={false}
-          renderItem={({item, index}) => (
+          renderItem={({ item, index }) => (
             <View
               style={{
                 flexDirection: 'row',
                 alignSelf: 'center',
                 justifyContent: 'center',
-              }}>
+              }}
+            >
               <Playlist_Menu
                 image={require('../assets/playlist.png')}
-                item={item}
+                item={{ ...item, is_favorite: true }}
                 visible={index == visibleIndex}
                 onClose={() => setVisibleIndex(-1)}
                 onPressListen={items => {
@@ -406,7 +418,8 @@ const Toptab = () => {
               <TouchableOpacity
                 onPress={() => {
                   getPlayListItem(item);
-                }}>
+                }}
+              >
                 <View style={styles.imageeContainer}>
                   <View
                     style={{
@@ -416,7 +429,8 @@ const Toptab = () => {
                       alignItems: 'center',
                       borderRadius: wp(2),
                       backgroundColor: 'white',
-                    }}>
+                    }}
+                  >
                     <Image
                       source={require('../assets/playlist.png')}
                       style={styles.image}
@@ -429,11 +443,12 @@ const Toptab = () => {
                       flexDirection: 'column',
                       justifyContent: 'center',
                       marginHorizontal: hp(2.5),
-                    }}>
+                    }}
+                  >
                     <Text style={styles.text}>{item.title}</Text>
                     <Text style={styles.text2}>{item.description}</Text>
                   </View>
-                  <View style={{justifyContent: 'center', paddingRight: 20}}>
+                  <View style={{ justifyContent: 'center', paddingRight: 20 }}>
                     <Entypo
                       onPress={() => {
                         setVisibleIndex(index);

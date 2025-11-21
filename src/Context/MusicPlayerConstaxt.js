@@ -2,8 +2,16 @@ import React, { createContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Tts from 'react-native-tts';
 // import TrackPlayer from 'react-native-track-player';
-import { Alert } from 'react-native';
+import { Alert, Image } from 'react-native';
 import affirmations from './affirmation';
+import {
+  pauseAudio,
+  playAudio,
+  seekAudio,
+  setPlaylist,
+  setVolumeSound,
+  stopAudio,
+} from '../native/SoundModule';
 
 export const MusicPlayerContext = createContext();
 
@@ -29,6 +37,31 @@ export const MusicPlayerProvider = ({ children }) => {
     if (!isPaused && text) {
       Tts.stop();
       Tts.speak(text);
+    }
+  };
+
+  const PlayBgSound = async () => {
+    const result = Image.resolveAssetSource(
+      require('../assets/sounds/Affirmation.mp3'),
+    ).uri;
+    await setPlaylist([result]);
+    setVolumeSound(0.5);
+  };
+  useEffect(() => {
+    PlayBgSound();
+  }, []);
+  useEffect(() => {
+    if (isPaused) {
+      pauseAudio();
+    } else {
+      playAudio();
+      handleSeek(1);
+    }
+  }, [isPaused]);
+  const handleSeek = position => {
+    const pos = parseInt(position, 10);
+    if (!isNaN(pos)) {
+      seekAudio(pos);
     }
   };
 
@@ -116,7 +149,6 @@ export const MusicPlayerProvider = ({ children }) => {
     const remove = Tts.addEventListener('tts-finish', handleTTSFinish);
     return () => {
       if (remove) remove.remove(handleTTSFinish);
-  
     };
   }, [playItem]);
 
@@ -172,7 +204,6 @@ export const MusicPlayerProvider = ({ children }) => {
   };
 
   const updateSpeechRate = async rate => {
-
     setSpeechRate(rate);
   };
 

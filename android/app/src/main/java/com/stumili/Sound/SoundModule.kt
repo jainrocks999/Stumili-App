@@ -8,10 +8,11 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableType
 
 class SoundModule(reactContext: ReactApplicationContext) :
-    ReactContextBaseJavaModule(reactContext) {
+        ReactContextBaseJavaModule(reactContext) {
 
     override fun getName() = "AudioModule"
 
+    // 🟢 Play playlist
     @ReactMethod
     fun playUrls(urls: ReadableArray) {
         val playlist = mutableListOf<String>()
@@ -56,6 +57,48 @@ class SoundModule(reactContext: ReactApplicationContext) :
         val context = reactApplicationContext
         val intent = Intent(context, MyAudioService::class.java)
         intent.action = "PREV_ACTION"
+        context.startService(intent)
+    }
+
+    // 🔊 Independent Volume Controls
+    @ReactMethod
+    fun volumeUp() {
+        val context = reactApplicationContext
+        val intent = Intent(context, MyAudioService::class.java)
+        intent.action = "VOLUME_UP_ACTION"
+        context.startService(intent)
+    }
+
+    @ReactMethod
+    fun volumeDown() {
+        val context = reactApplicationContext
+        val intent = Intent(context, MyAudioService::class.java)
+        intent.action = "VOLUME_DOWN_ACTION"
+        context.startService(intent)
+    }
+
+    // 🔄 Smooth Fade Controls
+    @ReactMethod
+    fun fadeOut() {
+        val context = reactApplicationContext
+        val intent = Intent(context, MyAudioService::class.java)
+        intent.action = "FADE_OUT_ACTION"
+        context.startService(intent)
+    }
+
+    @ReactMethod
+    fun fadeIn() {
+        val context = reactApplicationContext
+        val intent = Intent(context, MyAudioService::class.java)
+        intent.action = "FADE_IN_ACTION"
+        context.startService(intent)
+    }
+    @ReactMethod
+    fun setVolume(value: Double) {
+        val context = reactApplicationContext
+        val intent = Intent(context, MyAudioService::class.java)
+        intent.action = "SET_VOLUME_ACTION"
+        intent.putExtra("VOLUME_VALUE", value.toFloat())
         context.startService(intent)
     }
 }

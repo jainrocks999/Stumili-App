@@ -43,8 +43,6 @@ const Categores_menu = ({
     },
   ];
 
-
-
   return (
     <Modal animationType="fade" visible={visible} transparent={true}>
       <View style={{ flex: 1, backgroundColor: '#191919', opacity: 0.99 }}>
@@ -60,7 +58,8 @@ const Categores_menu = ({
               justifyContent: 'center',
               borderRadius: wp(2),
               overflow: 'hidden',
-            }}>
+            }}
+          >
             <Image source={image} style={{ height: '100%', width: '100%' }} />
           </View>
           <View style={{ paddingBottom: '5%' }}>
@@ -71,7 +70,8 @@ const Categores_menu = ({
               style={[
                 styles.title,
                 { fontSize: wp(4), marginTop: 10, fontFamily: fonts.medium },
-              ]}>
+              ]}
+            >
               {'by stumili'}
             </Text>
           </View>
@@ -90,22 +90,18 @@ const Categores_menu = ({
                       onPressListen(parentItem);
                     } else if (item.id == '2') {
                       onPressEdit(parentItem);
-                    }
-                    // else if (item.id == '3') {
-                    //   onPressDelete(parentItem);
-                    // }
-                    else if (item.id == '3' && onPressDelete) {
+                    } else if (item.id == '3' && onPressDelete) {
                       onPressDelete(parentItem);
                     } else {
-                      console.log("onPressDelete function is missing!");
+                      console.log('onPressDelete function is missing!');
                     }
-                    
                   }}
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
                     marginVertical: '5%',
-                  }}>
+                  }}
+                >
                   {index == 0 || index == 1 ? (
                     <AntDesign
                       color={
@@ -130,7 +126,8 @@ const Categores_menu = ({
                       fontSize: wp(5),
                       marginLeft: '5%',
                       fontFamily: fonts.medium,
-                    }}>
+                    }}
+                  >
                     {item.text}
                   </Text>
                 </TouchableOpacity>
@@ -145,7 +142,8 @@ const Categores_menu = ({
               fontSize: wp(6.5),
               fontFamily: fonts.medium,
               // fontWeight: 'bol000d',
-            }}>
+            }}
+          >
             Close
           </Text>
         </TouchableOpacity>

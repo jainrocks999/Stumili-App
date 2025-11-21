@@ -281,8 +281,7 @@ const Playlistdetails = () => {
           size={30}
           color={'white'}
           style={{
-            zIndex: 0,
-            margin: '4%',
+            zIndex: 0, margin: '4%',
           }}
         />
         <Text

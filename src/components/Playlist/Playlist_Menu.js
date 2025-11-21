@@ -7,9 +7,9 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {heightPercent as hp, widthPrecent as wp} from '../atoms/responsive';
-import {fonts} from '../../Context/Conctants';
-import {FlatList} from 'react-native-gesture-handler';
+import { heightPercent as hp, widthPrecent as wp } from '../atoms/responsive';
+import { fonts } from '../../Context/Conctants';
+import { FlatList } from 'react-native-gesture-handler';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Loader from '../Loader';
@@ -45,9 +45,9 @@ const Playlist_Menu = ({
 
   return (
     <Modal animationType="fade" visible={visible} transparent={true}>
-      <View style={{flex: 1, backgroundColor: '#191919', opacity: 0.99}}>
+      <View style={{ flex: 1, backgroundColor: '#191919', opacity: 0.99 }}>
         <Loader loading={loading} />
-        <View style={{height: '20%'}} />
+        <View style={{ height: '20%' }} />
         <View style={styles.card}>
           <View
             style={{
@@ -59,31 +59,33 @@ const Playlist_Menu = ({
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: wp(2),
-            }}>
+            }}
+          >
             <Image
               tintColor={'#B72658'}
               source={image}
-              style={{height: '100%', width: '100%'}}
+              style={{ height: '100%', width: '100%' }}
               resizeMode="contain"
             />
           </View>
-          <View style={{paddingBottom: '5%'}}>
+          <View style={{ paddingBottom: '5%' }}>
             <Text style={styles.title}>{item.title}</Text>
             <Text
               style={[
                 styles.title,
-                {fontSize: wp(5), fontFamily: fonts.medium},
-              ]}>
+                { fontSize: wp(5), fontFamily: fonts.medium },
+              ]}
+            >
               {item?.description.substring(0, 20)}
             </Text>
           </View>
         </View>
-        <View style={{paddingLeft: wp(5), paddingTop: hp(4)}}>
+        <View style={{ paddingLeft: wp(5), paddingTop: hp(4) }}>
           <FlatList
             data={data}
             keyExtractor={item => item.id}
-            contentContainerStyle={{alignSelf: 'right', marginLeft: wp(8)}}
-            renderItem={({item, index}) => {
+            contentContainerStyle={{ alignSelf: 'right', marginLeft: wp(8) }}
+            renderItem={({ item, index }) => {
               return (
                 <TouchableOpacity
                   activeOpacity={0.7}
@@ -100,7 +102,8 @@ const Playlist_Menu = ({
                     flexDirection: 'row',
                     alignItems: 'center',
                     marginVertical: '5%',
-                  }}>
+                  }}
+                >
                   {index == 0 || index == 2 ? (
                     <AntDesign color={'white'} size={wp(7)} name={item.icon} />
                   ) : (
@@ -113,7 +116,8 @@ const Playlist_Menu = ({
                       fontSize: wp(5),
                       marginLeft: '5%',
                       fontFamily: fonts.medium,
-                    }}>
+                    }}
+                  >
                     {item.text}
                   </Text>
                 </TouchableOpacity>
@@ -128,7 +132,8 @@ const Playlist_Menu = ({
               fontSize: wp(6.5),
               fontFamily: fonts.medium,
               // fontWeight: 'bol000d',
-            }}>
+            }}
+          >
             Close
           </Text>
         </TouchableOpacity>

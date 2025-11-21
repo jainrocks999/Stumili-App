@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Button, TextInput, StyleSheet, Image, Alert } from 'react-native';
-import { playAudio, pauseAudio, stopAudio, seekAudio,setPlaylist } from './SoundModule';
+import { playAudio, pauseAudio, stopAudio, seekAudio,setPlaylist } from './src/native/SoundModule';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AudioPlayer: React.FC = () => {

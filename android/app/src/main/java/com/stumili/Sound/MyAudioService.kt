@@ -30,15 +30,24 @@ class MyAudioService : MediaBrowserServiceCompat() {
     private var currentIndex = 0
 
     private val handler = Handler(Looper.getMainLooper())
-    private val updateRunnable = object : Runnable {
-        override fun run() {
-            if (::exoPlayer.isInitialized && exoPlayer.isPlaying) {
-                updateNotificationProgress()
-                sendProgressUpdate()
-                handler.postDelayed(this, 1000) // Update every second for smoother progress
+
+    // 🔊 Independent volume variable
+    private var customVolume = 1.0f
+
+    // Volume animation handler
+    private var volumeFadeHandler = Handler(Looper.getMainLooper())
+    private var isFading = false
+
+    private val updateRunnable =
+            object : Runnable {
+                override fun run() {
+                    if (::exoPlayer.isInitialized && exoPlayer.isPlaying) {
+                        updateNotificationProgress()
+                        sendProgressUpdate()
+                        handler.postDelayed(this, 1000)
+                    }
+                }
             }
-        }
-    }
 
     override fun onCreate() {
         super.onCreate()
@@ -49,62 +58,58 @@ class MyAudioService : MediaBrowserServiceCompat() {
         mediaSession.isActive = true
 
         exoPlayer = ExoPlayer.Builder(this).build()
-        exoPlayer.addListener(object : Player.Listener {
-            override fun onPlaybackStateChanged(state: Int) {
-                when (state) {
-                    Player.STATE_ENDED -> skipToNext()
-                    Player.STATE_READY -> {
-                        updateNotification() // Full notification update when ready
-                        if (exoPlayer.isPlaying) {
-                            startProgressUpdates()
+        exoPlayer.volume = customVolume
+
+        exoPlayer.addListener(
+                object : Player.Listener {
+                    override fun onPlaybackStateChanged(state: Int) {
+                        when (state) {
+                            Player.STATE_ENDED -> skipToNext()
+                            Player.STATE_READY -> {
+                                updateNotification()
+                                if (exoPlayer.isPlaying) startProgressUpdates()
+                            }
+                            Player.STATE_BUFFERING -> updateNotification()
                         }
                     }
-                    Player.STATE_BUFFERING -> updateNotification()
+
+                    override fun onIsPlayingChanged(isPlaying: Boolean) {
+                        if (isPlaying) startProgressUpdates() else stopProgressUpdates()
+                        updateNotification()
+                    }
                 }
-            }
+        )
 
-            override fun onIsPlayingChanged(isPlaying: Boolean) {
-                if (isPlaying) {
-                    startProgressUpdates()
-                } else {
-                    stopProgressUpdates()
+        mediaSession.setCallback(
+                object : MediaSessionCompat.Callback() {
+                    override fun onPlay() {
+                        playCurrent()
+                        startProgressUpdates()
+                    }
+
+                    override fun onPause() {
+                        exoPlayer.pause()
+                        updatePlaybackState(PlaybackStateCompat.STATE_PAUSED)
+                        stopProgressUpdates()
+                    }
+
+                    override fun onStop() {
+                        exoPlayer.stop()
+                        stopForeground(true)
+                        stopSelf()
+                        updatePlaybackState(PlaybackStateCompat.STATE_STOPPED)
+                        stopProgressUpdates()
+                    }
+
+                    override fun onSeekTo(pos: Long) {
+                        exoPlayer.seekTo(pos)
+                        updateNotificationProgress()
+                    }
+
+                    override fun onSkipToNext() = skipToNext()
+                    override fun onSkipToPrevious() = skipToPrevious()
                 }
-                updateNotification() // Update play/pause button
-            }
-        })
-
-        mediaSession.setCallback(object : MediaSessionCompat.Callback() {
-            override fun onPlay() {
-                playCurrent()
-                startProgressUpdates()
-            }
-
-            override fun onPause() {
-                exoPlayer.pause()
-                updatePlaybackState(PlaybackStateCompat.STATE_PAUSED)
-                stopProgressUpdates()
-            }
-
-            override fun onStop() {
-                exoPlayer.stop()
-                stopForeground(true)
-                stopSelf()
-                updatePlaybackState(PlaybackStateCompat.STATE_STOPPED)
-                stopProgressUpdates()
-            }
-
-            override fun onSeekTo(pos: Long) {
-                exoPlayer.seekTo(pos)
-                updateNotificationProgress() // Immediate update after seek
-                updatePlaybackState(
-                    mediaSession.controller.playbackState?.state
-                        ?: PlaybackStateCompat.STATE_PAUSED
-                )
-            }
-
-            override fun onSkipToNext() = skipToNext()
-            override fun onSkipToPrevious() = skipToPrevious()
-        })
+        )
     }
 
     private fun startProgressUpdates() {
@@ -123,14 +128,21 @@ class MyAudioService : MediaBrowserServiceCompat() {
         sendBroadcast(intent)
     }
 
+    private fun sendVolumeUpdate() {
+        val intent = Intent("AUDIO_VOLUME_CHANGED")
+        intent.putExtra("volume", customVolume)
+        sendBroadcast(intent)
+    }
+
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                "Audio Playback",
-                NotificationManager.IMPORTANCE_LOW
-            )
-            channel.setSound(null, null) // Disable notification sound
+            val channel =
+                    NotificationChannel(
+                            CHANNEL_ID,
+                            "Audio Playback",
+                            NotificationManager.IMPORTANCE_LOW
+                    )
+            channel.setSound(null, null)
             val manager = getSystemService(NotificationManager::class.java)
             manager?.createNotificationChannel(channel)
         }
@@ -146,65 +158,58 @@ class MyAudioService : MediaBrowserServiceCompat() {
                         playlist.addAll(urls)
                         currentIndex = 0
                         playCurrent()
-                        updateNotificationProgress() // Add this line here
                     }
                 }
-                "PLAY_ACTION" -> {
-                    mediaSession.controller.transportControls.play()
-                    startProgressUpdates()
-                    updateNotificationProgress()
-                }
-                "PAUSE_ACTION" -> {
-                    mediaSession.controller.transportControls.pause()
-                    stopProgressUpdates()
-                }
-                "NEXT_ACTION" -> {
-                    mediaSession.controller.transportControls.skipToNext()
-                    updateNotification()
-                }
-                "PREV_ACTION" ->{ 
-                    mediaSession.controller.transportControls.skipToPrevious()
-                    updateNotificationProgress()
-                }
-                "STOP_ACTION" -> {
-                    mediaSession.controller.transportControls.stop()
-                    updateNotificationProgress()
-                }
+                "PLAY_ACTION" -> mediaSession.controller.transportControls.play()
+                "PAUSE_ACTION" -> mediaSession.controller.transportControls.pause()
+                "NEXT_ACTION" -> mediaSession.controller.transportControls.skipToNext()
+                "PREV_ACTION" -> mediaSession.controller.transportControls.skipToPrevious()
+                "STOP_ACTION" -> mediaSession.controller.transportControls.stop()
                 "SEEK_ACTION" -> {
                     val pos = intent.getLongExtra("POSITION", 0L)
                     mediaSession.controller.transportControls.seekTo(pos)
+                }
+                // 🔊 Independent Volume Actions
+                "VOLUME_UP_ACTION" -> increaseVolume()
+                "VOLUME_DOWN_ACTION" -> decreaseVolume()
+                "FADE_OUT_ACTION" -> fadeOutVolume()
+                "FADE_IN_ACTION" -> fadeInVolume()
+                "SET_VOLUME_ACTION" -> {
+                    val value = intent.getFloatExtra("VOLUME_VALUE", customVolume)
+                    setVolumeFromReact(value)
                 }
             }
         }
         return START_STICKY
     }
+
     private fun playCurrent() {
         if (playlist.isEmpty()) return
-    
+
         val url = playlist[currentIndex]
-    
-        // Create MediaItem with mediaId to detect same track
-        val mediaItem = MediaItem.Builder()
-            .setUri(url)
-            .setMediaId(url)
-            .build()
-    
-        // Only set media if new track
+        val mediaItem = MediaItem.Builder().setUri(url).setMediaId(url).build()
+
         if (exoPlayer.currentMediaItem == null || exoPlayer.currentMediaItem?.mediaId != url) {
             exoPlayer.setMediaItem(mediaItem)
             exoPlayer.prepare()
         }
-    
+
+        exoPlayer.volume = customVolume
         exoPlayer.play()
-        updateNotificationProgress() // Add this line here
+
         mediaSession.setMetadata(
-            MediaMetadataCompat.Builder()
-                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Song ${currentIndex + 1}")
-                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "Artist")
-                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, exoPlayer.duration)
-                .build()
+                MediaMetadataCompat.Builder()
+                        .putString(
+                                MediaMetadataCompat.METADATA_KEY_TITLE,
+                                "Song ${currentIndex + 1}"
+                        )
+                        .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "Artist")
+                        .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, exoPlayer.duration)
+                        .build()
         )
+
         updatePlaybackState(PlaybackStateCompat.STATE_PLAYING)
+        updateNotification()
     }
 
     private fun skipToNext() {
@@ -226,17 +231,18 @@ class MyAudioService : MediaBrowserServiceCompat() {
     }
 
     private fun updatePlaybackState(state: Int) {
-        val playbackState = PlaybackStateCompat.Builder()
-            .setState(state, exoPlayer.currentPosition, 1.0f)
-            .setActions(
-                PlaybackStateCompat.ACTION_PLAY or
-                        PlaybackStateCompat.ACTION_PAUSE or
-                        PlaybackStateCompat.ACTION_STOP or
-                        PlaybackStateCompat.ACTION_SEEK_TO or
-                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
-                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-            )
-            .build()
+        val playbackState =
+                PlaybackStateCompat.Builder()
+                        .setState(state, exoPlayer.currentPosition, 1.0f)
+                        .setActions(
+                                PlaybackStateCompat.ACTION_PLAY or
+                                        PlaybackStateCompat.ACTION_PAUSE or
+                                        PlaybackStateCompat.ACTION_STOP or
+                                        PlaybackStateCompat.ACTION_SEEK_TO or
+                                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+                                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+                        )
+                        .build()
         mediaSession.setPlaybackState(playbackState)
         updateNotification()
     }
@@ -247,81 +253,86 @@ class MyAudioService : MediaBrowserServiceCompat() {
 
     private fun updateNotificationProgress() {
         if (!::exoPlayer.isInitialized) return
-    
+
         val metadata = mediaSession.controller.metadata
         val title = metadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE) ?: "Audio"
         val artist = metadata?.getString(MediaMetadataCompat.METADATA_KEY_ARTIST) ?: "Unknown"
         val isPlaying = exoPlayer.isPlaying
-    
+
         val current = exoPlayer.currentPosition.coerceAtLeast(0)
         val total = exoPlayer.duration.coerceAtLeast(1)
-    
-        // Use different request codes for each PendingIntent to avoid conflicts
-        val playIntent = PendingIntent.getService(
-            this, 0,
-            Intent(this, MyAudioService::class.java).setAction("PLAY_ACTION"),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val pauseIntent = PendingIntent.getService(
-            this, 1,
-            Intent(this, MyAudioService::class.java).setAction("PAUSE_ACTION"),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val nextIntent = PendingIntent.getService(
-            this, 2,
-            Intent(this, MyAudioService::class.java).setAction("NEXT_ACTION"),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val prevIntent = PendingIntent.getService(
-            this, 3,
-            Intent(this, MyAudioService::class.java).setAction("PREV_ACTION"),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val stopIntent = PendingIntent.getService(
-            this, 4,
-            Intent(this, MyAudioService::class.java).setAction("STOP_ACTION"),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-    
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(title)
-            .setContentText(artist)
-            .setSubText("${formatTime(current)} / ${formatTime(total)}")
-            .setSmallIcon(android.R.drawable.ic_media_play)
-            .setOngoing(isPlaying)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setOnlyAlertOnce(true)
-            .setWhen(System.currentTimeMillis() - current)
-            .setUsesChronometer(true)
-            .setShowWhen(true)
-            .setProgress(
-                if (total > 0) total.toInt() else 0,
-                if (total > 0) current.toInt() else 0,
-                total <= 0
-            )
-            .setStyle(
-                androidx.media.app.NotificationCompat.MediaStyle()
-                    .setMediaSession(mediaSession.sessionToken)
-                    .setShowActionsInCompactView(0, 1, 2)
-                    .setShowCancelButton(true)
-                    .setCancelButtonIntent(stopIntent)
-            )
-            .addAction(android.R.drawable.ic_media_previous, "Prev", prevIntent)
-            .addAction(
-                if (isPlaying) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play,
-                if (isPlaying) "Pause" else "Play",
-                if (isPlaying) pauseIntent else playIntent
-            )
-            .addAction(android.R.drawable.ic_media_next, "Next", nextIntent)
-            .setContentIntent(mediaSession.controller.sessionActivity)
-    
+
+        val playIntent =
+                PendingIntent.getService(
+                        this,
+                        0,
+                        Intent(this, MyAudioService::class.java).setAction("PLAY_ACTION"),
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+        val pauseIntent =
+                PendingIntent.getService(
+                        this,
+                        1,
+                        Intent(this, MyAudioService::class.java).setAction("PAUSE_ACTION"),
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+        val nextIntent =
+                PendingIntent.getService(
+                        this,
+                        2,
+                        Intent(this, MyAudioService::class.java).setAction("NEXT_ACTION"),
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+        val prevIntent =
+                PendingIntent.getService(
+                        this,
+                        3,
+                        Intent(this, MyAudioService::class.java).setAction("PREV_ACTION"),
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+        val volUpIntent =
+                PendingIntent.getService(
+                        this,
+                        4,
+                        Intent(this, MyAudioService::class.java).setAction("VOLUME_UP_ACTION"),
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+        val volDownIntent =
+                PendingIntent.getService(
+                        this,
+                        5,
+                        Intent(this, MyAudioService::class.java).setAction("VOLUME_DOWN_ACTION"),
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+
+        val builder =
+                NotificationCompat.Builder(this, CHANNEL_ID)
+                        .setContentTitle(title)
+                        .setContentText("$artist | Volume: ${(customVolume * 100).toInt()}%")
+                        .setSubText("${formatTime(current)} / ${formatTime(total)}")
+                        .setSmallIcon(android.R.drawable.ic_media_play)
+                        .setOngoing(isPlaying)
+                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                        .setOnlyAlertOnce(true)
+                        .addAction(android.R.drawable.ic_media_previous, "Prev", prevIntent)
+                        .addAction(
+                                if (isPlaying) android.R.drawable.ic_media_pause
+                                else android.R.drawable.ic_media_play,
+                                if (isPlaying) "Pause" else "Play",
+                                if (isPlaying) pauseIntent else playIntent
+                        )
+                        .addAction(android.R.drawable.ic_media_next, "Next", nextIntent)
+                        .addAction(android.R.drawable.ic_media_ff, "Vol+", volUpIntent)
+                        .addAction(android.R.drawable.ic_media_rew, "Vol-", volDownIntent)
+                        .setStyle(
+                                androidx.media.app.NotificationCompat.MediaStyle()
+                                        .setMediaSession(mediaSession.sessionToken)
+                                        .setShowActionsInCompactView(0, 1, 2, 3, 4)
+                        )
+
         val notificationManager = getSystemService(NotificationManager::class.java)
-        if (isPlaying) {
-            startForeground(NOTIFICATION_ID, builder.build())
-        } else {
-            // When paused or stopped, update the notification without starting foreground
-            notificationManager?.notify(NOTIFICATION_ID, builder.build())
-        }
+        if (isPlaying) startForeground(NOTIFICATION_ID, builder.build())
+        else notificationManager?.notify(NOTIFICATION_ID, builder.build())
     }
 
     private fun formatTime(ms: Long): String {
@@ -331,15 +342,72 @@ class MyAudioService : MediaBrowserServiceCompat() {
         return String.format("%d:%02d", minutes, seconds)
     }
 
+    // 🎚️ Independent Volume Functions
+    fun setCustomVolume(volume: Float) {
+        customVolume = volume.coerceIn(0f, 1f)
+        exoPlayer.volume = customVolume
+        sendVolumeUpdate()
+        updateNotification()
+    }
+
+    fun increaseVolume(step: Float = 0.1f) {
+        setCustomVolume(customVolume + step)
+    }
+
+    fun decreaseVolume(step: Float = 0.1f) {
+        setCustomVolume(customVolume - step)
+    }
+
+    // 🔄 Smooth fade out
+    fun fadeOutVolume(durationMs: Long = 2000L) {
+        if (isFading) return
+        isFading = true
+        val start = customVolume
+        val steps = 20
+        val delay = durationMs / steps
+        var i = 0
+        volumeFadeHandler.post(
+                object : Runnable {
+                    override fun run() {
+                        val newVol = start * (1f - i / steps.toFloat())
+                        setCustomVolume(newVol)
+                        if (i++ < steps) volumeFadeHandler.postDelayed(this, delay)
+                        else isFading = false
+                    }
+                }
+        )
+    }
+
+    // 🔄 Smooth fade in
+    fun fadeInVolume(durationMs: Long = 2000L) {
+        if (isFading) return
+        isFading = true
+        val end = customVolume
+        setCustomVolume(0f)
+        val steps = 20
+        val delay = durationMs / steps
+        var i = 0
+        volumeFadeHandler.post(
+                object : Runnable {
+                    override fun run() {
+                        val newVol = i / steps.toFloat() * end
+                        setCustomVolume(newVol)
+                        if (i++ < steps) volumeFadeHandler.postDelayed(this, delay)
+                        else isFading = false
+                    }
+                }
+        )
+    }
+
     override fun onGetRoot(
-        clientPackageName: String,
-        clientUid: Int,
-        rootHints: Bundle?
+            clientPackageName: String,
+            clientUid: Int,
+            rootHints: Bundle?
     ): BrowserRoot? = BrowserRoot("root_id", null)
 
     override fun onLoadChildren(
-        parentId: String,
-        result: Result<MutableList<MediaBrowserCompat.MediaItem>>
+            parentId: String,
+            result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
         result.sendResult(null)
     }
@@ -354,5 +422,9 @@ class MyAudioService : MediaBrowserServiceCompat() {
 
     fun addToPlaylist(urls: List<String>) {
         playlist.addAll(urls)
+    }
+    fun setVolumeFromReact(value: Float) {
+        val newVol = value.coerceIn(0f, 1f)
+        setCustomVolume(newVol)
     }
 }

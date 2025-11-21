@@ -10,7 +10,7 @@ import {
   ToastAndroid,
   Platform,
 } from 'react-native';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   heightPercent as hp,
   widthPrecent as wp,
@@ -23,30 +23,36 @@ import Feather from 'react-native-vector-icons/Feather';
 import Tts from 'react-native-tts';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Mymodal from '../../components/molecules/Modal';
-import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 import {} from 'react-native-gesture-handler';
 import CircularProgress from 'react-native-circular-progress-indicator';
-import {useDispatch} from 'react-redux';
-import {setupPlayer} from '../../utils/Setup';
+import { useDispatch } from 'react-redux';
+import { setupPlayer } from '../../utils/Setup';
 // import TrackPlayer from 'react-native-track-player';
 import RNFS from 'react-native-fs';
-import {fonts} from '../../Context/Conctants';
+import { fonts } from '../../Context/Conctants';
 import storage from '../../utils/StorageService';
-import {MusicPlayerContext} from '../../Context/MusicPlayerConstaxt';
+import { MusicPlayerContext } from '../../Context/MusicPlayerConstaxt';
+import {
+  pauseAudio,
+  playAudio,
+  setPlaylist,
+  setVolumeSound,
+} from '../../native/SoundModule';
 const data = [
   {
     id: '1',
     title: 'Voice',
     image: require('../../assets/profilepic/profile2.jpg'),
   },
-  {id: '2', title: 'Time', image: require('../../assets/timer.jpg')},
-  {id: '3', title: 'Music', image: require('../../assets/music1.jpg')},
+  { id: '2', title: 'Time', image: require('../../assets/timer.jpg') },
+  { id: '3', title: 'Music', image: require('../../assets/music1.jpg') },
 ];
 
-const Playsong = ({route}) => {
+const Playsong = ({ route }) => {
   const indexxxx = route.params.index;
-  const {screens} = useSelector(state => state.home);
+  const { screens } = useSelector(state => state.home);
 
   const {
     currentTrack,
@@ -136,8 +142,8 @@ const Playsong = ({route}) => {
 
   useEffect(() => {
     player('Sleeping.wav');
-    Tts.setDefaultPitch(1)
-    Tts.setDefaultRate(0.35); 
+    Tts.setDefaultPitch(1);
+    Tts.setDefaultRate(0.35);
     setIsPaused(false);
   }, []);
 
@@ -153,12 +159,13 @@ const Playsong = ({route}) => {
   const getmodified = (array, indexs, bool) => {
     return array.map((item, index) => {
       if (index == indexs) {
-        return {...item, is_favorite: bool};
+        return { ...item, is_favorite: bool };
       } else {
         return item;
       }
     });
   };
+
   const handleHeartPress = async (item, index) => {
     const items = await storage.getMultipleItems([
       storage.TOKEN,
@@ -179,7 +186,6 @@ const Playsong = ({route}) => {
     });
   };
   const removeFavroit = async (item, index) => {
-  
     const items = await storage.getMultipleItems([
       storage.TOKEN,
       storage.USER_ID,
@@ -200,24 +206,27 @@ const Playsong = ({route}) => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <ImageBackground
         source={require('../../assets/music.jpg')}
-        style={{width: '100%', height: '100%'}}>
+        style={{ width: '100%', height: '100%' }}
+      >
         <View
           style={{
             backgroundColor: '#191919',
             height: hp(100),
             zIndex: 1,
             opacity: 0.93,
-          }}>
+          }}
+        >
           <View
             style={{
               flexDirection: 'row',
               marginTop: 20,
               alignItems: 'center',
-            }}>
-            <View style={{height: hp(5), marginLeft: '5%'}}>
+            }}
+          >
+            <View style={{ height: hp(5), marginLeft: '5%' }}>
               <Icon
                 onPress={() => navigation.goBack()}
                 name="arrow-back"
@@ -235,14 +244,16 @@ const Playsong = ({route}) => {
                 elevation: 3,
                 shadowColor: '#fff',
               },
-            ]}>
+            ]}
+          >
             <View
               style={{
                 flexDirection: 'row',
                 alignSelf: 'center',
                 width: wp(50),
                 marginHorizontal: '4%',
-              }}>
+              }}
+            >
               <Text
                 style={{
                   fontSize: hp(2.5),
@@ -251,7 +262,8 @@ const Playsong = ({route}) => {
                   // fontFamily: 'Poppins-Medium',
                   color: 'white',
                   fontFamily: fonts.medium,
-                }}>
+                }}
+              >
                 Affirmations
               </Text>
             </View>
@@ -266,7 +278,8 @@ const Playsong = ({route}) => {
                 overflow: 'hidden',
                 // borderColor: '#fff',
                 backgroundColor: '#fff',
-              }}>
+              }}
+            >
               <Image
                 source={require('../../assets/music.jpg')}
                 style={{
@@ -287,14 +300,16 @@ const Playsong = ({route}) => {
               right: wp(10),
               position: 'absolute',
               zIndex: 1,
-            }}>
+            }}
+          >
             <TouchableOpacity
-              style={{zIndex: 2}}
+              style={{ zIndex: 2 }}
               onPress={() => {
                 !affirmations[visibleIndex].is_favorite
                   ? handleHeartPress(affirmations[visibleIndex], visibleIndex)
                   : removeFavroit(affirmations[visibleIndex], visibleIndex);
-              }}>
+              }}
+            >
               <FontAwesome
                 name={
                   affirmations[visibleIndex]?.is_favorite ? 'heart' : 'heart-o'
@@ -315,21 +330,22 @@ const Playsong = ({route}) => {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('Menu');
-              }}>
+              }}
+            >
               <Entypo name="dots-three-horizontal" size={30} color="white" />
             </TouchableOpacity>
           </View>
 
-          <View style={{height: hp(100)}}>
+          <View style={{ height: hp(100) }}>
             <FlatList
               ref={flatListRef}
               pagingEnabled
               initialScrollIndex={0}
               showsVerticalScrollIndicator={false}
               data={affirmations}
-              renderItem={({item, index}) =>
+              renderItem={({ item, index }) =>
                 true ? (
-                  <View style={{height: hp(100)}}>
+                  <View style={{ height: hp(100) }}>
                     <View
                       style={{
                         justifyContent: 'center',
@@ -339,16 +355,17 @@ const Playsong = ({route}) => {
                         width: wp(70),
                         position: 'absolute',
                         top: '10%',
-                      }}>
+                      }}
+                    >
                       <Text style={styles.text}>{item?.affirmation_text}</Text>
                     </View>
                   </View>
                 ) : (
-                  <View style={{height: hp(100)}} />
+                  <View style={{ height: hp(100) }} />
                 )
               }
               keyExtractor={(item, index) => index.toString()}
-              onViewableItemsChanged={async ({viewableItems, changed}) => {
+              onViewableItemsChanged={async ({ viewableItems, changed }) => {
                 const newIndex = viewableItems[0].index;
                 readText(affirmations[newIndex].affirmation_text); // Read text when view changes
                 setVisibleIndex(newIndex);
@@ -378,7 +395,8 @@ const Playsong = ({route}) => {
               alignItems: 'center',
               position: 'absolute',
               bottom: '20%',
-            }}>
+            }}
+          >
             <Image
               source={
                 isPaused
@@ -393,7 +411,7 @@ const Playsong = ({route}) => {
                 zIndex: 0,
               }}
             />
-            
+
             <CircularProgress
               value={progress}
               radius={hp(4.5)}
@@ -416,13 +434,14 @@ const Playsong = ({route}) => {
               width: wp(100),
               position: 'absolute',
               bottom: hp(3),
-            }}>
+            }}
+          >
             <FlatList
               data={data}
               horizontal={true}
               scrollEnabled={false}
               keyExtractor={item => item.id}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <TouchableOpacity onPress={() => handleTabPress(item.title)}>
                   <View
                     style={{
@@ -435,7 +454,8 @@ const Playsong = ({route}) => {
                         selectedTab === item.title ? '#000000' : '#DEDEDE',
                       borderRadius: hp(5),
                       marginHorizontal: wp(1),
-                    }}>
+                    }}
+                  >
                     <Text
                       style={{
                         color: selectedTab === item.title ? 'white' : 'black',
@@ -443,7 +463,8 @@ const Playsong = ({route}) => {
                         // fontWeight: '400',
                         right: wp(3),
                         fontFamily: fonts.medium,
-                      }}>
+                      }}
+                    >
                       {item.title}
                     </Text>
                     <Image
