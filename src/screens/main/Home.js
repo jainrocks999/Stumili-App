@@ -131,6 +131,7 @@ const HomeScreen = props => {
     });
   };
   const getAffetMationsbyCategories = async item => {
+   
     const items = await storage.getMultipleItems([
       storage.TOKEN,
       storage.USER_ID,
@@ -176,7 +177,7 @@ const HomeScreen = props => {
     const user = items.find(([key]) => key === storage.USER_ID)?.[1];
     dispatch({
       type: 'home/removeFavriout_request',
-      url: 'unlikeCategories',
+      url: 'removeFavoriteList',
       user_id: user,
       favorite_id: item.item.favorite_id,
       category_id: item.item.id,
@@ -256,7 +257,7 @@ const HomeScreen = props => {
       );
       dispatch({
         type: 'home/removeFavriout_request',
-        url: 'unlikeCategories',
+        url: 'removeFavoriteList',
         user_id: user,
         favorite_id: item.item.favorite_id,
         category_id: item.item.id,
@@ -435,7 +436,7 @@ const HomeScreen = props => {
           data={groups}
           renderItem={({ item, index }) => (
             <>
-              {item.groupByCategory.length > 0 ? (
+              {item.groupByCategory?.length > 0 ? (
                 <>
                   <View style={styles.FeatureContainer}>
                     <CateGoriesModal

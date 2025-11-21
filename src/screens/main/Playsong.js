@@ -189,10 +189,10 @@ const Playsong = ({route}) => {
     const modified = getmodified(affirmations, index, false);
     dispatch({
       type: 'home/removeFavriout_request',
-      url: 'unlikeAffirmations',
+      url: 'removeFavoriteList',
       user_id: user,
-      favorite_id: item.favorite_id,
-      category_id: item.id,
+      favorite_id: item?.favorite_id,
+      category_id: item?.id,
       token,
       isCat: false,
       data: modified,
@@ -386,16 +386,17 @@ const Playsong = ({route}) => {
                   : require('../../assets/flaticon/pause.png')
               }
               style={{
-                height: hp(3.5),
-                width: hp(3.5),
+                height: hp(2.5),
+                width: hp(2.5),
                 tintColor: !isPaused ? '#fff' : '#fff',
                 position: 'absolute',
                 zIndex: 0,
               }}
             />
+            
             <CircularProgress
               value={progress}
-              radius={hp(5.3)}
+              radius={hp(4.5)}
               // progressValueFontSize={wp(1)}
               duration={200}
               progressValueColor={'#ecf0f1'}
@@ -426,7 +427,7 @@ const Playsong = ({route}) => {
                   <View
                     style={{
                       width: wp(30),
-                      height: hp(6),
+                      height: hp(5.5),
                       alignItems: 'center',
                       justifyContent: 'flex-end',
                       flexDirection: 'row',
@@ -438,8 +439,8 @@ const Playsong = ({route}) => {
                     <Text
                       style={{
                         color: selectedTab === item.title ? 'white' : 'black',
-                        fontSize: hp(2.1),
-                        fontWeight: '400',
+                        fontSize: hp(1.8),
+                        // fontWeight: '400',
                         right: wp(3),
                         fontFamily: fonts.medium,
                       }}>
@@ -448,9 +449,9 @@ const Playsong = ({route}) => {
                     <Image
                       source={item.image}
                       style={{
-                        width: hp(6),
+                        width: hp(5.1),
                         color: selectedTab === item.image ? 'white' : 'black',
-                        height: hp(6),
+                        height: hp(5.1),
                         borderRadius: hp(7),
                       }}
                     />

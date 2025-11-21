@@ -142,6 +142,7 @@ const Toptab = () => {
     getFavroitCategories(true);
   }, [grops, category]);
   const getAffetMations = async item => {
+  
     const items = await storage.getMultipleItems([
       storage.TOKEN,
       storage.USER_ID,
@@ -184,7 +185,7 @@ const Toptab = () => {
     });
   };
 
-  const getAffetMationsbyCategories = async item => {
+  const getAffetMationsbyCategories = async item => {    
     const items = await storage.getMultipleItems([
       storage.TOKEN,
       storage.USER_ID,
@@ -328,7 +329,7 @@ const Toptab = () => {
                   />
                   <TouchableOpacity
                     onPress={() => {
-                      getAffetMations(item);
+                      getAffetMationsbyCategories(item);
                     }}>
                     <View style={styles.imageeContainer}>
                       <View

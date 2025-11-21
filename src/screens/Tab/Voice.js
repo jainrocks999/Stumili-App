@@ -57,8 +57,8 @@ const Voice = ({ voice, onPress, selectedVoice }) => {
       sub.remove();
     };
   }, []);
-  const getVolume = async() => {
-    const value= await VolumeModule.getVolume()
+  const getVolume = async () => {
+    const value = await VolumeModule.getVolume();
     setVolume(value);
   };
   useEffect(() => {
@@ -67,16 +67,76 @@ const Voice = ({ voice, onPress, selectedVoice }) => {
   function filterByLanguage(array, languages) {
     return array.filter(item => languages.includes(item.language));
   }
-  const myvoice = vociesss
-    .filter((item, index) => {
-      return item.language == 'en-IN';
-    })
-    .map((item, index) => ({
-      id: item.id,
-      name: 'Lily' + index,
-      language: item.language,
+  // const myvoice = vociesss
+  //   .filter((item, index) => {
+  //     return item.language == 'en-IN';
+  //   })
+  //   .map((item, index) => ({
+  //     id: item.id,
+  //     name: 'Lily' + index,
+  //     language: item.language,
+  //     image: require('../../assets/profilepic/profile4.jpg'),
+  //   }));
+
+  const myvoice = [
+    {
+      id: 'en-in-x-ene-network',
+      name: 'Aarohi',
+      language: 'en-IN',
       image: require('../../assets/profilepic/profile4.jpg'),
-    }));
+    },
+    {
+      id: 'en-in-x-enc-network',
+      name: 'Ishita',
+      language: 'en-IN',
+      image: require('../../assets/profilepic/profile5.jpg'),
+    },
+    {
+      id: 'en-in-x-enc-local',
+      name: 'Diya',
+      language: 'en-IN',
+      image: require('../../assets/profilepic/profile4.jpg'),
+    },
+    {
+      id: 'en-in-x-end-local',
+      name: 'Sanya',
+      language: 'en-IN',
+      image: require('../../assets/profilepic/profile6.jpg'),
+    },
+    {
+      id: 'en-in-x-ena-network',
+      name: 'Meera',
+      language: 'en-IN',
+      image: require('../../assets/profilepic/profile3.jpg'),
+    },
+    {
+      id: 'en-in-x-end-network',
+      name: 'Kavya',
+      language: 'en-IN',
+      image: require('../../assets/profilepic/profile4.jpg'),
+    },
+    {
+      id: 'en-in-x-ene-local',
+      name: 'Anika',
+      language: 'en-IN',
+      image: require('../../assets/profilepic/profile2.jpg'),
+    },
+    {
+      id: 'en-in-x-ena-local',
+      name: 'Riya',
+      language: 'en-IN',
+      image: require('../../assets/profilepic/profile5.jpg'),
+    },
+    {
+      id: 'en-IN-language',
+      name: 'Tara',
+      language: 'en-IN',
+      image: require('../../assets/profilepic/profile6.jpg'),
+    },
+  ];
+
+  console.log('this is my ovices', myvoice);
+
   const myvoice1 = [
     {
       id: 'en-IN-language',

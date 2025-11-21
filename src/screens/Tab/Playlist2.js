@@ -66,7 +66,7 @@ const Img = [
   {
     id: '6',
     image: require('../../assets/music.jpg'),
-    title: 'Lorem Ipsum is simply dummy text of the  ',
+    title: 'Lorem Ipsum is simply dummy text of the',
     title2: '90 affirmations',
   },
   {
@@ -140,7 +140,7 @@ const Playlistdetails = () => {
     const user = items.find(([key]) => key === storage.USER_ID)?.[1];
     dispatch({
       type: 'home/removeFavriout_request',
-      url: 'unlikeCategories',
+      url: 'removeFavoriteList',
       user_id: user,
       favorite_id: item.favorite_id,
       category_id: item.id,

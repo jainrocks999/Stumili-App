@@ -254,10 +254,9 @@ function* fetchCreatePlaylist(action) {
 }
 function* fetchCreatefavriote(action) {
   try {
-    console.log(action);
+  
     let formdata = new FormData();
     formdata.append('user_id', action.user_id);
-    console.log(action.user_id);
     formdata.append('category_id', action.category_id);
     formdata.append('affirmation_id', action.affirmation_id);
     const res = yield call(Api.API_POST, {
@@ -515,13 +514,17 @@ function* removeFavrioutList(action) {
     const params = {
       user_id: action.user_id,
       favorite_id: action.favorite_id,
-      [action.isCat ? 'category_id' : 'affirmation_id']: action.category_id,
+      [action.isCat ? 'category_id' : 'affirmation_text_id']: action.category_id,
     };
+    console.log("paramsss",params);
+    
     const res = yield call(Api.API_GET, {
       token: action.token,
       url: action.url,
       params,
     });
+    console.log("dkdkdkdkd",res);
+    
     if (res.status) {
       yield put({
         type: 'home/removeFavriout_success',
@@ -594,7 +597,7 @@ function* fetchAffirmationByCategory(action) {
     if (res?.status) {
       yield put({
         type: 'home/affirmationBYCategory_success',
-        payload: res.data?.[0]?.affirmation_text,
+        payload: res.data,
       });
       if (action.item) {
         yield put({
@@ -602,7 +605,7 @@ function* fetchAffirmationByCategory(action) {
           payload: { from: false, isFroiut: false, ...action.item },
         });
       }
-      if (action.navigation && res.data?.[0]?.affirmation_text?.length > 0)
+      if (action.navigation && res.data?.length > 0)
         action.navigation.navigate(action.page);
       else {
         Toast.show('No affiramtion is this playlist');

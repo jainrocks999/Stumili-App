@@ -1,4 +1,4 @@
-import {mainURl} from '../constanst';
+import { mainURl } from '../constanst';
 export default class Api {
   static getToken = async data => {
     var formdata = new FormData();
@@ -29,8 +29,8 @@ export default class Api {
   static API_POST = async data => {
     var myHeaders = {
       Authorization: `Bearer ${data.token}`,
-         'Content-Type': 'multipart/form-data',
-    'Accept': 'application/json'
+      'Content-Type': 'multipart/form-data',
+      Accept: 'application/json',
     };
 
     var requestOptions = {
@@ -46,35 +46,32 @@ export default class Api {
       .catch(error => console.log('error', error));
   };
   static API_GET = async data => {
-    try{
-    let params = data.params;
-    var myHeaders = {
-      Authorization: `Bearer ${data.token}`,
-    };
-    const queryString = Object.keys(params)
-      .map(
-        key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]),
-      )
-      .join('&');
+    try {
+      let params = data.params;
+      var myHeaders = {
+        Authorization: `Bearer ${data.token}`,
+      };
+      const queryString = Object.keys(params)
+        .map(
+          key =>
+            encodeURIComponent(key) + '=' + encodeURIComponent(params[key]),
+        )
+        .join('&');
 
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-    };
-  ;
-  
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+      const response = await fetch(
+        `${mainURl}${data.url}?${queryString}`,
+        requestOptions,
+      );
 
-    const response= await fetch(`${mainURl}${data.url}?${queryString}`, requestOptions)
-    console.log("thsisiis",response);
-    
-    return await response.json()
-  }catch(err){
-    
-    console.log("error in Api ===>",err)
-    return null
-  }
-  
-    
+      return await response.json();
+    } catch (err) {
+      console.log('error in Api ===>', err);
+      return null;
+    }
   };
 }

@@ -92,14 +92,14 @@ export const MusicPlayerProvider = ({ children }) => {
 
       let selectedVoice = null;
       if (voices && voices?.length > 0) {
-        selectedVoice = 'en-au-x-auc-local';
+        selectedVoice = 'en-in-x-ene-network';
         try {
-          await Tts.setDefaultLanguage('en-AU');
+          await Tts.setDefaultLanguage('en-IN');
         } catch (err) {
           console.log(`setDefaultLanguage error `, err);
         }
 
-        await Tts.setDefaultVoice('en-au-x-auc-local');
+        await Tts.setDefaultVoice('en-in-x-ene-network');
         if (affirmations?.length > 0) {
           readText(affirmations[0].affirmation_text);
           player('sleeping.waw');
@@ -116,7 +116,7 @@ export const MusicPlayerProvider = ({ children }) => {
     const remove = Tts.addEventListener('tts-finish', handleTTSFinish);
     return () => {
       if (remove) remove.remove(handleTTSFinish);
-      // Tts.removeEventListener('tts-finish', handleTTSFinish);
+  
     };
   }, [playItem]);
 
