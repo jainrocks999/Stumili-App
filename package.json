@@ -77,11 +77,11 @@
     "node": ">=20"
   },
   "codegenConfig": {
-  "name": "AudioModule",
-  "type": "modules",
-  "jsSrcsDir": "./src/native",
-  "android": {
-    "javaPackageName": "com.stumili"
+    "name": "AudioModule",
+    "type": "modules",
+    "jsSrcsDir": "./src/native",
+    "android": {
+      "javaPackageName": "com.stumili"
+    }
   }
-}
 }

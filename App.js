@@ -1,20 +1,20 @@
-import React, {useEffect} from 'react';
-import {Clipboard, Vibration} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import React, { useEffect } from 'react';
+import { Clipboard, Vibration } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from './src/navigation/AppNavigator';
-import {LogBox, PermissionsAndroid} from 'react-native';
-import {Provider} from 'react-redux';
+import { LogBox, PermissionsAndroid } from 'react-native';
+import { Provider } from 'react-redux';
 import store from './src/redux/store';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 // import PushNotification from 'react-native-push-notification';
 import crashlytics from '@react-native-firebase/crashlytics';
 import SoundPlayer from 'react-native-sound-player';
-import {MusicPlayerProvider} from './src/Context/MusicPlayerConstaxt';
+import { MusicPlayerProvider } from './src/Context/MusicPlayerConstaxt';
 import {
   heightPercent as hp,
   widthPrecent as wp,
 } from './src/components/atoms/responsive';
-import {View} from 'react-native';
+import { View } from 'react-native';
 import Root from './src';
 const App = () => {
   LogBox.ignoreAllLogs();
@@ -64,15 +64,16 @@ const App = () => {
   // };
   useEffect(() => {
     // initiateNotifiction();
-    crashlytics().log('analytics just mounted');
-    getCrashlyticsDetail();
+    // crashlytics().log('analytics just mounted');
+    crashlytics().crash();
+    // getCrashlyticsDetail();
     return () => {
       crashlytics().log('analitics just unmounted');
     };
   }, []);
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
         <Root />
       </Provider>

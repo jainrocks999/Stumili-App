@@ -5,9 +5,6 @@
 import { AppRegistry, PermissionsAndroid, Platform } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
-import AudioPlayer from './Sound';
-// import TrackPlayer from 'react-native-track-player';
-// TrackPlayer.registerPlaybackService(() => require('./Service'));
 requestNotificationPermission();
 AppRegistry.registerComponent(appName, () => App);
 async function requestNotificationPermission() {
