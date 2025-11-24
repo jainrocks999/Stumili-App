@@ -74,4 +74,28 @@ export default class Api {
       return null;
     }
   };
+  static API_POST_JSON = async data => {
+    try {
+      const myHeaders = {
+        Authorization: `Bearer ${data.token}`, // agar token chahiye
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      };
+
+      const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(data.body), // JSON body
+        redirect: 'follow',
+      };
+
+      console.log(`${mainURl}${data.url}`);
+      const response = await fetch(`${mainURl}${data.url}`, requestOptions);
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.log('error', error);
+      throw error;
+    }
+  };
 }

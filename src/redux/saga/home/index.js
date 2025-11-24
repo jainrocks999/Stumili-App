@@ -254,11 +254,10 @@ function* fetchCreatePlaylist(action) {
 }
 function* fetchCreatefavriote(action) {
   try {
-  
     let formdata = new FormData();
     formdata.append('user_id', action.user_id);
     formdata.append('category_id', action.category_id);
-    formdata.append('affirmation_id', action.affirmation_id);
+    formdata.append('affirmation_text_id', action.affirmation_id);
     const res = yield call(Api.API_POST, {
       formdata,
       token: action.token,
@@ -359,19 +358,22 @@ function* getfavoriteList(action) {
 }
 function* addPlaylistItem(action) {
   try {
-    const formdata = new FormData();
-    formdata.append('playlist_id', action.playlist_id);
-    formdata.append('category_id[0]', 0);
+    // const formdata = new FormData();
+    // formdata.append('playlist_id', action.playlist_id);
+    // formdata.append('category_id[0]', 0);
     if (Array.isArray(action.affirmation_id)) {
-      action.affirmation_id.map((item, index) => {
-        formdata.append(`affirmation_id[${index}]`, item);
-      });
-      const res = yield call(Api.API_POST, {
-        formdata,
+      // action.affirmation_id.map((item, index) => {
+      //   formdata.append(`affirmation_id[${index}]`, item);
+      // });
+      const formdata = {
+        affirmation_text_id: action?.affirmation_id,
+        playlist_id: action.playlist_id,
+      };
+      const res = yield call(Api.API_POST_JSON, {
+        body: formdata,
         token: action.token,
         url: action.url,
       });
-      console.log('thjis is res', res);
       if (res.status) {
         yield put({
           type: 'home/add_playlistItem_success',
@@ -409,6 +411,9 @@ function* getPlayListItem(action) {
       url: action.url,
       params,
     });
+
+    console.log('titititititii', res);
+
     if (res.status) {
       yield put({
         type: 'home/playList_item',
@@ -467,6 +472,9 @@ function* getFavoriout(action) {
       url: action.url,
       params,
     });
+
+    console.log('rrrrrrirdeii', res);
+
     if (res.status) {
       console.log(res.data);
       yield put({
@@ -513,18 +521,19 @@ function* removeFavrioutList(action) {
   try {
     const params = {
       user_id: action.user_id,
-      favorite_id: action.favorite_id,
-      [action.isCat ? 'category_id' : 'affirmation_text_id']: action.category_id,
+      // favorite_id: action.favorite_id,
+      [action.isCat ? 'category_id' : 'affirmation_text_id']:
+        action.category_id,
     };
-    console.log("paramsss",params);
-    
+    console.log('paramsss', params);
+
     const res = yield call(Api.API_GET, {
       token: action.token,
       url: action.url,
       params,
     });
-    console.log("dkdkdkdkd",res);
-    
+    console.log('dkdkdkdkd', res);
+
     if (res.status) {
       yield put({
         type: 'home/removeFavriout_success',
@@ -691,16 +700,20 @@ function* deletePlaylist(action) {
 }
 function* deletePlaylistItme(action) {
   try {
-    const formdata = new FormData();
-    formdata.append('playlist_id', action.playlist_id);
-    if (Array.isArray(action.affirmation_id)) {
-      action.affirmation_id.map((item, index) => {
-        formdata.append(`affirmation_id[${index}]`, item);
-      });
-    }
+    // const formdata = new FormData();
+    // formdata.append('playlist_id', action.playlist_id);
+    // if (Array.isArray(action.affirmation_id)) {
+    //   action.affirmation_id.map((item, index) => {
+    //     formdata.append(`affirmation_id[${index}]`, item);
+    //   });
+    // }
+    const formdata = {
+      affirmation_text_id: action?.affirmation_id,
+      playlist_id: action.playlist_id,
+    };
 
-    const res = yield call(Api.API_POST, {
-      formdata,
+    const res = yield call(Api.API_POST_JSON, {
+      body: formdata,
       token: action.token,
       url: action.url,
     });

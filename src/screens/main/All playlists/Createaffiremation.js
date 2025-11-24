@@ -6,8 +6,8 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {
@@ -16,10 +16,10 @@ import {
 } from '../../../components/atoms/responsive';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import {ScrollView} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Buttun from '../../Auth/compoents/Buttun';
-import {fonts} from '../../../Context/Conctants';
+import { fonts } from '../../../Context/Conctants';
 const Img = [
   {
     id: '1',
@@ -70,8 +70,8 @@ const Img = [
     title2: '90 affirmations',
   },
 ];
-const Createaffirmation = ({route}) => {
-  const {affirmations, addetItems_to_playlist} = useSelector(
+const Createaffirmation = ({ route }) => {
+  const { affirmations, addetItems_to_playlist } = useSelector(
     state => state.home,
   );
   const [selected, setSelected] = useState([]);
@@ -104,15 +104,16 @@ const Createaffirmation = ({route}) => {
 
   const navigation = useNavigation();
   return (
-    <View style={{flex: 1, backgroundColor: '#191919'}}>
+    <View style={{ flex: 1, backgroundColor: '#191919' }}>
       <View
         style={{
           flexDirection: 'row',
           marginTop: 20,
           alignItems: 'center',
           justifyContent: 'center',
-        }}>
-        <View style={{height: hp(5), marginLeft: '15%'}}>
+        }}
+      >
+        <View style={{ height: hp(5), marginLeft: '15%' }}>
           <Icon
             onPress={() => navigation.goBack()}
             name="arrow-back"
@@ -120,7 +121,7 @@ const Createaffirmation = ({route}) => {
             color="white"
           />
         </View>
-        <View style={{height: hp(5), width: wp(100)}}>
+        <View style={{ height: hp(5), width: wp(100) }}>
           <Text
             style={{
               fontSize: 20,
@@ -128,7 +129,8 @@ const Createaffirmation = ({route}) => {
               marginHorizontal: '8%',
               fontFamily: fonts.bold,
               color: 'white',
-            }}>
+            }}
+          >
             Edit List of Affirmation
           </Text>
         </View>
@@ -138,11 +140,13 @@ const Createaffirmation = ({route}) => {
           Edit List of Affirmation
         </Text>
       </View> */}
-      <ScrollView contentContainerStyle={{alignItems: 'center', marginTop: 20}}>
+      <ScrollView
+        contentContainerStyle={{ alignItems: 'center', marginTop: 20 }}
+      >
         <FlatList
           data={filterSelected()}
           keyExtractor={item => item.id}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <View
               style={{
                 flexDirection: 'row',
@@ -154,12 +158,13 @@ const Createaffirmation = ({route}) => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 paddingHorizontal: wp(4),
-              }}>
+              }}
+            >
               <Text style={styles.text}>
                 {item.affirmation_text.substring(0, 40)}
               </Text>
 
-              <View style={{justifyContent: 'center'}}>
+              <View style={{ justifyContent: 'center' }}>
                 <AntDesign
                   onPress={() => {
                     deselectItem(item.id);
@@ -180,12 +185,13 @@ const Createaffirmation = ({route}) => {
           height: hp(12),
           alignItems: 'center',
           width: '100%',
-        }}>
+        }}
+      >
         <Buttun
           onPress={() => {
-            navigation.navigate('saveplaylist', {isEdit: false});
+            navigation.navigate('saveplaylist', { isEdit: false });
           }}
-          title={`${'Next'}`}
+          title={`${'Nex'}`}
           style={{
             width: '58%',
           }}

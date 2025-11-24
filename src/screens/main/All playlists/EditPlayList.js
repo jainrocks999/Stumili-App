@@ -1,23 +1,24 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {
   widthPrecent as wp,
   heightPercent as hp,
 } from '../../../components/atoms/responsive';
-import {fonts} from '../../../Context/Conctants';
-import {Image} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import { fonts } from '../../../Context/Conctants';
+import { Image } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import Buttun from '../../Auth/compoents/Buttun';
-import {FlatList} from 'react-native';
+import { FlatList } from 'react-native';
 import AffirmationMenu from './AffirmationMenu';
 import storage from '../../../utils/StorageService';
 import Loader from '../../../components/Loader';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const EditPlayList = ({navigation}) => {
+const EditPlayList = ({ navigation }) => {
   const dispatch = useDispatch();
-  const {item, affirmations2, affirmations, loading} = useSelector(
+  const { item, affirmations2, affirmations, loading } = useSelector(
     state => state.home,
   );
   const data = item.item;
@@ -76,7 +77,7 @@ const EditPlayList = ({navigation}) => {
     const ids = getIds(selected);
     dispatch({
       type: 'home/update_playlistitem_request',
-      url: 'deletePlayListItem',
+      url: 'createPlayListItem',
       playlist_id: item.item.id,
       affirmation_id: ids,
       token,
@@ -85,7 +86,7 @@ const EditPlayList = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#191919'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#191919' }}>
       <Loader loading={loading} />
       <View
         style={{
@@ -93,7 +94,8 @@ const EditPlayList = ({navigation}) => {
           flexDirection: 'row',
           paddingHorizontal: wp(0),
           alignItems: 'center',
-        }}>
+        }}
+      >
         <Entypo
           onPress={() => navigation.goBack()}
           name="chevron-left"
@@ -105,7 +107,8 @@ const EditPlayList = ({navigation}) => {
           }}
         />
         <Text
-          style={{color: '#fff', fontSize: wp(5.5), fontFamily: fonts.medium}}>
+          style={{ color: '#fff', fontSize: wp(5.5), fontFamily: fonts.medium }}
+        >
           {'Edit PlayList'}
         </Text>
       </View>
@@ -115,12 +118,13 @@ const EditPlayList = ({navigation}) => {
         onClose={() => setVisible(false)}
         onSelect={item => toggleItemInSelected(item)}
       />
-      <View style={{height: '2%'}} />
+      <View style={{ height: '2%' }} />
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('saveplaylist', {isEdit: true});
+          navigation.navigate('saveplaylist', { isEdit: true });
         }}
-        style={styles.card}>
+        style={styles.card}
+      >
         <View
           style={{
             height: hp(9),
@@ -131,21 +135,23 @@ const EditPlayList = ({navigation}) => {
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: wp(2),
-          }}>
+          }}
+        >
           <Image
             tintColor={'#B72658'}
             source={require('../../../assets/playlist.png')}
-            style={{height: '100%', width: '100%'}}
+            style={{ height: '100%', width: '100%' }}
             resizeMode="contain"
           />
         </View>
-        <View style={{paddingBottom: '5%'}}>
+        <View style={{ paddingBottom: '5%' }}>
           <Text style={styles.title}>{data.title}</Text>
           <Text
             style={[
               styles.title,
-              {fontSize: wp(4), fontFamily: fonts.regular, marginTop: '2%'},
-            ]}>
+              { fontSize: wp(4), fontFamily: fonts.regular, marginTop: '2%' },
+            ]}
+          >
             <Entypo color="white" size={wp(3.5)} name={'pencil'} />
             {'Edit Name and info'}
           </Text>
@@ -154,19 +160,21 @@ const EditPlayList = ({navigation}) => {
       <Buttun
         onPress={() => getAffetMations()}
         child
-        style={styles.moreAffirmationBtn}>
+        style={styles.moreAffirmationBtn}
+      >
         <Text
           style={{
             fontSize: wp(5),
             textAlign: 'center',
             color: '#fff',
             fontFamily: fonts.medium,
-          }}>
+          }}
+        >
           {'Add More Affirmations'}
         </Text>
         <AntDesign
           size={wp(6)}
-          style={{marginTop: '1%', marginLeft: '3%'}}
+          style={{ marginTop: '1%', marginLeft: '3%' }}
           name="plus"
           color={'#fff'}
         />
@@ -179,7 +187,8 @@ const EditPlayList = ({navigation}) => {
           justifyContent: 'space-between',
           alignItems: 'center',
           alignSelf: 'center',
-        }}>
+        }}
+      >
         <Text style={styles.aded}>Added Affirmations</Text>
         <Text style={styles.aded}>{selected.length}</Text>
       </View>
@@ -189,11 +198,12 @@ const EditPlayList = ({navigation}) => {
           alignSelf: 'center',
           marginTop: '2%',
           height: '55%',
-        }}>
+        }}
+      >
         <FlatList
           data={selected}
           keyExtractor={item => item.id}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <View
               style={{
                 flexDirection: 'row',
@@ -205,12 +215,13 @@ const EditPlayList = ({navigation}) => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 paddingHorizontal: wp(4),
-              }}>
+              }}
+            >
               <Text style={styles.text}>
                 {item.affirmation_text.substring(0, 40)}
               </Text>
 
-              <View style={{justifyContent: 'center'}}>
+              <View style={{ justifyContent: 'center' }}>
                 <AntDesign
                   onPress={() => {
                     toggleItemInSelected(item);
@@ -229,7 +240,7 @@ const EditPlayList = ({navigation}) => {
         style={{
           alignSelf: 'center',
           position: 'absolute',
-          bottom: '1%',
+          bottom: '4%',
           width: '60%',
           height: hp(5.5),
         }}
@@ -237,7 +248,7 @@ const EditPlayList = ({navigation}) => {
           updatePlaylistItem();
         }}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -218,7 +218,7 @@ const Toptab = () => {
 
     dispatch({
       type: 'home/removeFavriout_request',
-      url: 'unlikeCategories',
+      url: 'removeFavoriteList',
       user_id: user,
       favorite_id: item?.favorite_id,
       category_id: item.id,

@@ -45,7 +45,13 @@ export const MusicPlayerProvider = ({ children }) => {
       require('../assets/sounds/Affirmation.mp3'),
     ).uri;
     await setPlaylist([result]);
-    setVolumeSound(0.5);
+    setVolumeSound(0.35);
+  };
+  const handleSeek = position => {
+    const pos = parseInt(position, 10);
+    if (!isNaN(pos)) {
+      seekAudio(pos);
+    }
   };
   useEffect(() => {
     PlayBgSound();
@@ -58,12 +64,6 @@ export const MusicPlayerProvider = ({ children }) => {
       handleSeek(1);
     }
   }, [isPaused]);
-  const handleSeek = position => {
-    const pos = parseInt(position, 10);
-    if (!isNaN(pos)) {
-      seekAudio(pos);
-    }
-  };
 
   const handleTTSFinish = () => {
     // if (affirmations.length === 0) return;

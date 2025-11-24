@@ -6,8 +6,8 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {
   heightPercent as hp,
@@ -15,11 +15,12 @@ import {
 } from '../../../components/atoms/responsive';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Buttun from '../../Auth/compoents/Buttun';
 import Loader from '../../../components/Loader';
-import {fonts} from '../../../Context/Conctants';
+import { fonts } from '../../../Context/Conctants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 // import {affirmations} from '../affmatin';
 const Img = [
   {
@@ -72,7 +73,7 @@ const Img = [
   },
 ];
 const Createplaylist = () => {
-  const {affirmations, loading, addetItems_to_playlist} = useSelector(
+  const { affirmations, loading, addetItems_to_playlist } = useSelector(
     state => state.home,
   );
   useEffect(() => {
@@ -95,7 +96,7 @@ const Createplaylist = () => {
     setSelected(newarray);
   };
   return (
-    <View style={{flex: 1, backgroundColor: '#191919'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#191919' }}>
       <Loader loading={loading} />
       <View
         style={{
@@ -103,18 +104,19 @@ const Createplaylist = () => {
           marginTop: 20,
           alignItems: 'center',
           justifyContent: 'center',
-        }}>
-        <View style={{height: hp(5), marginLeft: '15%'}}>
+        }}
+      >
+        <View style={{ height: hp(5), marginLeft: '15%' }}>
           <Icon
             onPress={() =>
-              navigation.reset({index: 0, routes: [{name: 'Home'}]})
+              navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
             }
             name="arrow-back"
             size={30}
             color="white"
           />
         </View>
-        <View style={{height: hp(5), width: wp(100)}}>
+        <View style={{ height: hp(5), width: wp(100) }}>
           <Text
             style={{
               fontSize: hp(2.5),
@@ -124,8 +126,9 @@ const Createplaylist = () => {
               // fontFamily: 'Montserrat-SemiBold',
               fontFamily: fonts.bold,
               color: 'white',
-            }}>
-            Create Your Playlist
+            }}
+          >
+            Create Your Playlis
           </Text>
         </View>
       </View>
@@ -155,12 +158,13 @@ const Createplaylist = () => {
           marginTop: 20,
           alignItems: 'center',
           paddingBottom: hp(4),
-        }}>
+        }}
+      >
         <FlatList
           data={affirmations}
           keyExtractor={item => item.id}
           scrollEnabled={false}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <View
               style={{
                 flexDirection: 'row',
@@ -172,12 +176,13 @@ const Createplaylist = () => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 paddingHorizontal: wp(4),
-              }}>
+              }}
+            >
               <Text style={styles.text}>
                 {item.affirmation_text.substring(0, 35)}
               </Text>
 
-              <View style={{justifyContent: 'center'}}>
+              <View style={{ justifyContent: 'center' }}>
                 <AntDesign
                   onPress={() => {
                     hanleSelected(item.id);
@@ -197,24 +202,23 @@ const Createplaylist = () => {
         style={{
           height: hp(12),
           alignItems: 'center',
-        }}>
+        }}
+      >
         <Buttun
           onPress={() => {
             dispatch({
               type: 'home/Add_item_to_Create_Playlist',
               payload: selected,
             });
-            navigation.navigate('createaffirmation', {selected: []});
+            navigation.navigate('createaffirmation', { selected: [] });
           }}
           title={`${'Added Affirmations '}${selected.length}`}
-          
           style={{
             width: '68%',
           }}
-          
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 export default Createplaylist;

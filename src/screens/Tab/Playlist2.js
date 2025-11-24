@@ -32,6 +32,7 @@ import Categores_menu from '../../components/Playlist/Categores_menu';
 import { MusicPlayerContext } from '../../Context/MusicPlayerConstaxt';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import PlayPopup from '../../components/PlayPopup';
+import { AffirmationBySelected } from '../../redux/reducer/home';
 const Img = [
   {
     id: '1',
@@ -402,7 +403,14 @@ const Playlistdetails = () => {
               />
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('playsong', { index: index });
+                  const remaining = affirmations.filter(
+                    items => items.id !== item.id,
+                  );
+
+                  dispatch(AffirmationBySelected([item, ...remaining]));
+                  setTimeout(() => {
+                    navigation.navigate('playsong', { index: index });
+                  }, 500);
                 }}
                 style={{ justifyContent: 'center', marginHorizontal: '10%' }}
               >
