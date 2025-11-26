@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "771363707112",
-    "project_id": "stumili-ccee6",
-    "storage_bucket": "stumili-ccee6.firebasestorage.app"
+    "project_number": "796128426527",
+    "project_id": "stimuli-59f10",
+    "storage_bucket": "stimuli-59f10.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:771363707112:android:4a79d9862fca36a8f9515d",
+        "mobilesdk_app_id": "1:796128426527:android:a0100469bc5e642a66332a",
         "android_client_info": {
           "package_name": "com.stumili"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDItLK_yFrTmIsR4cS5RAJQ-9JTl57bU14"
+          "current_key": "AIzaSyBrAPkVbMWnrp_mV0BAyQFMZGcZ6ZWRads"
         }
       ],
       "services": {

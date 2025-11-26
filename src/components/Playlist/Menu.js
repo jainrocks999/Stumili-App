@@ -6,16 +6,16 @@ import {
   TouchableOpacityBase,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import {widthPrecent as wp, heightPercent as hp} from '../atoms/responsive';
-import {TouchableOpacity} from 'react-native';
-import {FlatList} from 'react-native';
+import { widthPrecent as wp, heightPercent as hp } from '../atoms/responsive';
+import { TouchableOpacity } from 'react-native';
+import { FlatList } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {fonts} from '../../Context/Conctants';
+import { fonts } from '../../Context/Conctants';
 import storage from '../../utils/StorageService';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Loader from '../Loader';
 import FullScreenModal from './AddAffirmationPlaylist';
 
@@ -54,7 +54,7 @@ const Menu = ({
   const getmodified = (array, indexs, bool) => {
     return array.map((item, index) => {
       if (index == indexs) {
-        return {...item, is_favorite: bool};
+        return { ...item, is_favorite: bool };
       } else {
         return item;
       }
@@ -94,7 +94,7 @@ const Menu = ({
 
     dispatch({
       type: 'home/removeFavriout_request',
-      url: 'unlikeAffirmations',
+      url: 'removeFavoriteList',
       user_id: user,
       favorite_id: item.favorite_id,
       category_id: item.id,
@@ -114,17 +114,17 @@ const Menu = ({
         onClose={() => setVisible(false)}
         visible={visibles}
       />
-      <View style={{flex: 1, backgroundColor: '#191919', opacity: 0.99}}>
-        <View style={{height: '25%'}} />
+      <View style={{ flex: 1, backgroundColor: '#191919', opacity: 0.99 }}>
+        <View style={{ height: '25%' }} />
         <View style={styles.main}>
           <Text style={styles.txt}>{selectedItem?.affirmation_text}</Text>
         </View>
-        <View style={{height: '5%'}} />
+        <View style={{ height: '5%' }} />
         <FlatList
           data={data}
           keyExtractor={item => item.id}
-          contentContainerStyle={{alignSelf: 'right', marginLeft: wp(8)}}
-          renderItem={({item, index}) => {
+          contentContainerStyle={{ alignSelf: 'right', marginLeft: wp(8) }}
+          renderItem={({ item, index }) => {
             return (
               <TouchableOpacity
                 onPress={() => {
@@ -146,7 +146,8 @@ const Menu = ({
                   flexDirection: 'row',
                   alignItems: 'center',
                   marginVertical: '5%',
-                }}>
+                }}
+              >
                 {index != 2 ? (
                   <AntDesign
                     color={
@@ -167,7 +168,8 @@ const Menu = ({
                     fontSize: wp(5),
                     marginLeft: '5%',
                     fontFamily: fonts.medium,
-                  }}>
+                  }}
+                >
                   {item.text}
                 </Text>
               </TouchableOpacity>
@@ -181,7 +183,8 @@ const Menu = ({
               fontSize: wp(6.5),
               fontFamily: fonts.medium,
               // fontWeight: 'bol000d',
-            }}>
+            }}
+          >
             Close
           </Text>
         </TouchableOpacity>

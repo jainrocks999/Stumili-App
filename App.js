@@ -1,74 +1,121 @@
 import React, { useEffect } from 'react';
-import { Clipboard, Vibration } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import AppNavigator from './src/navigation/AppNavigator';
-import { LogBox, PermissionsAndroid } from 'react-native';
-import { Provider } from 'react-redux';
-import store from './src/redux/store';
+import { Platform, PermissionsAndroid, LogBox, Alert } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-// import PushNotification from 'react-native-push-notification';
-import crashlytics from '@react-native-firebase/crashlytics';
-import SoundPlayer from 'react-native-sound-player';
-import { MusicPlayerProvider } from './src/Context/MusicPlayerConstaxt';
-import {
-  heightPercent as hp,
-  widthPrecent as wp,
-} from './src/components/atoms/responsive';
-import { View } from 'react-native';
+import { Provider } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
+import notifee, { AndroidImportance } from '@notifee/react-native';
+import store from './src/redux/store';
 import Root from './src';
+import crashlytics from '@react-native-firebase/crashlytics';
+
+async function createNotificationChannel() {
+  const channelId = await notifee.createChannel({
+    id: 'default',
+    name: 'Default Channel',
+    importance: AndroidImportance.HIGH,
+  });
+  return channelId;
+}
+
+async function requestPermissions() {
+  if (Platform.OS === 'android' && Platform.Version >= 33) {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+    );
+    console.log('Android POST_NOTIFICATIONS Permission:', granted);
+  }
+
+  const settings = await notifee.requestPermission();
+  if (settings.authorizationStatus >= 1) {
+    console.log('[Notifee] Permission granted');
+  } else {
+    console.log('[Notifee] Permission NOT granted');
+  }
+}
+
+async function getFCMToken() {
+  try {
+    await messaging().registerDeviceForRemoteMessages();
+    const token = await messaging().getToken();
+    if (token) {
+      await AsyncStorage.setItem('fcm_token', token);
+      console.log('FCM Token:', token);
+    }
+  } catch (err) {
+    console.log('FCM Token Error:', err);
+  }
+}
+
+async function displayNotification(remoteMessage) {
+  const channelId = await createNotificationChannel();
+  await notifee.displayNotification({
+    title: remoteMessage?.notification?.title || 'New Notification',
+    body: remoteMessage?.notification?.body || 'You have a new message.',
+    android: {
+      channelId,
+      smallIcon: 'ic_launcher',
+      pressAction: { id: 'default' },
+    },
+    data: remoteMessage?.data,
+  });
+}
+
+function initNotifications(manageLogin) {
+  const unsubscribeForeground = messaging().onMessage(async remoteMessage => {
+    console.log('[Foreground] Notification:', remoteMessage);
+    await displayNotification(remoteMessage);
+  });
+
+  const unsubscribeBackground = messaging().onNotificationOpenedApp(
+    remoteMessage => {
+      console.log('[Background] Notification opened:', remoteMessage);
+      if (remoteMessage?.notification?.title === 'New Message') {
+        manageLogin();
+      }
+    },
+  );
+
+  messaging()
+    .getInitialNotification()
+    .then(remoteMessage => {
+      if (remoteMessage) {
+        console.log('[Killed] Notification opened:', remoteMessage);
+        if (remoteMessage?.notification?.title === 'New Message') {
+          manageLogin();
+        }
+      }
+    });
+
+  messaging().setBackgroundMessageHandler(async remoteMessage => {
+    console.log('[BackgroundHandler] Message received:', remoteMessage);
+    await displayNotification(remoteMessage);
+  });
+
+  return () => {
+    unsubscribeForeground();
+    unsubscribeBackground();
+  };
+}
+
 const App = () => {
   LogBox.ignoreAllLogs();
 
-  const getCrashlyticsDetail = async () => {
-    try {
-      crashlytics().setUserId('admin@admin.com');
-
-      crashlytics().setAttribute('username', 'admin@admin.com');
-    } catch (err) {
-      crashlytics().recordError(err);
-    }
+  const manageLogin = () => {
+    console.log('Perform app-specific action on notification click');
   };
-  // const initiateNotifiction = () => {
-  //   PushNotification.deleteChannel('default-channel-id');
-  //   PushNotification.createChannel(
-  //     {
-  //       channelId: 'default-channel-id',
-  //       channelName: 'My channel',
-  //       soundName: 'notification.mp3',
-  //       importance: 4,
-  //       vibrate: true,
-  //       playSound: true,
-  //     },
-  //     created => console.log(`Notification channel created '${created}'`),
-  //   );
-  //   PushNotification.configure({
-  //     onRegister: token => {
-  //       console.log(token.token);
-  //       // Clipboard.setString(token.token);
-  //     },
-  //     onNotification: notification => {
-  //       PushNotification.localNotification({
-  //         title: notification.title,
-  //         message: notification.message,
-  //         actions: ['Open', 'Cancle'],
-  //         largeIcon: 'ic_launcher',
-  //         largeIconUrl:
-  //           'https://cdn.iconscout.com/icon/premium/png-512-thumb/online-url-encoder-decod-5-53646.png?f=webp&w=256',
-  //         smallIcon: 'ic_notification',
-  //         bigText:
-  //           'My big text that will be shown when notification is expanded. Styling can be done using HTML tags(see android docs for details)',
-  //         ignoreInForeground: true,
-  //       });
-  //     },
-  //   });
-  // };
+
   useEffect(() => {
-    // initiateNotifiction();
-    // crashlytics().log('analytics just mounted');
-    crashlytics().crash();
-    // getCrashlyticsDetail();
+    requestPermissions();
+    getFCMToken();
+
+    const removeListeners = initNotifications(manageLogin);
+    crashlytics().setUserId('admin@admin.com');
+
+    crashlytics().setAttribute('username', 'admin@admin.com');
+
     return () => {
-      crashlytics().log('analitics just unmounted');
+      removeListeners();
     };
   }, []);
 

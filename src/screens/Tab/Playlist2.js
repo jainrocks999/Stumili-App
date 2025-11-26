@@ -33,6 +33,7 @@ import { MusicPlayerContext } from '../../Context/MusicPlayerConstaxt';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import PlayPopup from '../../components/PlayPopup';
 import { AffirmationBySelected } from '../../redux/reducer/home';
+import { SafeAreaView } from 'react-native-safe-area-context';
 const Img = [
   {
     id: '1',
@@ -84,15 +85,15 @@ const Img = [
   },
 ];
 
-const Playlistdetails = () => {
+const Playlistdetails = ({ route }) => {
   const dispatch = useDispatch();
+  const { isPlaylist } = route?.params || { isPlaylist: false };
   const { getNameImage } = useContext(MusicPlayerContext);
   const { favoriteList } = useSelector(state => state.home);
-
-  console.log('tjhidi', favoriteList.favoritelist);
-  const { loading, affirmations, groups, category, item } = useSelector(
+  const { loading, affirmations, groups, category, item, from } = useSelector(
     state => state.home,
   );
+
   const playItem = item;
   const image = item?.categories_image[0]?.original_url ?? '';
   const title = item?.categories_name ?? 'Believe in yourself';
@@ -154,7 +155,7 @@ const Playlistdetails = () => {
   //   setVisible(false);
   // }, [item]);
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Loader loading={loading} />
       <Categores_menu
         onPressListen={() => navigation.navigate('playsong', { index: -1 })}
@@ -336,36 +337,40 @@ const Playlistdetails = () => {
             playlist
           />
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            width: '45%',
-            zIndex: 5,
-            alignSelf: 'center',
-            // bottom: '5%',
-            justifyContent: 'space-between',
-            marginTop: '8%',
-          }}
-        >
-          <FontAwesome
-            onPress={() => {
-              item.is_favorite ? removeFavroit(item) : getFavriote(item);
+        {!isPlaylist ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              width: '45%',
+              zIndex: 5,
+              alignSelf: 'center',
+              // bottom: '5%',
+              justifyContent: 'space-between',
+              marginTop: '8%',
             }}
-            name={item.is_favorite ? 'heart' : 'heart-o'}
-            size={25}
-            color={item.is_favorite ? '#B72658' : 'white'}
-          />
-          <Entypo name="share" size={25} color="white" />
-          <Entypo
-            onPress={() => {
-              setVisible(true);
-            }}
-            name="dots-three-vertical"
-            size={25}
-            color="white"
-          />
-        </View>
+          >
+            {
+              <FontAwesome
+                onPress={() => {
+                  item.is_favorite ? removeFavroit(item) : getFavriote(item);
+                }}
+                name={item.is_favorite ? 'heart' : 'heart-o'}
+                size={25}
+                color={item.is_favorite ? '#B72658' : 'white'}
+              />
+            }
+            <Entypo name="share" size={25} color="white" />
+            <Entypo
+              onPress={() => {
+                setVisible(true);
+              }}
+              name="dots-three-vertical"
+              size={25}
+              color="white"
+            />
+          </View>
+        ) : null}
       </View>
       <ScrollView
         style={styles.scrollView}
@@ -437,7 +442,7 @@ const Playlistdetails = () => {
       {affirmations.length > 0 && getNameImage().name != '' ? (
         <PlayPopup />
       ) : null}
-    </View>
+    </SafeAreaView>
   );
 };
 export default Playlistdetails;
@@ -448,14 +453,7 @@ const styles = StyleSheet.create({
   },
   header: {
     height: hp(40),
-    // position: 'absolute',
-    // top: 0,
-    // right: 0,
-    // left: 0,
-    // elevation: 4,
-    // zIndex: 8,
     backgroundColor: '#191919',
-
     borderColor: '#fff',
   },
   scrollView: {

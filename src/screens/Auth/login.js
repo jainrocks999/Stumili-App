@@ -169,7 +169,6 @@
 // };
 // export default Login;
 
-
 import React, { useState } from 'react';
 import { View, Text, SafeAreaView, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -184,19 +183,24 @@ import Social from './compoents/Social';
 import { fonts } from '../../Context/Conctants';
 import Toast from 'react-native-simple-toast';
 import storage from '../../utils/StorageService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const STATIC_FCM_TOKEN = 'eaNTcT6oTAqFaZFYH0Gnez:APA91bGCaILXCtWA4RKocVDU6Oq7GwgrWpz7ENckRc5UqTYM3ThoRAKiMEmPb7pxGCayRU8mhYA4jELDmbA2toK_iDgw-0McmXUuez7y1UtRU95tvmwuBHKwK1rxKfSzv7-r5DfcYfCL';
 
-  const validateEmail = (email) => {
+  const validateEmail = email => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
   };
 
   const handleLogin = async () => {
+    const fcm_token = await AsyncStorage.getItem('fcm_token');
+    if (!fcm_token) {
+      Toast.show('Something gone wrong! Please try again. ');
+      return;
+    }
     if (!email) {
       Toast.show('Please enter email');
       return;
@@ -212,13 +216,13 @@ const Login = () => {
     let formData = new FormData();
     formData.append('email', email);
     formData.append('password', password);
-    formData.append('fcm_token', STATIC_FCM_TOKEN);
+    formData.append('fcm_token', fcm_token);
     console.log('FormData Debugging:');
-    console.log(formData); 
+    console.log(formData);
     const debugData = {
       email: email,
       password: password,
-      fcm_token: STATIC_FCM_TOKEN,
+      fcm_token: fcm_token,
     };
     console.log('Debug Object:', debugData);
     try {
@@ -228,14 +232,13 @@ const Login = () => {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            'Accept': 'application/json',
+            Accept: 'application/json',
           },
-        }
+        },
       );
-    
 
       const userData = response?.data?.data;
-    
+
       if (userData?.id && userData?.token) {
         const userId = userData.id;
         const token = userData.token;
@@ -250,19 +253,37 @@ const Login = () => {
       console.error('Login Error:', error?.response?.data || error);
       Toast.show(error?.response?.data?.message || 'Something went wrong!');
     }
-    
-};
+  };
   return (
     <Background>
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView>
-          <Intro title1="Welcome" title2="To STIMULI" title3="Let's Sign In here" />
+          <Intro
+            title1="Welcome"
+            title2="To STIMULI"
+            title3="Let's Sign In here"
+          />
           <View style={{ alignItems: 'center' }}>
-            <Input placeholder="Email" keyboardType="email-address" onChangeText={setEmail} />
-            <Input placeholder="Password" secureTextEntry onChangeText={setPassword} />
+            <Input
+              placeholder="Email"
+              keyboardType="email-address"
+              onChangeText={setEmail}
+            />
+            <Input
+              placeholder="Password"
+              secureTextEntry
+              onChangeText={setPassword}
+            />
             <Text
               onPress={() => navigation.navigate('Forgot')}
-              style={{ color: '#fff', alignSelf: 'flex-end', marginRight: '6%', marginTop: '3%', fontSize: 16 }}>
+              style={{
+                color: '#fff',
+                alignSelf: 'flex-end',
+                marginRight: '6%',
+                marginTop: '3%',
+                fontSize: 16,
+              }}
+            >
               Forgot Your Password?
             </Text>
             <Buttun title="Sign In" onPress={handleLogin} />
@@ -271,9 +292,19 @@ const Login = () => {
           <View style={{ alignItems: 'center', marginTop: '7%' }}>
             <Social />
           </View>
-          <Text style={{ alignSelf: 'center', marginTop: '5%', color: 'white', fontFamily: fonts.medium }}>
+          <Text
+            style={{
+              alignSelf: 'center',
+              marginTop: '5%',
+              color: 'white',
+              fontFamily: fonts.medium,
+            }}
+          >
             Don't have an account?{' '}
-            <Text onPress={() => navigation.navigate('signup')} style={{ color: '#B72658', fontSize: 16, fontWeight: '500' }}>
+            <Text
+              onPress={() => navigation.navigate('signup')}
+              style={{ color: '#B72658', fontSize: 16, fontWeight: '500' }}
+            >
               Sign Up
             </Text>
           </Text>
@@ -284,4 +315,3 @@ const Login = () => {
 };
 
 export default Login;
-

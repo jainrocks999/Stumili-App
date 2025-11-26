@@ -412,8 +412,6 @@ function* getPlayListItem(action) {
       params,
     });
 
-    console.log('titititititii', res);
-
     if (res.status) {
       yield put({
         type: 'home/playList_item',
@@ -444,6 +442,7 @@ function* getPlayListItem(action) {
       if (res.data.length > 0) {
         action.navigation.navigate(
           !action.isEdit ? 'Playlistdetails2' : 'EditPlayList',
+          { isPlaylist: true },
         );
       } else {
         Toast.show('There are no playlist item added');
@@ -473,10 +472,7 @@ function* getFavoriout(action) {
       params,
     });
 
-    console.log('rrrrrrirdeii', res);
-
-    if (res.status) {
-      console.log(res.data);
+    if (res?.status) {
       yield put({
         type: action.category
           ? 'home/getFavriotCategories_success'
@@ -496,7 +492,11 @@ function* getFavoriout(action) {
             categories_name: 'Liked affirmations',
           },
         });
-        action.navigation.navigate('Playlistdetails2');
+        if (res?.data?.length) {
+          action.navigation.navigate('Playlistdetails2', { isPlaylist: true });
+        } else {
+          Toast.show('No liked affirmation found');
+        }
       }
     } else {
       yield put({
