@@ -112,9 +112,11 @@ const Toptab = () => {
 
   const getPlayListItem = async (item, bool) => {
     const token = await storage.getItem(storage.TOKEN);
+    const user_id = await storage.getItem(storage.USER_ID);
     dispatch({
       type: 'home/getPlayListItem_request',
       playlist_id: item.id,
+      user_id,
       token,
       url: 'playListItem',
       navigation,

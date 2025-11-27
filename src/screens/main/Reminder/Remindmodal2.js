@@ -57,25 +57,12 @@ const Img = [
 ];
 
 const Remindmodal2 = ({ onPress }) => {
-  // const [selectedDay, setSelectedDay] = useState([]);
   const [selectedDays, setSelectedDays] = useState([]);
-  // const handleSelectedDay = items => {
-  //   // Alert.alert('i am here')
-  //   console.log(items.id);
-  //   if (selectedDay.includes(items.id)) {
-  //     // Alert.alert('i am here')
-  //     let filter = [...selectedDay].filter((item, index) => item != items.id);
-  //     console.log(filter);
-  //     setSelectedDay(filter);
-  //   } else {
-  //     setSelectedDay([...selectedDay, items.id]);
-  //   }
-  // };
-  const handleDaySelection = (dayId) => {
-    setSelectedDays((prevSelected) =>
+  const handleDaySelection = dayId => {
+    setSelectedDays(prevSelected =>
       prevSelected.includes(dayId)
-        ? prevSelected.filter((id) => id !== dayId) 
-        : [...prevSelected, dayId] 
+        ? prevSelected.filter(id => id !== dayId)
+        : [...prevSelected, dayId],
     );
   };
   const [currentTime1, setCurrentTime1] = useState('9:00');
@@ -129,6 +116,42 @@ const Remindmodal2 = ({ onPress }) => {
     setCurrentTime2(hour + ':' + minute);
   };
   const [reapeat, setRepeat] = useState(7);
+
+  const prepareApiData = () => {
+    const today = new Date();
+    const dateStr = today.toISOString().split('T')[0];
+
+    // JavaScript: Sunday = 0
+    const dayMap = {
+      0: 'sun',
+      1: 'mon',
+      2: 'tue',
+      3: 'wed',
+      4: 'thu',
+      5: 'fri',
+      6: 'sat',
+    };
+
+    // Din select mapping
+    const dayData = {};
+    Object.keys(dayMap).forEach(dayId => {
+      dayData[dayMap[dayId]] = selectedDays.includes(Number(dayId));
+    });
+
+    const apiData = {
+      user_id: 1,
+      affirmation_id: 1,
+      playlist_id: 1,
+      start_at: `${dateStr} ${currentTime1}:00`, // HH:mm:ss ensure
+      end_at: `${dateStr} ${currentTime2}:00`,
+      r_status: 1,
+      ...dayData,
+      reminder_id: 0,
+    };
+
+    return apiData;
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: '#191919' }}>
       <View style={{ height: '2%' }} />
@@ -139,7 +162,8 @@ const Remindmodal2 = ({ onPress }) => {
           fontSize: wp(6),
           fontWeight: 'bold',
           fontFamily: fonts.bold,
-        }}>
+        }}
+      >
         Affirmations
       </Text>
       <View style={{ height: '2%' }} />
@@ -162,16 +186,18 @@ const Remindmodal2 = ({ onPress }) => {
                 setRepeat(30);
               }
             }}
-            style={styles.cicrcle}>
+            style={styles.cicrcle}
+          >
             <Entypo name="minus" style={styles.icon} />
           </TouchableOpacity>
           <Text
             style={{
               color: '#fff',
-              fontSize: wp(11),
+              fontSize: 30,
               marginTop: '-5%',
               fontFamily: fonts.medium,
-            }}>
+            }}
+          >
             {reapeat}X
           </Text>
           <TouchableOpacity
@@ -182,7 +208,8 @@ const Remindmodal2 = ({ onPress }) => {
                 setRepeat(0);
               }
             }}
-            style={styles.cicrcle}>
+            style={styles.cicrcle}
+          >
             <Entypo name="plus" style={styles.icon} />
           </TouchableOpacity>
         </View>
@@ -192,7 +219,8 @@ const Remindmodal2 = ({ onPress }) => {
             marginTop: '3%',
             fontSize: wp(5),
             fontFamily: fonts.medium,
-          }}>
+          }}
+        >
           How many
         </Text>
       </View>
@@ -234,19 +262,27 @@ const Remindmodal2 = ({ onPress }) => {
             width: '35%',
             alignItems: 'center',
             justifyContent: 'space-between',
-          }}>
+          }}
+        >
           <TouchableOpacity
             onPress={() => updateTime1(false)}
-            style={styles.cicrcle2}>
+            style={styles.cicrcle2}
+          >
             <Entypo name="minus" style={styles.icon2} />
           </TouchableOpacity>
           <Text
-            style={{ color: 'white', fontSize: wp(4), fontFamily: fonts.medium }}>
+            style={{
+              color: 'white',
+              fontSize: wp(4),
+              fontFamily: fonts.medium,
+            }}
+          >
             {currentTime1}
           </Text>
           <TouchableOpacity
             onPress={() => updateTime1(true)}
-            style={styles.cicrcle2}>
+            style={styles.cicrcle2}
+          >
             <Entypo name="plus" style={styles.icon2} />
           </TouchableOpacity>
         </View>
@@ -269,19 +305,27 @@ const Remindmodal2 = ({ onPress }) => {
             width: '35%',
             alignItems: 'center',
             justifyContent: 'space-between',
-          }}>
+          }}
+        >
           <TouchableOpacity
             onPress={() => updateTime2(false)}
-            style={styles.cicrcle2}>
+            style={styles.cicrcle2}
+          >
             <Entypo name="minus" style={styles.icon2} />
           </TouchableOpacity>
           <Text
-            style={{ color: 'white', fontSize: wp(4), fontFamily: fonts.medium }}>
+            style={{
+              color: 'white',
+              fontSize: wp(4),
+              fontFamily: fonts.medium,
+            }}
+          >
             {currentTime2}
           </Text>
           <TouchableOpacity
             onPress={() => updateTime2(true)}
-            style={styles.cicrcle2}>
+            style={styles.cicrcle2}
+          >
             <Entypo name="plus" style={styles.icon2} />
           </TouchableOpacity>
         </View>
@@ -300,18 +344,20 @@ const Remindmodal2 = ({ onPress }) => {
         style={{
           marginTop: hp(2),
           alignItems: 'center',
-        }}>
+        }}
+      >
         <Text style={styles.txt2}>Repeat</Text>
         <View
           style={{
             marginTop: '2%',
             borderColor: 'white',
             height: hp(7),
-          }}>
+          }}
+        >
           <FlatList
             data={Img}
             horizontal
-            keyExtractor={(item) => item.id}
+            keyExtractor={item => item.id}
             renderItem={({ item }) => {
               const isSelected = selectedDays.includes(item.id); // Check if selected
 
@@ -320,15 +366,15 @@ const Remindmodal2 = ({ onPress }) => {
                   onPress={() => handleDaySelection(item.id)}
                   style={[
                     styles.listCircle,
-                    { backgroundColor: isSelected ? "#B72658" : "#fff" } // Selected: Pink, Unselected: White
+                    { backgroundColor: isSelected ? '#B72658' : '#fff' }, // Selected: Pink, Unselected: White
                   ]}
                 >
                   <Text
                     style={{
-                      alignSelf:'center',
+                      alignSelf: 'center',
                       marginLeft: wp(1),
-                      color: isSelected ? "#fff" : "#B72658", // Selected text: White, Unselected: Pink
-                      fontWeight: "500",
+                      color: isSelected ? '#fff' : '#B72658', // Selected text: White, Unselected: Pink
+                      fontWeight: '500',
                       fontFamily: fonts.bold,
                     }}
                   >
@@ -366,7 +412,8 @@ const Remindmodal2 = ({ onPress }) => {
             textAlign: 'center',
             width: '65%',
             fontFamily: fonts.medium,
-          }}>
+          }}
+        >
           Remind yourself on selected Affirmations
         </Text>
       </View>
@@ -379,7 +426,10 @@ const Remindmodal2 = ({ onPress }) => {
           borderRadius: wp(2),
           elevation: 4,
         }}
-        onPress={onPress}
+        onPress={() => {
+          const data = prepareApiData();
+          console.log('tjitititi', data);
+        }}
         title="Create"
       />
     </View>
@@ -426,7 +476,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: '#B72658',
-    fontSize: wp(4),
+    fontSize: wp(5),
     textAlign: 'center',
     // marginTop: '-5%',
   },

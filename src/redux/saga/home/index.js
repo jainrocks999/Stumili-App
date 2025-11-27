@@ -405,6 +405,7 @@ function* getPlayListItem(action) {
   try {
     const params = {
       playlist_id: action.playlist_id,
+      user_id: action.user_id,
     };
     const res = yield call(Api.API_GET, {
       token: action.token,
@@ -700,23 +701,26 @@ function* deletePlaylist(action) {
 }
 function* deletePlaylistItme(action) {
   try {
-    // const formdata = new FormData();
-    // formdata.append('playlist_id', action.playlist_id);
-    // if (Array.isArray(action.affirmation_id)) {
-    //   action.affirmation_id.map((item, index) => {
-    //     formdata.append(`affirmation_id[${index}]`, item);
-    //   });
-    // }
-    const formdata = {
-      affirmation_text_id: action?.affirmation_id,
-      playlist_id: action.playlist_id,
-    };
+    const formdata = new FormData();
+    formdata.append('playlist_id', action.playlist_id);
+    formdata.append('user_id', action?.user_id);
+    if (Array.isArray(action.affirmation_id)) {
+      action.affirmation_id.map((item, index) => {
+        formdata.append(`affirmation_text_id[${index}]`, item);
+      });
+    }
+    // const formdata = {
+    //   affirmation_text_id: action?.affirmation_id,
+    //   playlist_id: action.playlist_id,
+    // };
 
-    const res = yield call(Api.API_POST_JSON, {
-      body: formdata,
+    const res = yield call(Api.API_POST, {
+      formdata,
       token: action.token,
       url: action.url,
     });
+    console.log('this is respe', res);
+
     if (res.status) {
       yield put({
         type: 'home/update_playlistitem_success',

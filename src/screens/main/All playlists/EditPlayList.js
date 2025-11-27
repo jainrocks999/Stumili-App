@@ -74,12 +74,14 @@ const EditPlayList = ({ navigation }) => {
       storage.USER_ID,
     ]);
     const token = items.find(([key]) => key === storage.TOKEN)?.[1];
+    const user_id = items.find(([key]) => key === storage.USER_ID)?.[1];
     const ids = getIds(selected);
     dispatch({
       type: 'home/update_playlistitem_request',
-      url: 'createPlayListItem',
+      url: 'deletePlayListItem',
       playlist_id: item.item.id,
       affirmation_id: ids,
+      user_id,
       token,
       navigation,
     });

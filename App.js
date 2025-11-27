@@ -13,6 +13,7 @@ async function createNotificationChannel() {
   const channelId = await notifee.createChannel({
     id: 'default',
     name: 'Default Channel',
+    sound: 'my_sound',
     importance: AndroidImportance.HIGH,
   });
   return channelId;
@@ -40,7 +41,7 @@ async function getFCMToken() {
     const token = await messaging().getToken();
     if (token) {
       await AsyncStorage.setItem('fcm_token', token);
-      console.log('FCM Token:', token);
+      console.log('fcm token ', token);
     }
   } catch (err) {
     console.log('FCM Token Error:', err);

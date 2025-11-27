@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,19 +15,34 @@ import {
   heightPercent as hp,
   widthPrecent as wp,
 } from '../../components/atoms/responsive';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
-import {fonts} from '../../Context/Conctants';
+import { fonts } from '../../Context/Conctants';
 const data = [
-  {id: '1', title: 'Daily Practice', time: '09:00', frequency: '1x Every Day'},
-  {id: '2', title: 'Daily Practice', time: '09:00', frequency: '1x Every Day'},
-  {id: '3', title: 'Daily Practice', time: '09:00', frequency: '1x Every Day'},
-  {id: '4', title: 'Daily Practice', time: '09:00', frequency: '1x Every Day'},
-];
-const data2 = [
-  {id: '1', title: 'Affirmations', time: '09:00', frequency: '1x Every Day'},
-  {id: '2', title: 'Affirmations', time: '09:00', frequency: '1x Every Day'},
-  {id: '3', title: 'Affirmations', time: '09:00', frequency: '1x Every Day'},
+  {
+    id: '1',
+    title: 'Daily Practice',
+    time: '09:00',
+    frequency: '1x Every Day',
+  },
+  {
+    id: '2',
+    title: 'Daily Practice',
+    time: '09:00',
+    frequency: '1x Every Day',
+  },
+  {
+    id: '3',
+    title: 'Daily Practice',
+    time: '09:00',
+    frequency: '1x Every Day',
+  },
+  {
+    id: '4',
+    title: 'Daily Practice',
+    time: '09:00',
+    frequency: '1x Every Day',
+  },
 ];
 const Reminder = () => {
   const navigation = useNavigation();
@@ -47,17 +62,18 @@ const Reminder = () => {
     setSelectedModal(titles);
     setVisible(true);
   };
-  console.log('thiss vidzxc', visible);
+
   return (
-    <View style={{flex: 1, backgroundColor: '#191919'}}>
+    <View style={{ flex: 1, backgroundColor: '#191919' }}>
       <View
         style={{
           flexDirection: 'row',
           marginTop: 20,
           alignItems: 'center',
           justifyContent: 'center',
-        }}>
-        <View style={{height: hp(5), marginLeft: '15%'}}>
+        }}
+      >
+        <View style={{ height: hp(5), marginLeft: '15%' }}>
           <Icon
             onPress={() => navigation.goBack()}
             name="arrow-back"
@@ -65,7 +81,7 @@ const Reminder = () => {
             color="white"
           />
         </View>
-        <View style={{height: hp(5), width: wp(100)}}>
+        <View style={{ height: hp(5), width: wp(100) }}>
           <Text
             style={{
               fontSize: 20,
@@ -73,21 +89,23 @@ const Reminder = () => {
               marginHorizontal: '8%',
               color: 'white',
               fontFamily: fonts.bold,
-            }}>
+            }}
+          >
             Set your reminders
           </Text>
         </View>
       </View>
-      <ScrollView style={{marginTop: 10}}>
+      <ScrollView style={{ marginTop: 10 }}>
         <FlatList
           data={data}
           pagingEnabled={false}
           keyExtractor={item => item.id}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => {
                 handleModalPress('Remindmodal4');
-              }}>
+              }}
+            >
               <View
                 style={{
                   height: hp(10),
@@ -99,21 +117,24 @@ const Reminder = () => {
                   marginVertical: 10,
                   padding: '0%',
                   // alignItems: 'center',
-                }}>
+                }}
+              >
                 <View
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     marginHorizontal: '8%',
                     marginTop: '3%',
-                  }}>
+                  }}
+                >
                   <Text
                     style={{
                       color: '#fff',
                       fontSize: 12,
                       fontWeight: '500',
                       fontFamily: fonts.bold,
-                    }}>
+                    }}
+                  >
                     {item.title}
                   </Text>
                   <Text
@@ -122,7 +143,8 @@ const Reminder = () => {
                       fontSize: 13,
                       fontWeight: '400',
                       fontFamily: fonts.medium,
-                    }}>
+                    }}
+                  >
                     {item.time}
                   </Text>
                 </View>
@@ -133,14 +155,16 @@ const Reminder = () => {
                     justifyContent: 'space-between',
                     marginHorizontal: '7%',
                     marginVertical: 10,
-                  }}>
+                  }}
+                >
                   <Text
                     style={{
                       color: '#fff',
                       fontSize: 13,
                       fontWeight: '300',
                       fontFamily: fonts.medium,
-                    }}>
+                    }}
+                  >
                     {item.frequency}
                   </Text>
                   <ToggleSwitch
@@ -217,7 +241,9 @@ const Reminder = () => {
           )}
         /> */}
       </ScrollView>
-      <View style={{alignSelf: 'center', position: 'absolute', bottom: hp(8)}}>
+      <View
+        style={{ alignSelf: 'center', position: 'absolute', bottom: hp(8) }}
+      >
         <TouchableOpacity
           style={{
             height: hp(6.5),
@@ -228,7 +254,8 @@ const Reminder = () => {
             overflow: 'hidden',
             borderRadius: 8,
           }}
-          onPress={() => handleModalPress('Remindermodal1')}>
+          onPress={() => handleModalPress('Remindermodal1')}
+        >
           <LinearGradient
             style={{
               height: '100%',
@@ -240,10 +267,11 @@ const Reminder = () => {
             // end={{x: 5, y: 0.0}}
             // locations={[0, 0.4, 0.2]}
             // colors={['#B72658', '#D485D1']}
-            start={{x: 1.4, y: 0}}
-            end={{x: 0, y: 1}}
+            start={{ x: 1.4, y: 0 }}
+            end={{ x: 0, y: 1 }}
             locations={[0, 1]}
-            colors={['#D485D1', '#B72658']}>
+            colors={['#D485D1', '#B72658']}
+          >
             <Text style={styles.loginText}>Add New Reminder</Text>
           </LinearGradient>
         </TouchableOpacity>

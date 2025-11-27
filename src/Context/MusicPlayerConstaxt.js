@@ -170,7 +170,7 @@ export const MusicPlayerProvider = ({ children }) => {
   }, [visibleIndex, affirmations?.length]);
 
   const handlePlayPauseClick = () => {
-    if (affirmations?.length === 0) return; // Early return if affirmations array is empty
+    if (affirmations?.length === 0) return;
 
     setIsPaused(prevIsPaused => !prevIsPaused);
     if (isPaused && progress >= 100) {
