@@ -741,6 +741,36 @@ function* deletePlaylistItme(action) {
     console.log(error);
   }
 }
+function* getLastSesstion(action) {
+  try {
+    const params = {
+      user_id: action.user_id,
+    };
+    const res = yield call(Api.API_GET, {
+      token: action.token,
+      url: action.url,
+      params,
+    });
+
+    if (res?.status) {
+      yield put({
+        type: 'home/lastSesstionSuccess',
+        payload: res.data,
+      });
+    } else {
+      yield put({
+        type: 'home/lastSesstionFailled',
+      });
+      Toast.show(res.data.message);
+    }
+  } catch (error) {
+    console.log('thididididi', error);
+    yield put({
+      type: 'home/lastSesstionFailled',
+    });
+    Toast.show('error with fetching last sesstions');
+  }
+}
 export default function* homeSaga() {
   yield takeEvery('home/playlist_request', getplaylist);
   yield takeEvery('home/group_fetch_request', fetchGroups);
@@ -763,4 +793,5 @@ export default function* homeSaga() {
   );
   yield takeEvery('home/search_request', doSearch);
   yield takeEvery('home/update_playlistitem_request', deletePlaylistItme);
+  yield takeEvery('home/lastSesstionRequest', getLastSesstion);
 }

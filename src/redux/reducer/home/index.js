@@ -29,6 +29,7 @@ const initialState = {
     ],
     categories_name: '',
   },
+  lastSessions: [],
 };
 const Home = createSlice({
   name: 'home',
@@ -209,6 +210,16 @@ const Home = createSlice({
     },
     update_playlistitem_error: (state, action) => {
       return { ...state, loading: false };
+    },
+    lastSesstionRequest: (state, action) => {
+      return { ...state, loading: true };
+    },
+    lastSesstionSuccess: (state, action) => {
+      state.loading = false;
+      state.lastSessions = action.payload;
+    },
+    lastSesstionFailled: (state, action) => {
+      state.loading = false;
     },
   },
 });

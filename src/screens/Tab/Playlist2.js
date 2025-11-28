@@ -34,6 +34,7 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 import PlayPopup from '../../components/PlayPopup';
 import { AffirmationBySelected } from '../../redux/reducer/home';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 const Img = [
   {
     id: '1',
@@ -93,6 +94,40 @@ const Playlistdetails = ({ route }) => {
   const { loading, affirmations, groups, category, item, from } = useSelector(
     state => state.home,
   );
+
+  const axios = require('axios');
+  const FormData = require('form-data');
+
+  const updateLastSession = async () => {
+    const userId = await storage.getItem(storage.USER_ID);
+    let data = new FormData();
+    data.append('user_id', Number(userId));
+    data.append('category_id', item?.id);
+    console.log('thuuduu', data);
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://stimuli.craftsweb.co.in/api/v1/playList/LastSessionUpdate',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      data: data,
+    };
+
+    return axios
+      .request(config)
+      .then(response => {
+        console.log(JSON.stringify(response.data));
+        console.log('resposedata', response.data);
+
+        return response.data;
+      })
+      .catch(error => {
+        console.log(error);
+        throw error;
+      });
+  };
 
   const playItem = item;
   const image = item?.categories_image[0]?.original_url ?? '';
@@ -327,6 +362,8 @@ const Playlistdetails = ({ route }) => {
               shadowColor: '#fff',
             }}
             onPress={() => {
+              updateLastSession();
+
               navigation.navigate('playsong', { index: -1 });
               dispatch({
                 type: 'home/currentPLaylist',

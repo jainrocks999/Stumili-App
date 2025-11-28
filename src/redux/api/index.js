@@ -67,7 +67,6 @@ export default class Api {
         `${mainURl}${data.url}?${queryString}`,
         requestOptions,
       );
-
       return await response.json();
     } catch (err) {
       console.log('error in Api ===>', err);

@@ -8,6 +8,7 @@ import {
   Alert,
   Clipboard,
   BackHandler,
+  Pressable,
 } from 'react-native';
 import Header from '../../components/molecules/Header';
 import { useDispatch, useSelector, useStore } from 'react-redux';
@@ -66,9 +67,30 @@ const HomeScreen = props => {
   // console.log(progress);
   const dispatch = useDispatch();
   const getFavriote = item => {};
-  const { groups, loading, category, playItem } = useSelector(
-    state => state.home,
-  );
+  const {
+    groups,
+    loading,
+    category,
+    playItem,
+    lastSessions: lastSession,
+  } = useSelector(state => state.home);
+  const [lastSessions, setLatSesstions] = useState([]);
+
+  const addRandomImages = (apiData, staticImages) => {
+    return apiData.map(item => {
+      const randomImg =
+        staticImages[Math.floor(Math.random() * staticImages.length)];
+      return {
+        ...item,
+        image: randomImg.image,
+        imgTitle: randomImg.title,
+      };
+    });
+  };
+  useEffect(() => {
+    const data = addRandomImages(lastSession, Img);
+    setLatSesstions(data);
+  }, [lastSession]);
   const [searchvisble, setSearchvisible] = useState(false);
   const getAllCategories = async () => {
     const items = await storage.getMultipleItems([
@@ -77,6 +99,13 @@ const HomeScreen = props => {
     ]);
     const token = items.find(([key]) => key === storage.TOKEN)?.[1];
     const user = items.find(([key]) => key === storage.USER_ID)?.[1];
+    dispatch({
+      type: 'home/lastSesstionRequest',
+      token,
+      url: 'playList/LastSession',
+      user_id: user,
+    });
+
     dispatch({
       type: 'home/playlist_request',
       token,
@@ -300,18 +329,24 @@ const HomeScreen = props => {
           }}
         >
           <FlatList
-            data={Img}
+            data={lastSessions}
             numColumns={2}
             showsHorizontalScrollIndicator={false}
             scrollEnabled={false}
             keyExtractor={item => item.id}
             renderItem={({ item }) => (
-              <View style={styles.lastSestionItem}>
+              <Pressable
+                onPress={() => {
+                  getAffetMationsbyCategories(item);
+                }}
+                style={styles.lastSestionItem}
+              >
                 <Image
                   source={item.image}
                   style={{ height: hp(8), width: hp(8), borderRadius: hp(1.5) }}
                 />
                 <Text
+                  numberOfLines={2}
                   style={{
                     fontSize: 12,
                     marginLeft: '5%',
@@ -321,9 +356,9 @@ const HomeScreen = props => {
                     width: '50%',
                   }}
                 >
-                  {item.title.substring(0, 10)}...
+                  {item?.categories_name}
                 </Text>
-              </View>
+              </Pressable>
             )}
           />
         </View>
