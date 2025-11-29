@@ -8,27 +8,28 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
-import {heightPercent as hp, widthPrecent as wp} from '../atoms/responsive';
+import React, { useState } from 'react';
+import { heightPercent as hp, widthPrecent as wp } from '../atoms/responsive';
 import Remindermodal1 from '../../screens/main/Reminder/Remindermodal1';
 import Remindmodal5 from '../../screens/main/Reminder/Remindmodal5';
 import Remindmodal4 from '../../screens/main/Reminder/Remindmodal4';
 import Remindmodal3 from '../../screens/main/Reminder/Remindmodal3';
 import Remindmodal2 from '../../screens/main/Reminder/Remindmodal2';
 const data = [
-  {id: '1', titles: 'Remindermodal1'},
-  {id: '2', titles: 'Remindmodal2'},
-  {id: '3', titles: 'Remindmodal3'},
-  {id: '4', titles: 'Remindmodal4'},
-  {id: '5', titles: 'Remindmodal5'},
+  { id: '1', titles: 'Remindermodal1' },
+  { id: '2', titles: 'Remindmodal2' },
+  { id: '3', titles: 'Remindmodal3' },
+  { id: '4', titles: 'Remindmodal4' },
+  { id: '5', titles: 'Remindmodal5' },
 ];
-const Modal2 = ({visible, onClose, titles}) => {
+const Modal2 = ({ visible, onClose, titles }) => {
   return (
     <Modal
       animationType="slide"
       transparent={true}
       visible={visible}
-      onRequestClose={onClose}>
+      onRequestClose={onClose}
+    >
       <TouchableOpacity
         style={{
           flex: 1,
@@ -36,7 +37,8 @@ const Modal2 = ({visible, onClose, titles}) => {
           justifyContent: 'flex-end',
         }}
         activeOpacity={1}
-        onPress={onClose}>
+        onPress={onClose}
+      >
         <View
           style={{
             backgroundColor: 'white',
@@ -54,9 +56,10 @@ const Modal2 = ({visible, onClose, titles}) => {
             borderTopEndRadius: 30,
             overflow: 'hidden',
             borderTopStartRadius: 30,
-          }}>
+          }}
+        >
           {titles == 'Remindermodal1' ? (
-            <Remindermodal1 />
+            <Remindermodal1 onPress={onClose} />
           ) : titles == 'Remindmodal2' ? (
             <Remindmodal2 onPress={onClose} />
           ) : titles == 'Remindmodal3' ? (

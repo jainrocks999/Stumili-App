@@ -18,6 +18,9 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
 import Buttun from '../../Auth/compoents/Buttun';
 import { fonts } from '../../../Context/Conctants';
+import Api from '../../../redux/api';
+import storage from '../../../utils/StorageService';
+import Toast from 'react-native-simple-toast';
 const Img = [
   {
     id: '1',
@@ -117,11 +120,13 @@ const Remindmodal2 = ({ onPress }) => {
   };
   const [reapeat, setRepeat] = useState(7);
 
-  const prepareApiData = () => {
+  const prepareApiData = async () => {
+    const [token, user_id] = await Promise.all([
+      storage.getItem(storage.TOKEN),
+      storage.getItem(storage.USER_ID),
+    ]);
     const today = new Date();
     const dateStr = today.toISOString().split('T')[0];
-
-    // JavaScript: Sunday = 0
     const dayMap = {
       0: 'sun',
       1: 'mon',
@@ -132,21 +137,24 @@ const Remindmodal2 = ({ onPress }) => {
       6: 'sat',
     };
 
-    // Din select mapping
     const dayData = {};
     Object.keys(dayMap).forEach(dayId => {
-      dayData[dayMap[dayId]] = selectedDays.includes(Number(dayId));
+      dayData[dayMap[dayId]] = selectedDays.includes(dayId.toString());
     });
 
     const apiData = {
-      user_id: 1,
-      affirmation_id: 1,
-      playlist_id: 1,
-      start_at: `${dateStr} ${currentTime1}:00`, // HH:mm:ss ensure
-      end_at: `${dateStr} ${currentTime2}:00`,
-      r_status: 1,
-      ...dayData,
-      reminder_id: 0,
+      token,
+      data: {
+        user_id: 1,
+        affirmation_id: 1,
+        playlist_id: 1,
+        start_at: `${dateStr} ${currentTime1}:00`,
+        end_at: `${dateStr} ${currentTime2}:00`,
+        r_status: 1,
+        ...dayData,
+        reminder_id: 0,
+        repeat: reapeat,
+      },
     };
 
     return apiData;
@@ -384,24 +392,6 @@ const Remindmodal2 = ({ onPress }) => {
               );
             }}
           />
-          {/* <FlatList
-            data={Img}
-            horizontal
-            keyExtractor={item => item.id}
-            renderItem={({item}) => (
-              <View style={styles.listCircle}>
-                <Text
-                  style={{
-                    marginLeft: '5%',
-                    color: '#B72658',
-                    fontWeight: '500',
-                    fontFamily: fonts.bold,
-                  }}>
-                  {item.title}
-                </Text>
-              </View>
-            )}
-          /> */}
         </View>
       </View>
       <View style={{ height: '2%' }} />
@@ -426,9 +416,16 @@ const Remindmodal2 = ({ onPress }) => {
           borderRadius: wp(2),
           elevation: 4,
         }}
-        onPress={() => {
-          const data = prepareApiData();
-          console.log('tjitititi', data);
+        onPress={async () => {
+          try {
+            const data = await prepareApiData();
+            const response = await Api.API_POST_JSON({
+              token: data.token,
+              body: data.data,
+              url: 'createReminder',
+            });
+            onPress();
+          } catch (err) {}
         }}
         title="Create"
       />
