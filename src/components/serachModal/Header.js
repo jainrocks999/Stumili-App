@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Image,
@@ -7,13 +7,13 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {heightPercent as hp, widthPrecent as wp} from '../atoms/responsive';
+import { heightPercent as hp, widthPrecent as wp } from '../atoms/responsive';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useNavigation} from '@react-navigation/native';
-import {fonts} from '../../Context/Conctants';
+import { useNavigation } from '@react-navigation/native';
+import { fonts } from '../../Context/Conctants';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {BackHandler} from 'react-native';
-const Header = ({ref, onChangeText, value, onCLose}) => {
+import { BackHandler } from 'react-native';
+const Header = ({ ref, onChangeText, value, onCLose }) => {
   const inputRef = useRef(null);
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.medium,
   },
   inputContainer: {
-    height: hp(7),
+    height: hp(5.5),
     borderWidth: wp(0.5),
     borderColor: 'gold',
     width: '80%',

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Image,
@@ -7,11 +7,11 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {heightPercent as hp, widthPrecent as wp} from '../atoms/responsive';
+import { heightPercent as hp, widthPrecent as wp } from '../atoms/responsive';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useNavigation} from '@react-navigation/native';
-import {fonts} from '../../Context/Conctants';
-const Header = ({placeholder, onChangeText, onPressSerach}) => {
+import { useNavigation } from '@react-navigation/native';
+import { fonts } from '../../Context/Conctants';
+const Header = ({ placeholder, onChangeText, onPressSerach }) => {
   const navigation = useNavigation();
   const [text, setText] = useState('');
   const handleClear = () => {
@@ -21,25 +21,27 @@ const Header = ({placeholder, onChangeText, onPressSerach}) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('goal');
-        }}>
+      <View
+      // onPress={() => {
+      //   navigation.navigate('goal');
+      // }}
+      >
         <Image
           source={require('../../assets/logo/stimuili-logos1-.png')}
           style={{
-            height: hp(6.5),
-            width: hp(6.5),
+            height: hp(5.5),
+            width: hp(5.5),
             marginRight: 15,
             borderRadius: hp(3.25),
             // tintColor: 'white',
           }}
         />
-      </TouchableOpacity>
+      </View>
       <TouchableOpacity
         activeOpacity={1}
         onPress={onPressSerach}
-        style={styles.inputContainer}>
+        style={styles.inputContainer}
+      >
         <AntDesign name="search1" size={20} color="black" />
         <TextInput
           editable={false}
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.medium,
   },
   inputContainer: {
-    height: hp(6.5),
+    height: hp(5.5),
     borderWidth: wp(0.1),
     borderColor: 'grey',
     width: '80%',

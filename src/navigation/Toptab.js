@@ -90,6 +90,7 @@ const Toptab = () => {
     grops,
   } = useSelector(state => state.home);
   const { getNameImage } = useContext(MusicPlayerContext);
+  console.log('ddddkk', favorite_Cat);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   useEffect(() => {
@@ -312,10 +313,9 @@ const Toptab = () => {
             keyExtractor={item => item?.id}
             scrollEnabled={false}
             renderItem={({ item, index }) => {
-              let image =
-                item.categories_image.length > 0
-                  ? item.categories_image[0].original_url
-                  : 'https://images.unsplash.com/photo-1616356607338-fd87169ecf1a';
+              let image = item.caetgory_images
+                ? item.caetgory_images
+                : 'https://images.unsplash.com/photo-1616356607338-fd87169ecf1a';
               // console.log(image, item.categories_name);
               return (
                 <View

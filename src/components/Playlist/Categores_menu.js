@@ -44,7 +44,14 @@ const Categores_menu = ({
   ];
 
   return (
-    <Modal animationType="fade" visible={visible} transparent={true}>
+    <Modal
+      onRequestClose={() => {
+        onClose();
+      }}
+      animationType="fade"
+      visible={visible}
+      transparent={true}
+    >
       <View style={{ flex: 1, backgroundColor: '#191919', opacity: 0.99 }}>
         <Loader loading={loading} />
         <View style={{ height: '20%' }} />

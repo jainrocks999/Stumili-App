@@ -130,7 +130,7 @@ const Playlistdetails = ({ route }) => {
   };
 
   const playItem = item;
-  const image = item?.categories_image[0]?.original_url ?? '';
+  const image = item?.caetgory_images ?? '';
   const title = item?.categories_name ?? 'Believe in yourself';
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);

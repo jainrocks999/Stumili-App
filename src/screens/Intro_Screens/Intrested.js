@@ -202,10 +202,10 @@ import {
   Text,
   ScrollView,
   View,
-  SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   heightPercent as hp,
   widthPrecent as wp,
@@ -215,26 +215,52 @@ import { useNavigation } from '@react-navigation/native';
 import { fonts } from '../../Context/Conctants';
 import Buttun from '../Auth/compoents/Buttun';
 
-const BUTTON_COLOR = '#D485D1'; 
+const BUTTON_COLOR = '#D485D1';
 
 const images = [
-  { title: 'Get Over Your Fear', path: require('../../assets/Intrested/icon1.png') },
-  { title: 'Get Higher Self Love', path: require('../../assets/Intrested/icon2.png') },
-  { title: 'Get Over an Addiction', path: require('../../assets/Intrested/icon3.png') },
-  { title: 'Get More Health', path: require('../../assets/Intrested/icon4.png') },
-  { title: 'Get More Motivation', path: require('../../assets/Intrested/icon5.png') },
-  { title: 'Get More Confidence', path: require('../../assets/Intrested/icon6.png') },
-  { title: 'Get More Happiness', path: require('../../assets/Intrested/icon7.png') },
-  { title: 'Get More Abundance', path: require('../../assets/Intrested/icon8.png') },
+  {
+    title: 'Get Over Your Fear',
+    path: require('../../assets/Intrested/icon1.png'),
+  },
+  {
+    title: 'Get Higher Self Love',
+    path: require('../../assets/Intrested/icon2.png'),
+  },
+  {
+    title: 'Get Over an Addiction',
+    path: require('../../assets/Intrested/icon3.png'),
+  },
+  {
+    title: 'Get More Health',
+    path: require('../../assets/Intrested/icon4.png'),
+  },
+  {
+    title: 'Get More Motivation',
+    path: require('../../assets/Intrested/icon5.png'),
+  },
+  {
+    title: 'Get More Confidence',
+    path: require('../../assets/Intrested/icon6.png'),
+  },
+  {
+    title: 'Get More Happiness',
+    path: require('../../assets/Intrested/icon7.png'),
+  },
+  {
+    title: 'Get More Abundance',
+    path: require('../../assets/Intrested/icon8.png'),
+  },
 ];
 
 const Interested = () => {
   const navigation = useNavigation();
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const toggleSelection = (title) => {
+  const toggleSelection = title => {
     setSelectedItems(prev =>
-      prev.includes(title) ? prev.filter(item => item !== title) : [...prev, title]
+      prev.includes(title)
+        ? prev.filter(item => item !== title)
+        : [...prev, title],
     );
   };
 
@@ -243,40 +269,61 @@ const Interested = () => {
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView nestedScrollEnabled>
           <View style={styles.header}>
-            <AntDesign onPress={() => navigation.goBack()} name="arrowleft" size={25} color="white" />
+            <AntDesign
+              onPress={() => navigation.goBack()}
+              name="arrowleft"
+              size={25}
+              color="white"
+            />
             <Text style={styles.headerTitle}>Welcome to Stimuli</Text>
-            <Image style={styles.logo} source={require('../../assets/logo/stimuili-logos1-.png')} />
+            <Image
+              style={styles.logo}
+              source={require('../../assets/logo/stimuili-logos1-.png')}
+            />
           </View>
           <View style={styles.intro}>
             <Text style={styles.title}>What are your Interests?</Text>
             <Text style={styles.subtitle}>
-              You are capable, resilient, and worthy of all the good things life offers. 
-              Your unique qualities shine brightly, guiding you toward success and fulfillment.
+              You are capable, resilient, and worthy of all the good things life
+              offers. Your unique qualities shine brightly, guiding you toward
+              success and fulfillment.
             </Text>
           </View>
           <View style={styles.listContainer}>
-          <FlatList
-  data={images}
-  numColumns={3}
-  keyExtractor={item => item.title}
-  renderItem={({ item }) => {
-    const isSelected = selectedItems.includes(item.title);
-    return (
-      <TouchableOpacity onPress={() => toggleSelection(item.title)}>
-        <View style={[styles.item, isSelected && styles.selectedItem]}>
-          <Image style={styles.icon} source={item.path} resizeMode="contain" />
-        </View>
-        <Text style={styles.itemTitle}>{item.title.substring(0, 16)}</Text>
-      </TouchableOpacity>
-    );
-  }}
-/>
-
+            <FlatList
+              data={images}
+              numColumns={3}
+              keyExtractor={item => item.title}
+              renderItem={({ item }) => {
+                const isSelected = selectedItems.includes(item.title);
+                return (
+                  <TouchableOpacity
+                    style={{ width: wp(29) }}
+                    onPress={() => toggleSelection(item.title)}
+                  >
+                    <View
+                      style={[styles.item, isSelected && styles.selectedItem]}
+                    >
+                      <Image
+                        style={styles.icon}
+                        source={item.path}
+                        resizeMode="contain"
+                      />
+                    </View>
+                    <Text numberOfLines={2} style={styles.itemTitle}>
+                      {item.title}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              }}
+            />
           </View>
           <Buttun
             style={styles.nextBtn}
             title={'Next'}
-            onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Home' }] })}
+            onPress={() =>
+              navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
+            }
           />
         </ScrollView>
       </SafeAreaView>
@@ -303,7 +350,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bold,
   },
   logo: {
-    marginTop:wp(5),
+    marginTop: wp(5),
     height: 50,
     width: 50,
   },
@@ -333,13 +380,13 @@ const styles = StyleSheet.create({
   item: {
     width: wp(22),
     height: wp(22),
-    backgroundColor: '#fff', 
+    backgroundColor: '#fff',
     marginVertical: hp(2),
     elevation: 4,
     borderRadius: wp(2),
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 3,  
+    borderWidth: 3,
     borderColor: 'white',
   },
   icon: {
@@ -359,6 +406,6 @@ const styles = StyleSheet.create({
     width: '60%',
   },
   selectedItem: {
-    borderColor: BUTTON_COLOR,  // Change only border color when selected
+    borderColor: BUTTON_COLOR, // Change only border color when selected
   },
 });

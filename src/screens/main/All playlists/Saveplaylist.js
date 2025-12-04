@@ -27,6 +27,7 @@ import { fonts } from '../../../Context/Conctants';
 import Buttun from '../../Auth/compoents/Buttun';
 import Loader from '../../../components/Loader';
 import storage from '../../../utils/StorageService';
+import { SafeAreaView } from 'react-native-safe-area-context';
 let launchImageLibrary = _launchImageLibrary;
 
 const Saveplaylist = ({ route }) => {
@@ -110,7 +111,7 @@ const Saveplaylist = ({ route }) => {
     }
   };
   return (
-    <View style={{ flex: 1, backgroundColor: '#191919' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#191919' }}>
       <Loader loading={loading} />
       <View
         style={{
@@ -214,7 +215,7 @@ const Saveplaylist = ({ route }) => {
           />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 export default Saveplaylist;

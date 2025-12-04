@@ -193,7 +193,7 @@ const Home = createSlice({
     search_success: (state, action) => {
       return { ...state, searchData: action.payload, loading: false };
     },
-    search_error: (state, action) => {
+    serach_error: (state, action) => {
       return { ...state, loading: false };
     },
     delete_playlist_request: (state, action) => {

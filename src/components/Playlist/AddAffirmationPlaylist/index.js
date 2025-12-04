@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,19 +11,23 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {heightPercent as hp, widthPrecent as wp} from '../../atoms/responsive';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  heightPercent as hp,
+  widthPrecent as wp,
+} from '../../atoms/responsive';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {fonts} from '../../../Context/Conctants';
+import { fonts } from '../../../Context/Conctants';
 import Buttun from '../../../screens/Auth/compoents/Buttun';
 import CheckCircle from './Animatecicle';
 import storage from '../../../utils/StorageService';
 import Loader from '../../Loader';
-const FullScreenModal = ({visible, onClose, loading, id}) => {
+import { useNavigation } from '@react-navigation/native';
+const FullScreenModal = ({ visible, onClose, loading, id }) => {
   const slideAnim = useRef(new Animated.Value(0)).current;
-  const {playlist, paly} = useSelector(state => state.home);
+  const { playlist, paly } = useSelector(state => state.home);
   const dispatch = useDispatch();
-
+  const navigation = useNavigation();
   useEffect(() => {
     if (visible) {
       Animated.timing(slideAnim, {
@@ -49,7 +53,6 @@ const FullScreenModal = ({visible, onClose, loading, id}) => {
       onPanResponderMove: (evt, gestureState) => {
         if (gestureState.dy > 0) {
           slideAnim.setValue(1 - gestureState.dy / 300);
-          console.log('kmdfdfpofpo', gestureState);
         }
       },
       onPanResponderRelease: (evt, gestureState) => {
@@ -71,22 +74,27 @@ const FullScreenModal = ({visible, onClose, loading, id}) => {
     outputRange: [300, 0],
   });
 
-  const dummyData = Array.from({length: 5}, (_, index) => ({
+  const dummyData = Array.from({ length: 5 }, (_, index) => ({
     id: index.toString(),
     title: `Item ${index + 1}`,
   }));
-  const [selectedIndex, setSelcteIndex] = useState({id: -1});
+  const [selectedIndex, setSelcteIndex] = useState({ id: -1 });
   return (
     <Modal
       transparent={true}
       visible={visible}
       animationType="none"
-      onRequestClose={onClose}>
+      onRequestClose={onClose}
+    >
       <View style={styles.modalBackground}>
         <Loader loading={loading} />
         <Animated.View
-          style={[styles.modalContent, {transform: [{translateY: slideIn}]}]}
-          {...panResponder.panHandlers}>
+          style={[
+            styles.modalContent,
+            { transform: [{ translateY: slideIn }] },
+          ]}
+          {...panResponder.panHandlers}
+        >
           <View style={styles.handle} />
 
           {/* <View style={styles.buttonContainer}>
@@ -95,6 +103,14 @@ const FullScreenModal = ({visible, onClose, loading, id}) => {
             </TouchableOpacity>
           </View> */}
           <Buttun
+            onPress={() => {
+              dispatch({
+                type: 'home/Add_item_to_Create_Playlist',
+                payload: [id],
+              });
+              navigation.navigate('saveplaylist', { isEdit: false });
+              onClose();
+            }}
             style={styles.buttonContainer}
             title={'Create new Playlist'}
           />
@@ -103,17 +119,19 @@ const FullScreenModal = ({visible, onClose, loading, id}) => {
               data={playlist[0].playlist}
               keyExtractor={item => item?.id}
               scrollEnabled={false}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <View
                   style={{
                     flexDirection: 'row',
                     alignSelf: 'center',
                     justifyContent: 'center',
-                  }}>
+                  }}
+                >
                   <TouchableOpacity
                     onPress={() => {
                       // getPlayListItem(item);
-                    }}>
+                    }}
+                  >
                     <View style={styles.imageeContainer}>
                       <View
                         style={{
@@ -123,7 +141,8 @@ const FullScreenModal = ({visible, onClose, loading, id}) => {
                           alignItems: 'center',
                           borderRadius: wp(2),
                           backgroundColor: 'white',
-                        }}>
+                        }}
+                      >
                         <Image
                           source={require('../../../assets/playlist.png')}
                           style={styles.image}
@@ -136,12 +155,14 @@ const FullScreenModal = ({visible, onClose, loading, id}) => {
                           flexDirection: 'column',
                           justifyContent: 'center',
                           marginHorizontal: hp(2.5),
-                        }}>
+                        }}
+                      >
                         <Text style={styles.text}>{item.title}</Text>
                         <Text style={styles.text2}>{item.description}</Text>
                       </View>
                       <View
-                        style={{justifyContent: 'center', paddingRight: 20}}>
+                        style={{ justifyContent: 'center', paddingRight: 20 }}
+                      >
                         <CheckCircle
                           size={wp(8)}
                           strokeWidth={wp(1)}

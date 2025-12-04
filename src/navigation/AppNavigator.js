@@ -1,4 +1,4 @@
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import MyTabs from './Bottomtab';
 import Login from '../screens/Auth/login';
@@ -25,6 +25,7 @@ import Playlistdetails2 from '../screens/Tab/Playlist2';
 import EditPlayList from '../screens/main/All playlists/EditPlayList';
 import SuggestImprovementScreen from '../screens/main/SuggestImprovement';
 import SuggestAffirmationScreen from '../screens/main/SuggestAffirmation';
+import Menu from '../components/Playlist/Menu';
 const Stack = createStackNavigator();
 function MyStack() {
   return (
@@ -41,119 +42,119 @@ function MyStack() {
       <Stack.Screen
         name="signup"
         component={Signup}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="login"
         component={Login}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Forgot"
         component={Forgot}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Home"
         component={MyTabs}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Popular"
         component={Popularplaylist}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="createplaylist"
         component={Createplaylist}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="createaffirmation"
         component={Createaffirmation}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="saveplaylist"
         component={Saveplaylist}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="playsong"
         component={Playsong}
-        options={{headerShown: false}}
-        initialParams={{index: -1}}
+        options={{ headerShown: false }}
+        initialParams={{ index: -1 }}
       />
       <Stack.Screen
         name="modal"
         component={Mymodal}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Playlistdetails"
         component={Playlistdetails}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Playlistdetails2"
         component={Playlistdetails2}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       {/* <Stack.Screen
         name="Menu"
         component={Menu}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       /> */}
       <Stack.Screen
         name="goal"
         component={Goal}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="audiorecorder"
         component={AudioRecorder}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Welecome"
         component={Welecome}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="ChooseAfferamtion"
         component={ChooseAfferamtion}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="AksReminder"
         component={AksReminder}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Welecome2"
         component={Welecome2}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Intrested"
         component={Intrested}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="EditPlayList"
         component={EditPlayList}
-        options={{headerShown: false}}
-      />
-        <Stack.Screen
-        name="SuggestImprovementScreen"
-        component={SuggestImprovementScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
-      name='SuggestAffirmationScreen'
-      component={SuggestAffirmationScreen}
-        options={{headerShown: false}}
-        />
+        name="SuggestImprovementScreen"
+        component={SuggestImprovementScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SuggestAffirmationScreen"
+        component={SuggestAffirmationScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }

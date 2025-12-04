@@ -128,7 +128,7 @@ const Createplaylist = () => {
               color: 'white',
             }}
           >
-            Create Your Playlis
+            Create Your Playlist
           </Text>
         </View>
       </View>

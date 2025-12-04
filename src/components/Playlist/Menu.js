@@ -18,6 +18,7 @@ import storage from '../../utils/StorageService';
 import { useDispatch } from 'react-redux';
 import Loader from '../Loader';
 import FullScreenModal from './AddAffirmationPlaylist';
+import { Share } from 'react-native';
 
 const Menu = ({
   visible,
@@ -44,11 +45,11 @@ const Menu = ({
       text: 'Share',
       icon: 'share-alternative',
     },
-    {
-      id: '4',
-      text: 'Hide',
-      icon: 'minuscircleo',
-    },
+    // {
+    //   id: '4',
+    //   text: 'Hide',
+    //   icon: 'minuscircleo',
+    // },
   ];
 
   const getmodified = (array, indexs, bool) => {
@@ -106,90 +107,107 @@ const Menu = ({
   const [visibles, setVisible] = useState(false);
 
   return (
-    <Modal animationType="fade" visible={visible} transparent={true}>
-      <Loader loading={loading} />
+    <>
+      <Modal
+        onRequestClose={() => {
+          onClose();
+        }}
+        animationType="fade"
+        visible={visible}
+        transparent={true}
+      >
+        <Loader loading={loading} />
+
+        <View style={{ flex: 1, backgroundColor: '#191919', opacity: 0.99 }}>
+          <View style={{ height: '25%' }} />
+          <View style={styles.main}>
+            <Text style={styles.txt}>{selectedItem?.affirmation_text}</Text>
+          </View>
+          <View style={{ height: '5%' }} />
+          <FlatList
+            data={data}
+            keyExtractor={item => item.id}
+            contentContainerStyle={{ alignSelf: 'right', marginLeft: wp(8) }}
+            renderItem={({ item, index }) => {
+              return (
+                <TouchableOpacity
+                  onPress={async () => {
+                    switch (item.id) {
+                      case '1': {
+                        if (selectedItem.is_favorite) {
+                          removeFavroit(selectedItem, selectedIndex);
+                        } else {
+                          handleHeartPress(selectedItem, selectedIndex);
+                        }
+                        break;
+                      }
+                      case '2': {
+                        setVisible(true);
+                        onClose();
+                        break;
+                      }
+                      case '3': {
+                        const result = await Share.share({
+                          message: selectedItem?.affirmation_text, // message to share
+                        });
+                      }
+                    }
+                  }}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginVertical: '5%',
+                  }}
+                >
+                  {index != 2 ? (
+                    <AntDesign
+                      color={
+                        item.id == '1' && selectedItem.is_favorite
+                          ? '#B72658'
+                          : 'white'
+                      }
+                      size={wp(7)}
+                      name={item.icon}
+                    />
+                  ) : (
+                    <Entypo color="white" size={wp(7)} name={item.icon} />
+                  )}
+
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontSize: wp(5),
+                      marginLeft: '5%',
+                      fontFamily: fonts.medium,
+                    }}
+                  >
+                    {item.text}
+                  </Text>
+                </TouchableOpacity>
+              );
+            }}
+          />
+          <TouchableOpacity onPress={onClose} style={styles.close}>
+            <Text
+              style={{
+                color: '#fff',
+                fontSize: wp(6.5),
+                fontFamily: fonts.medium,
+                // fontWeight: 'bol000d',
+              }}
+            >
+              Close
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
       <FullScreenModal
         loading={loading}
         id={selectedItem.id}
         onClose={() => setVisible(false)}
         visible={visibles}
       />
-      <View style={{ flex: 1, backgroundColor: '#191919', opacity: 0.99 }}>
-        <View style={{ height: '25%' }} />
-        <View style={styles.main}>
-          <Text style={styles.txt}>{selectedItem?.affirmation_text}</Text>
-        </View>
-        <View style={{ height: '5%' }} />
-        <FlatList
-          data={data}
-          keyExtractor={item => item.id}
-          contentContainerStyle={{ alignSelf: 'right', marginLeft: wp(8) }}
-          renderItem={({ item, index }) => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  switch (item.id) {
-                    case '1': {
-                      if (selectedItem.is_favorite) {
-                        removeFavroit(selectedItem, selectedIndex);
-                      } else {
-                        handleHeartPress(selectedItem, selectedIndex);
-                      }
-                      break;
-                    }
-                    case '2': {
-                      setVisible(true);
-                    }
-                  }
-                }}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginVertical: '5%',
-                }}
-              >
-                {index != 2 ? (
-                  <AntDesign
-                    color={
-                      item.id == '1' && selectedItem.is_favorite
-                        ? '#B72658'
-                        : 'white'
-                    }
-                    size={wp(7)}
-                    name={item.icon}
-                  />
-                ) : (
-                  <Entypo color="white" size={wp(7)} name={item.icon} />
-                )}
-
-                <Text
-                  style={{
-                    color: 'white',
-                    fontSize: wp(5),
-                    marginLeft: '5%',
-                    fontFamily: fonts.medium,
-                  }}
-                >
-                  {item.text}
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
-        />
-        <TouchableOpacity onPress={onClose} style={styles.close}>
-          <Text
-            style={{
-              color: '#fff',
-              fontSize: wp(6.5),
-              fontFamily: fonts.medium,
-              // fontWeight: 'bol000d',
-            }}
-          >
-            Close
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </Modal>
+    </>
   );
 };
 

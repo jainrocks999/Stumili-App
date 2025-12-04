@@ -1,18 +1,18 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import {TextInput} from 'react-native';
+import { TextInput } from 'react-native';
 import {
   heightPercent as hp,
   widthPrecent as wp,
 } from '../../../components/atoms/responsive';
-import {fonts} from '../../../Context/Conctants';
+import { fonts } from '../../../Context/Conctants';
 
-const Input = ({...props}) => {
+const Input = ({ ...props }) => {
   return (
     <View style={styles.input}>
       <TextInput
         {...props}
-        placeholderTextColor={'#fff'}
+        placeholderTextColor={'grey'}
         style={{
           fontSize: wp(5),
           fontFamily: fonts.medium,

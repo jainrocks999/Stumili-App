@@ -22,7 +22,7 @@ const data = [
   { id: '4', titles: 'Remindmodal4' },
   { id: '5', titles: 'Remindmodal5' },
 ];
-const Modal2 = ({ visible, onClose, titles }) => {
+const Modal2 = ({ visible, onClose, titles, selectedReminder }) => {
   return (
     <Modal
       animationType="slide"
@@ -44,7 +44,7 @@ const Modal2 = ({ visible, onClose, titles }) => {
             backgroundColor: 'white',
             height: hp(
               titles == 'Remindermodal1'
-                ? 50
+                ? 35
                 : titles == 'Remindmodal2'
                 ? 95
                 : titles == 'Remindmodal3'
@@ -61,7 +61,10 @@ const Modal2 = ({ visible, onClose, titles }) => {
           {titles == 'Remindermodal1' ? (
             <Remindermodal1 onPress={onClose} />
           ) : titles == 'Remindmodal2' ? (
-            <Remindmodal2 onPress={onClose} />
+            <Remindmodal2
+              selectedReminder={selectedReminder}
+              onPress={onClose}
+            />
           ) : titles == 'Remindmodal3' ? (
             <Remindmodal4 onPressClose={onClose} />
           ) : titles == 'Remindmodal4' ? (

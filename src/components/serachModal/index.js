@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,25 +11,24 @@ import Header from './Header';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {widthPrecent as wp, heightPercent as hp} from '../atoms/responsive';
-import {fonts} from '../../Context/Conctants';
+import { widthPrecent as wp, heightPercent as hp } from '../atoms/responsive';
+import { fonts } from '../../Context/Conctants';
 import List from '../CategoriesList';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {BackHandler} from 'react-native';
-import {ScrollView} from 'react-native';
+import { BackHandler } from 'react-native';
+import { ScrollView } from 'react-native';
 import storage from '../../utils/StorageService';
 import thisdata from './this';
 import Loader from '../Loader';
-const SearchModal = ({visible, onClose, onCategories}) => {
+const SearchModal = ({ visible, onClose, onCategories }) => {
   const dispatch = useDispatch();
-  const {searchData, Createfavriote, loading} = useSelector(
+  const { searchData, Createfavriote, loading } = useSelector(
     state => state.home,
   );
   const [value, setValue] = useState('');
   const [searchType, setSearchType] = useState('All');
   const handleonSearch = async (input, stype) => {
-    console.log('thid', input);
     const items = await storage.getMultipleItems([
       storage.TOKEN,
       storage.USER_ID,
@@ -56,8 +55,14 @@ const SearchModal = ({visible, onClose, onCategories}) => {
   }, [value, Createfavriote]);
 
   return (
-    <Modal animationType="fade" visible={visible}>
-      <View style={{flex: 1, backgroundColor: '#191919'}}>
+    <Modal
+      onRequestClose={() => {
+        onClose(false);
+      }}
+      animationType="fade"
+      visible={visible}
+    >
+      <View style={{ flex: 1, backgroundColor: '#191919' }}>
         <Loader loading={loading} />
         <Header
           onCLose={() => {
@@ -72,11 +77,13 @@ const SearchModal = ({visible, onClose, onCategories}) => {
             flexDirection: 'row',
             width: '100%',
             alignSelf: 'center',
-            height: hp(6.6),
+            height: hp(5.5),
+
             marginTop: '2%',
             justifyContent: 'space-between',
             paddingHorizontal: '2%',
-          }}>
+          }}
+        >
           <TouchableOpacity
             activeOpacity={0.9}
             onPress={() => {
@@ -85,8 +92,9 @@ const SearchModal = ({visible, onClose, onCategories}) => {
             }}
             style={[
               styles.btn,
-              {backgroundColor: searchType == 'All' ? '#D485D1' : 'white'},
-            ]}>
+              { backgroundColor: searchType == 'All' ? '#D485D1' : 'white' },
+            ]}
+          >
             <Fontisto
               color={searchType == 'All' ? 'white' : 'black'}
               name="star"
@@ -95,8 +103,9 @@ const SearchModal = ({visible, onClose, onCategories}) => {
             <Text
               style={[
                 styles.text,
-                {color: searchType == 'All' ? 'white' : 'black'},
-              ]}>
+                { color: searchType == 'All' ? 'white' : 'black' },
+              ]}
+            >
               All
             </Text>
           </TouchableOpacity>
@@ -108,8 +117,11 @@ const SearchModal = ({visible, onClose, onCategories}) => {
             }}
             style={[
               styles.btn,
-              {backgroundColor: searchType == 'playlist' ? '#D485D1' : 'white'},
-            ]}>
+              {
+                backgroundColor: searchType == 'playlist' ? '#D485D1' : 'white',
+              },
+            ]}
+          >
             <SimpleLineIcons
               color={searchType == 'playlist' ? 'white' : 'black'}
               name="playlist"
@@ -118,8 +130,9 @@ const SearchModal = ({visible, onClose, onCategories}) => {
             <Text
               style={[
                 styles.text,
-                {color: searchType == 'playlist' ? 'white' : 'black'},
-              ]}>
+                { color: searchType == 'playlist' ? 'white' : 'black' },
+              ]}
+            >
               PlayList
             </Text>
           </TouchableOpacity>
@@ -135,7 +148,8 @@ const SearchModal = ({visible, onClose, onCategories}) => {
                 backgroundColor:
                   searchType == 'affirmation' ? '#D485D1' : 'white',
               },
-            ]}>
+            ]}
+          >
             <FontAwesome
               color={searchType == 'affirmation' ? 'white' : 'black'}
               name="buysellads"
@@ -144,8 +158,9 @@ const SearchModal = ({visible, onClose, onCategories}) => {
             <Text
               style={[
                 styles.text,
-                {color: searchType == 'affirmation' ? 'white' : 'black'},
-              ]}>
+                { color: searchType == 'affirmation' ? 'white' : 'black' },
+              ]}
+            >
               Affirmations
             </Text>
           </TouchableOpacity>
@@ -161,7 +176,8 @@ const SearchModal = ({visible, onClose, onCategories}) => {
                   color: 'white',
                   marginVertical: 10,
                   marginLeft: wp(2),
-                }}>
+                }}
+              >
                 Playlist
               </Text>
               <List
@@ -181,7 +197,8 @@ const SearchModal = ({visible, onClose, onCategories}) => {
                   color: 'white',
                   marginVertical: 10,
                   marginLeft: wp(2),
-                }}>
+                }}
+              >
                 Affirmations
               </Text>
               <FlatList
@@ -191,7 +208,7 @@ const SearchModal = ({visible, onClose, onCategories}) => {
                 contentContainerStyle={{
                   marginTop: '3%',
                 }}
-                renderItem={({item}) => (
+                renderItem={({ item }) => (
                   <View
                     style={{
                       flexDirection: 'row',
@@ -201,17 +218,19 @@ const SearchModal = ({visible, onClose, onCategories}) => {
                       marginVertical: 10,
                       backgroundColor: '#4A4949',
                       borderRadius: 8,
-                    }}>
+                    }}
+                  >
                     <View
                       style={{
                         justifyContent: 'center',
                         marginHorizontal: '10%',
-                      }}>
+                      }}
+                    >
                       <Text style={styles.text2}>
                         {item.affirmation_text.substring(0, 40)}
                       </Text>
                     </View>
-                    <View style={{justifyContent: 'center'}}>
+                    <View style={{ justifyContent: 'center' }}>
                       <Entypo
                         onPress={() => {}}
                         name="dots-three-horizontal"

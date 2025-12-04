@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Pressable,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -136,8 +137,8 @@ const Reminder = () => {
   const [visible, setVisible] = useState(false);
   const [selectedModal, setSelectedModal] = useState();
   const [selectedToggles, setSelectedToggles] = useState({});
-  const handleModalPress = titles => {
-    // Alert.alert('thisis')
+  const handleModalPress = (titles, item = null) => {
+    setSelectedReminder(item);
     setSelectedModal(titles);
     setVisible(true);
   };
@@ -184,11 +185,8 @@ const Reminder = () => {
             const selectedDays = dayKeys.filter(day => item[day] == 1);
             return (
               <TouchableOpacity
-                onLongPress={() => {
-                  deleteReminder(item.id);
-                }}
                 onPress={() => {
-                  handleModalPress('Remindmodal4');
+                  handleModalPress('Remindmodal2', item);
                 }}
               >
                 <View
@@ -200,10 +198,28 @@ const Reminder = () => {
                     backgroundColor: '#4A4949',
                     borderRadius: wp(2),
                     marginVertical: 10,
-                    padding: '0%',
+                    padding: '2%',
                     // alignItems: 'center',
                   }}
                 >
+                  <Pressable
+                    onPress={() => {
+                      deleteReminder(item.id);
+                    }}
+                    style={{
+                      height: 18,
+                      width: 18,
+                      backgroundColor: '#ccc',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 10,
+                      position: 'absolute',
+                      top: 5,
+                      right: 8,
+                    }}
+                  >
+                    <Text style={{ fontSize: 12, marginTop: -3 }}>x</Text>
+                  </Pressable>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -277,7 +293,7 @@ const Reminder = () => {
         />
       </ScrollView>
       <View
-        style={{ alignSelf: 'center', position: 'absolute', bottom: hp(8) }}
+        style={{ alignSelf: 'center', position: 'absolute', bottom: hp(1) }}
       >
         <TouchableOpacity
           style={{
@@ -320,6 +336,7 @@ const Reminder = () => {
         }}
         visible={visible}
         titles={selectedModal}
+        selectedReminder={selectedReminder}
       />
     </SafeAreaView>
   );

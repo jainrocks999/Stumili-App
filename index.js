@@ -4,6 +4,7 @@
 
 import { AppRegistry, PermissionsAndroid, Platform } from 'react-native';
 import App from './App';
+// import App from './src1/screen/index';
 import { name as appName } from './app.json';
 requestNotificationPermission();
 AppRegistry.registerComponent(appName, () => App);

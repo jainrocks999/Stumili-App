@@ -40,6 +40,9 @@ import {
   setPlaylist,
   setVolumeSound,
 } from '../../native/SoundModule';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Menu from '../../components/Playlist/Menu';
+import { AffirmationBySelected } from '../../redux/reducer/home';
 const data = [
   {
     id: '1',
@@ -66,11 +69,7 @@ const Playsong = ({ route }) => {
     voices,
     ttsStatus,
     selectedVoice,
-    setSelectedVoice,
-    speechRate,
-    setSpeechRate,
-    speechPitch,
-    setSpeechPitch,
+
     affirmations,
     readText,
     player,
@@ -204,7 +203,11 @@ const Playsong = ({ route }) => {
       data: modified,
     });
   };
-
+  const [selectIndex, setSelectedIndex] = useState(-1);
+  const onRepeat = () => {
+    setVisibleIndex(0);
+    setProgress(0);
+  };
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
@@ -219,268 +222,296 @@ const Playsong = ({ route }) => {
             opacity: 0.93,
           }}
         >
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: 20,
-              alignItems: 'center',
-            }}
-          >
-            <View style={{ height: hp(5), marginLeft: '5%' }}>
-              <Icon
-                onPress={() => navigation.goBack()}
-                name="arrow-back"
-                size={30}
-                color="white"
-              />
-            </View>
-          </View>
-
-          <View
-            style={[
-              styles.card,
-              {
-                backgroundColor: 'black',
-                elevation: 3,
-                shadowColor: '#fff',
-              },
-            ]}
-          >
+          <SafeAreaView style={{ flex: 1 }}>
             <View
               style={{
                 flexDirection: 'row',
-                alignSelf: 'center',
-                width: wp(50),
-                marginHorizontal: '4%',
+                marginTop: 20,
+                alignItems: 'center',
               }}
             >
-              <Text
+              <View style={{ height: hp(5), marginLeft: '5%' }}>
+                <Icon
+                  onPress={() => navigation.goBack()}
+                  name="arrow-back"
+                  size={30}
+                  color="white"
+                />
+              </View>
+            </View>
+
+            <View
+              style={[
+                styles.card,
+                {
+                  backgroundColor: 'black',
+                  elevation: 3,
+                  shadowColor: '#fff',
+                },
+              ]}
+            >
+              <View
                 style={{
-                  fontSize: hp(2.5),
-                  fontWeight: '600',
-                  marginHorizontal: 10,
-                  // fontFamily: 'Poppins-Medium',
-                  color: 'white',
-                  fontFamily: fonts.medium,
+                  flexDirection: 'row',
+                  alignSelf: 'center',
+                  width: wp(50),
+                  marginHorizontal: '4%',
                 }}
               >
-                Affirmations
-              </Text>
+                <Text
+                  style={{
+                    fontSize: hp(2.5),
+                    fontWeight: '600',
+                    marginHorizontal: 10,
+                    // fontFamily: 'Poppins-Medium',
+                    color: 'white',
+                    fontFamily: fonts.medium,
+                  }}
+                >
+                  Affirmations
+                </Text>
+              </View>
+              <View
+                style={{
+                  elevation: 5,
+                  shadowColor: '#fff',
+                  height: hp(6),
+                  width: hp(6),
+                  borderWidth: 1,
+                  borderRadius: hp(3.5),
+                  overflow: 'hidden',
+                  // borderColor: '#fff',
+                  backgroundColor: '#fff',
+                }}
+              >
+                <Image
+                  source={require('../../assets/music.jpg')}
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    marginLeft: '5%',
+                    borderRadius: hp(3),
+                  }}
+                />
+              </View>
             </View>
             <View
               style={{
-                elevation: 5,
-                shadowColor: '#fff',
-                height: hp(6),
-                width: hp(6),
-                borderWidth: 1,
-                borderRadius: hp(3.5),
-                overflow: 'hidden',
-                // borderColor: '#fff',
-                backgroundColor: '#fff',
+                flexDirection: 'row',
+                marginTop: hp(15),
+                alignSelf: 'center',
+                marginTop: hp(60),
+                right: wp(10),
+                position: 'absolute',
+                zIndex: 1,
               }}
             >
-              <Image
-                source={require('../../assets/music.jpg')}
-                style={{
-                  height: '100%',
-                  width: '100%',
-                  marginLeft: '5%',
-                  borderRadius: hp(3),
+              <TouchableOpacity
+                style={{ zIndex: 2 }}
+                onPress={() => {
+                  !affirmations[visibleIndex].is_favorite
+                    ? handleHeartPress(affirmations[visibleIndex], visibleIndex)
+                    : removeFavroit(affirmations[visibleIndex], visibleIndex);
+                }}
+              >
+                <FontAwesome
+                  name={
+                    affirmations[visibleIndex]?.is_favorite
+                      ? 'heart'
+                      : 'heart-o'
+                  }
+                  size={30}
+                  color={
+                    affirmations[visibleIndex]?.is_favorite
+                      ? '#B72658'
+                      : 'white'
+                  }
+                />
+              </TouchableOpacity>
+
+              <FontAwesome
+                onPress={() => {
+                  onRepeat();
+                }}
+                name="repeat"
+                size={30}
+                color="white"
+                marginHorizontal="22%"
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Menu');
+                }}
+              >
+                <Entypo
+                  onPress={() => {
+                    setSelectedIndex(visibleIndex);
+                  }}
+                  name="dots-three-horizontal"
+                  size={30}
+                  color="white"
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View style={{ height: hp(100) }}>
+              <FlatList
+                ref={flatListRef}
+                pagingEnabled
+                initialScrollIndex={0}
+                showsVerticalScrollIndicator={false}
+                data={affirmations}
+                renderItem={({ item, index }) =>
+                  true ? (
+                    <View style={{ height: hp(100) }}>
+                      <Menu
+                        onClose={() => {
+                          setSelectedIndex(-1);
+                        }}
+                        selectedItem={item}
+                        visible={index == selectIndex}
+                        selectedIndex={index}
+                        affirmations={affirmations}
+                        loading={false}
+                      />
+                      <View
+                        style={{
+                          justifyContent: 'center',
+                          alignSelf: 'center',
+                          alignItems: 'center',
+                          flexDirection: 'column',
+                          width: wp(70),
+                          position: 'absolute',
+                          top: '10%',
+                        }}
+                      >
+                        <Text style={styles.text}>
+                          {item?.affirmation_text}
+                        </Text>
+                      </View>
+                    </View>
+                  ) : (
+                    <View style={{ height: hp(100) }} />
+                  )
+                }
+                keyExtractor={(item, index) => index.toString()}
+                onViewableItemsChanged={async ({ viewableItems, changed }) => {
+                  const newIndex = viewableItems[0].index;
+                  readText(affirmations[newIndex].affirmation_text); // Read text when view changes
+                  setVisibleIndex(newIndex);
+                  setIsPaused(false);
+                  if (isPaused & (progress >= 100)) {
+                    console.log('here');
+                    setProgress(0);
+                    currentTimeRef.current = 0;
+                  }
+                }}
+                onScrollToIndexFailed={info => {
+                  const wait = new Promise(resolve => setTimeout(resolve, 500));
+                  wait.then(() => {
+                    flatListRef.current?.scrollToIndex({
+                      index: info.index,
+                      animated: true,
+                    });
+                  });
                 }}
               />
             </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: hp(15),
-              alignSelf: 'center',
-              marginTop: hp(60),
-              right: wp(10),
-              position: 'absolute',
-              zIndex: 1,
-            }}
-          >
             <TouchableOpacity
-              style={{ zIndex: 2 }}
-              onPress={() => {
-                !affirmations[visibleIndex].is_favorite
-                  ? handleHeartPress(affirmations[visibleIndex], visibleIndex)
-                  : removeFavroit(affirmations[visibleIndex], visibleIndex);
+              onPress={() => handlePlayPauseClick()}
+              style={{
+                justifyContent: 'center',
+                alignSelf: 'center',
+                alignItems: 'center',
+                position: 'absolute',
+                bottom: '20%',
               }}
             >
-              <FontAwesome
-                name={
-                  affirmations[visibleIndex]?.is_favorite ? 'heart' : 'heart-o'
+              <Image
+                source={
+                  isPaused
+                    ? require('../../assets/flaticon/play.png')
+                    : require('../../assets/flaticon/pause.png')
                 }
-                size={30}
-                color={
-                  affirmations[visibleIndex]?.is_favorite ? '#B72658' : 'white'
-                }
+                style={{
+                  height: hp(2.5),
+                  width: hp(2.5),
+                  tintColor: !isPaused ? '#fff' : '#fff',
+                  position: 'absolute',
+                  zIndex: 0,
+                }}
+              />
+
+              <CircularProgress
+                value={progress}
+                radius={hp(4.5)}
+                // progressValueFontSize={wp(1)}
+                duration={200}
+                progressValueColor={'#ecf0f1'}
+                maxValue={100}
+                inActiveStrokeColor="#fff"
+                showProgressValue={false}
+                activeStrokeWidth={wp(0.8)}
+                inActiveStrokeWidth={wp(0.8)}
+                activeStrokeColor="#B72658"
               />
             </TouchableOpacity>
+            <View
+              style={{
+                alignItems: 'center',
 
-            <FontAwesome
-              name="repeat"
-              size={30}
-              color="white"
-              marginHorizontal="22%"
-            />
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Menu');
+                height: hp(10),
+                width: wp(100),
+                position: 'absolute',
+                bottom: hp(3),
               }}
             >
-              <Entypo name="dots-three-horizontal" size={30} color="white" />
-            </TouchableOpacity>
-          </View>
-
-          <View style={{ height: hp(100) }}>
-            <FlatList
-              ref={flatListRef}
-              pagingEnabled
-              initialScrollIndex={0}
-              showsVerticalScrollIndicator={false}
-              data={affirmations}
-              renderItem={({ item, index }) =>
-                true ? (
-                  <View style={{ height: hp(100) }}>
+              <FlatList
+                data={data}
+                horizontal={true}
+                scrollEnabled={false}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => (
+                  <TouchableOpacity onPress={() => handleTabPress(item.title)}>
                     <View
                       style={{
-                        justifyContent: 'center',
-                        alignSelf: 'center',
+                        width: wp(30),
+                        height: hp(5.5),
                         alignItems: 'center',
-                        flexDirection: 'column',
-                        width: wp(70),
-                        position: 'absolute',
-                        top: '10%',
+                        justifyContent: 'flex-end',
+                        flexDirection: 'row',
+                        backgroundColor:
+                          selectedTab === item.title ? '#000000' : '#DEDEDE',
+                        borderRadius: hp(5),
+                        marginHorizontal: wp(1),
                       }}
                     >
-                      <Text style={styles.text}>{item?.affirmation_text}</Text>
+                      <Text
+                        style={{
+                          color: selectedTab === item.title ? 'white' : 'black',
+                          fontSize: hp(1.8),
+                          // fontWeight: '400',
+                          right: wp(3),
+                          fontFamily: fonts.medium,
+                        }}
+                      >
+                        {item.title}
+                      </Text>
+                      <Image
+                        source={item.image}
+                        style={{
+                          width: hp(5.1),
+                          color: selectedTab === item.image ? 'white' : 'black',
+                          height: hp(5.1),
+                          borderRadius: hp(7),
+                        }}
+                      />
                     </View>
-                  </View>
-                ) : (
-                  <View style={{ height: hp(100) }} />
-                )
-              }
-              keyExtractor={(item, index) => index.toString()}
-              onViewableItemsChanged={async ({ viewableItems, changed }) => {
-                const newIndex = viewableItems[0].index;
-                readText(affirmations[newIndex].affirmation_text); // Read text when view changes
-                setVisibleIndex(newIndex);
-                setIsPaused(false);
-                if (isPaused & (progress >= 100)) {
-                  console.log('here');
-                  setProgress(0);
-                  currentTimeRef.current = 0;
-                }
-              }}
-              onScrollToIndexFailed={info => {
-                const wait = new Promise(resolve => setTimeout(resolve, 500));
-                wait.then(() => {
-                  flatListRef.current?.scrollToIndex({
-                    index: info.index,
-                    animated: true,
-                  });
-                });
-              }}
-            />
-          </View>
-          <TouchableOpacity
-            onPress={() => handlePlayPauseClick()}
-            style={{
-              justifyContent: 'center',
-              alignSelf: 'center',
-              alignItems: 'center',
-              position: 'absolute',
-              bottom: '20%',
-            }}
-          >
-            <Image
-              source={
-                isPaused
-                  ? require('../../assets/flaticon/play.png')
-                  : require('../../assets/flaticon/pause.png')
-              }
-              style={{
-                height: hp(2.5),
-                width: hp(2.5),
-                tintColor: !isPaused ? '#fff' : '#fff',
-                position: 'absolute',
-                zIndex: 0,
-              }}
-            />
-
-            <CircularProgress
-              value={progress}
-              radius={hp(4.5)}
-              // progressValueFontSize={wp(1)}
-              duration={200}
-              progressValueColor={'#ecf0f1'}
-              maxValue={100}
-              inActiveStrokeColor="#fff"
-              showProgressValue={false}
-              activeStrokeWidth={wp(0.8)}
-              inActiveStrokeWidth={wp(0.8)}
-              activeStrokeColor="#B72658"
-            />
-          </TouchableOpacity>
-          <View
-            style={{
-              alignItems: 'center',
-
-              height: hp(10),
-              width: wp(100),
-              position: 'absolute',
-              bottom: hp(3),
-            }}
-          >
-            <FlatList
-              data={data}
-              horizontal={true}
-              scrollEnabled={false}
-              keyExtractor={item => item.id}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => handleTabPress(item.title)}>
-                  <View
-                    style={{
-                      width: wp(30),
-                      height: hp(5.5),
-                      alignItems: 'center',
-                      justifyContent: 'flex-end',
-                      flexDirection: 'row',
-                      backgroundColor:
-                        selectedTab === item.title ? '#000000' : '#DEDEDE',
-                      borderRadius: hp(5),
-                      marginHorizontal: wp(1),
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: selectedTab === item.title ? 'white' : 'black',
-                        fontSize: hp(1.8),
-                        // fontWeight: '400',
-                        right: wp(3),
-                        fontFamily: fonts.medium,
-                      }}
-                    >
-                      {item.title}
-                    </Text>
-                    <Image
-                      source={item.image}
-                      style={{
-                        width: hp(5.1),
-                        color: selectedTab === item.image ? 'white' : 'black',
-                        height: hp(5.1),
-                        borderRadius: hp(7),
-                      }}
-                    />
-                  </View>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
+          </SafeAreaView>
         </View>
         <Mymodal
           title={selectedTab}

@@ -170,7 +170,7 @@
 // export default Login;
 
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import Loader from '../../components/Loader';
@@ -184,6 +184,8 @@ import { fonts } from '../../Context/Conctants';
 import Toast from 'react-native-simple-toast';
 import storage from '../../utils/StorageService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import messaging from '@react-native-firebase/messaging';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -196,7 +198,7 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    const fcm_token = await AsyncStorage.getItem('fcm_token');
+    const fcm_token = await messaging().getToken();
     if (!fcm_token) {
       Toast.show('Something gone wrong! Please try again. ');
       return;

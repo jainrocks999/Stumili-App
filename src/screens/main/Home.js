@@ -320,9 +320,11 @@ const HomeScreen = props => {
       />
       <Loader loading={loading} />
       <ScrollView contentContainerStyle={styles.scrollView}>
-        <View s tyle={styles.FeatureContainer}>
-          <Text style={styles.Featurecategory}>Last sessions</Text>
-        </View>
+        {lastSessions?.length > 0 ? (
+          <View s tyle={styles.FeatureContainer}>
+            <Text style={styles.Featurecategory}>Last sessions</Text>
+          </View>
+        ) : null}
         <View
           style={{
             alignItems: 'center',

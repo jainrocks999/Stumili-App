@@ -244,7 +244,7 @@ export const MusicPlayerProvider = ({ children }) => {
   const getNameImage = () => {
     return {
       image:
-        playItem?.categories_image[0]?.original_url ??
+        playItem?.caetgory_images ??
         'https://images.unsplash.com/photo-1616356607338-fd87169ecf1a',
       name: playItem?.categories_name ?? 'raju',
       title: 'By Stimuili',

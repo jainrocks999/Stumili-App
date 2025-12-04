@@ -6,16 +6,16 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
-import {widthPrecent as wp, heightPercent as hp} from '../atoms/responsive';
-import {fonts} from '../../Context/Conctants';
+import React, { useState } from 'react';
+import { widthPrecent as wp, heightPercent as hp } from '../atoms/responsive';
+import { fonts } from '../../Context/Conctants';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Categores_menu from '../Playlist/Categores_menu';
 import storage from '../../utils/StorageService';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-const List = ({cate, onPress, onPressPlay}) => {
-  const {loading} = useSelector(state => state.home);
+const List = ({ cate, onPress, onPressPlay }) => {
+  const { loading } = useSelector(state => state.home);
   const [modalIndex, setModalIndex] = useState(-1);
   const dispatch = useDispatch();
   const getFavriote = async item => {
@@ -62,23 +62,25 @@ const List = ({cate, onPress, onPressPlay}) => {
         data={cate}
         keyExtractor={item => item?.id}
         scrollEnabled={false}
-        renderItem={({item, index}) => {
-          let image =
-            item.categories_image.length > 0
-              ? item.categories_image[0].original_url
-              : 'https://images.unsplash.com/photo-1616356607338-fd87169ecf1a';
+        renderItem={({ item, index }) => {
+          console.log('titititi', item);
+
+          let image = item.caetgory_images
+            ? item.caetgory_images
+            : 'https://images.unsplash.com/photo-1616356607338-fd87169ecf1a';
           return (
             <View
               style={{
                 flexDirection: 'row',
                 alignSelf: 'center',
                 justifyContent: 'center',
-              }}>
+              }}
+            >
               <Categores_menu
                 onClose={() => setModalIndex(-1)}
                 visible={index == modalIndex}
                 item={item}
-                image={{uri: image}}
+                image={{ uri: image }}
                 onPressEdit={items => {
                   item.is_favorite ? removeFavroit(items) : getFavriote(items);
                 }}
@@ -88,7 +90,8 @@ const List = ({cate, onPress, onPressPlay}) => {
               <TouchableOpacity
                 onPress={() => {
                   onPress(item);
-                }}>
+                }}
+              >
                 <View style={styles.imageeContainer}>
                   <View
                     style={{
@@ -99,10 +102,11 @@ const List = ({cate, onPress, onPressPlay}) => {
                       borderRadius: wp(2),
                       backgroundColor: 'white',
                       overflow: 'hidden',
-                    }}>
+                    }}
+                  >
                     <Image
-                      source={{uri: image}}
-                      style={{height: '100%', width: '100%'}}
+                      source={{ uri: image }}
+                      style={{ height: '100%', width: '100%' }}
                       resizeMode="contain"
                     />
                   </View>
@@ -111,11 +115,12 @@ const List = ({cate, onPress, onPressPlay}) => {
                       flexDirection: 'column',
                       justifyContent: 'center',
                       marginHorizontal: hp(2.5),
-                    }}>
+                    }}
+                  >
                     <Text style={styles.text}>{item.categories_name}</Text>
                     <Text style={styles.text2}>{'Buy Stimuli '}</Text>
                   </View>
-                  <View style={{justifyContent: 'center', paddingRight: 20}}>
+                  <View style={{ justifyContent: 'center', paddingRight: 20 }}>
                     <Entypo
                       name="dots-three-horizontal"
                       size={20}

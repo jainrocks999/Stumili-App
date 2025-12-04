@@ -233,9 +233,10 @@ function* fetchCreatePlaylist(action) {
           token: action.token,
         });
         Toast.show('Play list created');
+        action.navigation.navigate('Home', { screen: 'library' });
       } else {
         Toast.show('Play list updated');
-        action.navigation.navigate('library');
+        action.navigation.navigate('Home', { screen: 'library' });
       }
     } else {
       Toast.show('Error with fetching createplaylist ');
@@ -656,7 +657,7 @@ function* doSearch(action) {
       yield put({
         type: 'home/serach_error',
       });
-      Toast.show(res.msg);
+      // Toast.show(res?.msg || 'Something went wrong');
     }
   } catch (error) {
     yield put({
@@ -726,7 +727,7 @@ function* deletePlaylistItme(action) {
         type: 'home/update_playlistitem_success',
       });
       Toast.show('Play list item updated successfully');
-      action.navigation.navigate('library');
+      action.navigation.navigate('Home', { screen: 'library' });
     } else {
       yield put({
         type: 'home/update_playlistitem_error',
@@ -761,7 +762,7 @@ function* getLastSesstion(action) {
       yield put({
         type: 'home/lastSesstionFailled',
       });
-      Toast.show(res.data.message);
+      // Toast.show(res.data?.message || 'Not Lar sesstion');
     }
   } catch (error) {
     console.log('thididididi', error);

@@ -7,7 +7,7 @@ import {
 } from '../../../components/atoms/responsive';
 import Modal2 from '../../../components/molecules/Modal2';
 import { fonts } from '../../../Context/Conctants';
-const Remindermodal1 = ({ onPress }) => {
+const Remindermodal1 = ({ onPress, setSelectedReminder }) => {
   const [visible, setVisible] = useState(false);
   const [selectedModal, setSelectedModal] = useState();
 
@@ -16,7 +16,6 @@ const Remindermodal1 = ({ onPress }) => {
     setSelectedModal(titles);
     setVisible(true);
   };
-  console.log('thiss vidzxc', visible);
   return (
     <View style={{ flex: 1, backgroundColor: '#111' }}>
       <View style={styles.bottomSheetContent}>
@@ -60,7 +59,7 @@ const Remindermodal1 = ({ onPress }) => {
             </LinearGradient>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             handleModalPress('Remindmodal3');
           }}
@@ -99,7 +98,7 @@ const Remindermodal1 = ({ onPress }) => {
               </View>
             </LinearGradient>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <Modal2
         title={selectedModal}

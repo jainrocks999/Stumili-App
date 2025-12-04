@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   heightPercent as hp,
   widthPrecent as wp,
@@ -59,8 +59,16 @@ const Img = [
   },
 ];
 
-const Remindmodal2 = ({ onPress }) => {
+const Remindmodal2 = ({ onPress, selectedReminder }) => {
+  const getTime = datetime => {
+    const time = datetime.split(' ')[1]; // "9:00:00"
+    const [hour, minute] = time.split(':');
+    // ensure 2-digit format (09:00)
+    return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
+  };
+
   const [selectedDays, setSelectedDays] = useState([]);
+
   const handleDaySelection = dayId => {
     setSelectedDays(prevSelected =>
       prevSelected.includes(dayId)
@@ -69,12 +77,11 @@ const Remindmodal2 = ({ onPress }) => {
     );
   };
   const [currentTime1, setCurrentTime1] = useState('9:00');
-  const [currentTime2, setCurrentTime2] = useState('9:00');
+  const [currentTime2, setCurrentTime2] = useState('9:30');
   const updateTime1 = increment => {
-    let [hour, minute] = currentTime1.split(':');
-    hour = parseInt(hour);
-    minute = parseInt(minute);
+    let [hour, minute] = currentTime1.split(':').map(Number);
 
+    // Adjust time1
     if (increment) {
       minute += 30;
       if (minute >= 60) {
@@ -89,16 +96,31 @@ const Remindmodal2 = ({ onPress }) => {
       }
     }
 
-    hour = (hour < 10 ? '0' : '') + hour;
-    minute = (minute < 10 ? '0' : '') + minute;
+    // Format back to HH:MM
+    const newHour = hour.toString().padStart(2, '0');
+    const newMinute = minute.toString().padStart(2, '0');
+    const newTime1 = `${newHour}:${newMinute}`;
 
-    setCurrentTime1(hour + ':' + minute);
+    // Auto-set time2 = time1 + 30 mins
+    let nextHour = hour;
+    let nextMinute = minute + 30;
+    if (nextMinute >= 60) {
+      nextMinute = 0;
+      nextHour = (nextHour + 1) % 24;
+    }
+
+    const newTime2 = `${nextHour.toString().padStart(2, '0')}:${nextMinute
+      .toString()
+      .padStart(2, '0')}`;
+
+    setCurrentTime1(newTime1);
+    setCurrentTime2(newTime2);
   };
+
   const updateTime2 = increment => {
-    let [hour, minute] = currentTime2.split(':');
-    hour = parseInt(hour);
-    minute = parseInt(minute);
+    let [hour, minute] = currentTime2.split(':').map(Number);
 
+    // Adjust time2
     if (increment) {
       minute += 30;
       if (minute >= 60) {
@@ -112,13 +134,38 @@ const Remindmodal2 = ({ onPress }) => {
         hour = (hour - 1 + 24) % 24;
       }
     }
+    const newHour = hour.toString().padStart(2, '0');
+    const newMinute = minute.toString().padStart(2, '0');
+    const newTime2 = `${newHour}:${newMinute}`;
+    const [h1, m1] = currentTime1.split(':').map(Number);
+    const time1InMins = h1 * 60 + m1;
+    const time2InMins = hour * 60 + minute;
 
-    hour = (hour < 10 ? '0' : '') + hour;
-    minute = (minute < 10 ? '0' : '') + minute;
+    if (time2InMins <= time1InMins) {
+      alert('End time must be at least 30 minutes after start time.');
+      return;
+    }
 
-    setCurrentTime2(hour + ':' + minute);
+    setCurrentTime2(newTime2);
   };
-  const [reapeat, setRepeat] = useState(7);
+
+  const [reapeat, setRepeat] = useState(selectedReminder?.repeat ?? 7);
+  useEffect(() => {
+    if (selectedReminder) {
+      const weekKeys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+      setRepeat(Number(selectedReminder?.repeat));
+      const time1 = getTime(selectedReminder?.start_at);
+      const time2 = getTime(selectedReminder?.end_at);
+      setCurrentTime1(time1);
+      setCurrentTime2(time2);
+      const selectedIds = weekKeys
+        .map((key, index) =>
+          selectedReminder[key] === 1 ? Img[index].id : null,
+        )
+        .filter(Boolean);
+      setSelectedDays(selectedIds);
+    }
+  }, [selectedReminder]);
 
   const prepareApiData = async () => {
     const [token, user_id] = await Promise.all([
@@ -128,13 +175,13 @@ const Remindmodal2 = ({ onPress }) => {
     const today = new Date();
     const dateStr = today.toISOString().split('T')[0];
     const dayMap = {
-      0: 'sun',
-      1: 'mon',
-      2: 'tue',
-      3: 'wed',
-      4: 'thu',
-      5: 'fri',
-      6: 'sat',
+      1: 'sun',
+      2: 'mon',
+      3: 'tue',
+      4: 'wed',
+      5: 'thu',
+      6: 'fri',
+      7: 'sat',
     };
 
     const dayData = {};
@@ -152,7 +199,7 @@ const Remindmodal2 = ({ onPress }) => {
         end_at: `${dateStr} ${currentTime2}:00`,
         r_status: 1,
         ...dayData,
-        reminder_id: 0,
+        reminder_id: selectedReminder?.id ?? 0,
         repeat: reapeat,
       },
     };
@@ -418,16 +465,23 @@ const Remindmodal2 = ({ onPress }) => {
         }}
         onPress={async () => {
           try {
+            if (selectedDays.length == 0) {
+              Toast.show('Please select any day!');
+              retu;
+            }
             const data = await prepareApiData();
             const response = await Api.API_POST_JSON({
               token: data.token,
               body: data.data,
               url: 'createReminder',
             });
+            Toast.show(
+              selectedReminder?.id ? 'Reminder Updated!' : 'Reminder Created!',
+            );
             onPress();
           } catch (err) {}
         }}
-        title="Create"
+        title={selectedReminder?.id ? 'Update' : 'Create'}
       />
     </View>
   );
