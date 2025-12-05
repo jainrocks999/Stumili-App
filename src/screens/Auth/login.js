@@ -170,7 +170,7 @@
 // export default Login;
 
 import React, { useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import Loader from '../../components/Loader';
@@ -198,36 +198,42 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    const fcm_token = await messaging().getToken();
-    if (!fcm_token) {
-      Toast.show('Something gone wrong! Please try again. ');
-      return;
-    }
-    if (!email) {
-      Toast.show('Please enter email');
-      return;
-    }
-    if (!validateEmail(email)) {
-      Toast.show('Email is invalid');
-      return;
-    }
-    if (!password) {
-      Toast.show('Please enter password');
-      return;
-    }
-    let formData = new FormData();
-    formData.append('email', email);
-    formData.append('password', password);
-    formData.append('fcm_token', fcm_token);
-    console.log('FormData Debugging:');
-    console.log(formData);
-    const debugData = {
-      email: email,
-      password: password,
-      fcm_token: fcm_token,
-    };
-    console.log('Debug Object:', debugData);
+    let fcm_token='diijiofdsiudfiiufd'
+      try{ fcm_token = await messaging().getToken();}catch(err){
+        console.log("friir",err);
+        
+      }
     try {
+    
+      if (!fcm_token) {
+        Toast.show('Something gone wrong! Please try again. ');
+        return;
+      }
+      if (!email) {
+        Toast.show('Please enter email');
+        return;
+      }
+      if (!validateEmail(email)) {
+        Toast.show('Email is invalid');
+        return;
+      }
+      if (!password) {
+        Toast.show('Please enter password');
+        return;
+      }
+      let formData = new FormData();
+      formData.append('email', email);
+      formData.append('password', password);
+      formData.append('fcm_token', fcm_token);
+      console.log('FormData Debugging:');
+      console.log(formData);
+      const debugData = {
+        email: email,
+        password: password,
+        fcm_token: fcm_token,
+      };
+      console.log('Debug Object:', debugData);
+
       const response = await axios.post(
         'https://stimuli.craftsweb.co.in/api/v1/login',
         formData,

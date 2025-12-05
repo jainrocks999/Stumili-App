@@ -113,7 +113,7 @@ const SearchModal = ({ visible, onClose, onCategories }) => {
             activeOpacity={0.9}
             onPress={() => {
               setSearchType('playlist');
-              handleonSearch(value, 'playlist');
+              handleonSearch(value, 'affirmation');
             }}
             style={[
               styles.btn,
@@ -140,7 +140,7 @@ const SearchModal = ({ visible, onClose, onCategories }) => {
             activeOpacity={0.9}
             onPress={() => {
               setSearchType('affirmation');
-              handleonSearch(value, 'affirmation');
+              handleonSearch(value, 'playlist');
             }}
             style={[
               styles.btn,

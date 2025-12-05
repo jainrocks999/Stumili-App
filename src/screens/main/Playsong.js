@@ -73,9 +73,8 @@ const Playsong = ({ route }) => {
     affirmations,
     readText,
     player,
-    setVolume,
-    updateSpeechRate,
-    updateSpeechPitch,
+
+
     onVoicePress,
     handlePlayPauseClick,
     visibleIndex,
@@ -385,7 +384,7 @@ const Playsong = ({ route }) => {
                           top: '10%',
                         }}
                       >
-                        <Text style={styles.text}>
+                        <Text numberOfLines={5} style={styles.text}>
                           {item?.affirmation_text}
                         </Text>
                       </View>

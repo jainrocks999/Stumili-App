@@ -47,8 +47,9 @@ const PlayPopup = () => {
             source={{uri: getNameImage().image}}
           />
         </View>
-        <View style={{marginLeft: '10%'}}>
+        <View style={{marginLeft: '10%',width:'60%'}}>
           <Text
+          numberOfLines={2}
             style={{
               color: '#fff',
               fontSize: wp(3.5),

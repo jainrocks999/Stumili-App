@@ -75,44 +75,90 @@ export const MusicPlayerProvider = ({ children }) => {
     });
   };
 
+  // useEffect(() => {
+  //   if (affirmations?.length === 0) return; // Early return if affirmations array is empty
+
+  //   const maxTimeInSeconds = maxTimeInMinutes * 60;
+  //   let currentTime = currentTimeRef.current || 0;
+  //   const initialProgress = (currentTime / maxTimeInSeconds) * 100;
+  //   setProgress(initialProgress);
+
+  //   const intervalForProgress = setInterval(async () => {
+  //     if (!isPaused) {
+  //       if (currentTime < maxTimeInSeconds) {
+  //         currentTime++;
+  //         const newProgress = (currentTime / maxTimeInSeconds) * 100;
+  //         setProgress(newProgress);
+  //         currentTimeRef.current = currentTime;
+  //       } else if (progress < 100) {
+  //         clearInterval(intervalForProgress);
+  //         setProgress(100);
+  //         setIsPaused(true);
+  //         Tts.stop();
+  //         // await TrackPlayer.pause();
+  //       }
+  //     } else {
+  //       Tts.pause();
+  //       // await TrackPlayer.pause();
+  //     }
+  //   }, 1000);
+
+  //   if (!isPaused) {
+  //     readText(affirmations?.[visibleIndex]?.affirmation_text);
+  //     // TrackPlayer.play();
+  //   }
+
+  //   return () => {
+  //     clearInterval(intervalForProgress);
+  //     Tts.stop();
+  //   };
+  // }, [maxTimeInMinutes, isPaused, affirmations?.length, visibleIndex]);
   useEffect(() => {
-    if (affirmations?.length === 0) return; // Early return if affirmations array is empty
+  if (!affirmations || affirmations.length === 0) return;
 
-    const maxTimeInSeconds = maxTimeInMinutes * 60;
-    let currentTime = currentTimeRef.current || 0;
-    const initialProgress = (currentTime / maxTimeInSeconds) * 100;
-    setProgress(initialProgress);
+  const maxTimeInSeconds = maxTimeInMinutes * 60;
+  let currentTime = currentTimeRef.current || 0;
 
-    const intervalForProgress = setInterval(async () => {
-      if (!isPaused) {
-        if (currentTime < maxTimeInSeconds) {
-          currentTime++;
-          const newProgress = (currentTime / maxTimeInSeconds) * 100;
-          setProgress(newProgress);
-          currentTimeRef.current = currentTime;
-        } else if (progress < 100) {
-          clearInterval(intervalForProgress);
-          setProgress(100);
-          setIsPaused(true);
-          Tts.stop();
-          // await TrackPlayer.pause();
-        }
-      } else {
-        Tts.pause();
-        // await TrackPlayer.pause();
-      }
-    }, 1000);
+  // Set initial progress only once on mount/change
+  setProgress((currentTime / maxTimeInSeconds) * 100);
 
-    if (!isPaused) {
-      readText(affirmations?.[visibleIndex]?.affirmation_text);
-      // TrackPlayer.play();
+  const interval = setInterval(() => {
+    // If paused → do NOT increase time
+    if (isPaused) {
+      Tts.pause();
+      return;
     }
 
-    return () => {
-      clearInterval(intervalForProgress);
+    // If still under duration → increase time
+    if (currentTime < maxTimeInSeconds) {
+      currentTime++;
+      currentTimeRef.current = currentTime;
+
+      setProgress((currentTime / maxTimeInSeconds) * 100);
+    } 
+    // If done → stop
+    else {
       Tts.stop();
-    };
-  }, [maxTimeInMinutes, isPaused, affirmations?.length, visibleIndex]);
+      clearInterval(interval);
+      setProgress(100);
+      setIsPaused(true);
+    }
+  }, 1000);
+
+  return () => {
+    clearInterval(interval);
+    Tts.stop();
+  };
+}, [maxTimeInMinutes, affirmations?.length]);
+useEffect(() => {
+    if(isPaused){
+     Tts.stop()
+     return
+    }
+  const text = affirmations?.[visibleIndex]?.affirmation_text;
+  if (text) readText(text);
+
+}, [visibleIndex, isPaused]);
 
   useEffect(() => {
     const initTts = async () => {
