@@ -6,6 +6,7 @@ import {
   Modal,
   TouchableOpacity,
   FlatList,
+  Pressable,
 } from 'react-native';
 import Header from './Header';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -21,6 +22,7 @@ import { ScrollView } from 'react-native';
 import storage from '../../utils/StorageService';
 import thisdata from './this';
 import Loader from '../Loader';
+import { useNavigation } from '@react-navigation/native';
 const SearchModal = ({ visible, onClose, onCategories }) => {
   const dispatch = useDispatch();
   const { searchData, Createfavriote, loading } = useSelector(
@@ -53,6 +55,7 @@ const SearchModal = ({ visible, onClose, onCategories }) => {
       clearTimeout(deBounce);
     };
   }, [value, Createfavriote]);
+  const navigation = useNavigation();
 
   return (
     <Modal
@@ -209,7 +212,23 @@ const SearchModal = ({ visible, onClose, onCategories }) => {
                   marginTop: '3%',
                 }}
                 renderItem={({ item }) => (
-                  <View
+                  <Pressable
+                    onPress={() => {
+                      onClose(false);
+                      dispatch({
+                        type: 'home/affirmationBYCategory_success',
+                        payload: searchData.affirmations,
+                      });
+                      dispatch({
+                        type: 'home/playList_item',
+                        payload: {
+                          from: true,
+                          isFroiut: true,
+                          categories_name: 'Search.....',
+                        },
+                      });
+                      navigation.navigate('Playlistdetails2',{isPlaylist:true});
+                    }}
                     style={{
                       flexDirection: 'row',
                       alignSelf: 'center',
@@ -238,7 +257,7 @@ const SearchModal = ({ visible, onClose, onCategories }) => {
                         color="white"
                       />
                     </View>
-                  </View>
+                  </Pressable>
                 )}
               />
             </>

@@ -46,6 +46,7 @@
     "react-native-searchbar": "^1.16.0",
     "react-native-share": "^12.2.0",
     "react-native-simple-toast": "^3.3.2",
+    "react-native-sound": "^0.13.0",
     "react-native-sound-player": "^0.14.5",
     "react-native-svg": "^15.13.0",
     "react-native-swift": "^1.2.3",

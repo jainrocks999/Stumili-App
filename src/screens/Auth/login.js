@@ -198,13 +198,15 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    let fcm_token='diijiofdsiudfiiufd'
-      try{ fcm_token = await messaging().getToken();}catch(err){
-        console.log("friir",err);
-        
-      }
+    let fcm_token = 'diijiofdsiudfiiufd';
     try {
-    
+      fcm_token = await messaging().getToken();
+    } catch (err) {
+      console.log('friir', err);
+    }
+
+
+    try {
       if (!fcm_token) {
         Toast.show('Something gone wrong! Please try again. ');
         return;
@@ -225,15 +227,7 @@ const Login = () => {
       formData.append('email', email);
       formData.append('password', password);
       formData.append('fcm_token', fcm_token);
-      console.log('FormData Debugging:');
-      console.log(formData);
-      const debugData = {
-        email: email,
-        password: password,
-        fcm_token: fcm_token,
-      };
-      console.log('Debug Object:', debugData);
-
+    
       const response = await axios.post(
         'https://stimuli.craftsweb.co.in/api/v1/login',
         formData,

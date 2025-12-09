@@ -1,92 +1,133 @@
 // SoundService.ts
-import { NativeModules } from 'react-native';
+import Sound from 'react-native-sound';
 
-// Type definition for native module
-interface ISoundModule {
-  playUrls(urls: string[]): Promise<string>;
-  play(): Promise<string>;
-  pause(): Promise<string>;
-  stop(): Promise<string>;
-  next(): Promise<string>;
-  previous(): Promise<string>;
-  seekTo(position: number): Promise<string>;
+Sound.setCategory('Playback');
 
-  // 🔊 Added volume & fade controls
-  volumeUp(): Promise<string>;
-  volumeDown(): Promise<string>;
-  fadeIn(): Promise<string>;
-  fadeOut(): Promise<string>;
-  setVolume(value:number):Promise<string>;
-  
-}
-
-// Type-safe access
-const { AudioModule } = NativeModules;
-export const soundModule = AudioModule as ISoundModule;
+let currentSound: Sound | null = null;
+let playlist: string[] = [];
+let currentIndex = 0;
+let currentVolume = 1;
 
 //
-// 🎵 Playlist control
+// 🎵 Set Playlist
 //
 export const setPlaylist = async (urls: string[]): Promise<void> => {
   try {
-    await soundModule.playUrls(urls);
-    console.log('✅ Playlist set:', urls);
+    playlist = urls;
+    currentIndex = 0;
+    console.log('✅ Playlist set:', playlist);
   } catch (error) {
     console.error('❌ Error setting playlist:', error);
   }
 };
 
 //
-// ▶️ Playback controls
+// 🔄 Load sound
+//
+const loadSound = (url: string): Promise<Sound> => {
+  return new Promise((resolve, reject) => {
+    const sound = new Sound(url, undefined, (error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(sound);
+      }
+    });
+  });
+};
+
+//
+// ▶️ Play
 //
 export const playAudio = async (): Promise<void> => {
   try {
-    await soundModule.play();
+    if (!playlist.length) return;
+
+    if (currentSound) {
+      currentSound.release();
+    }
+
+    const url = playlist[currentIndex];
+    currentSound = await loadSound(url);
+
+    currentSound.setVolume(currentVolume);
+    currentSound.play((success) => {
+      if (success) {
+        console.log('✅ Finished playing');
+      } else {
+        console.error('❌ Playback failed');
+      }
+    });
+
     console.log('▶️ Playing audio');
   } catch (error) {
     console.error('❌ Error playing audio:', error);
   }
 };
 
+//
+// ⏸️ Pause
+//
 export const pauseAudio = async (): Promise<void> => {
   try {
-    await soundModule.pause();
+    currentSound?.pause();
     console.log('⏸️ Paused audio');
   } catch (error) {
     console.error('❌ Error pausing audio:', error);
   }
 };
 
+//
+// ⏹️ Stop
+//
 export const stopAudio = async (): Promise<void> => {
   try {
-    await soundModule.stop();
+    currentSound?.stop();
     console.log('⏹️ Stopped audio');
   } catch (error) {
     console.error('❌ Error stopping audio:', error);
   }
 };
 
+//
+// ⏭️ Next
+//
 export const nextAudio = async (): Promise<void> => {
   try {
-    await soundModule.next();
+    if (!playlist.length) return;
+
+    currentIndex = (currentIndex + 1) % playlist.length;
+    await playAudio();
     console.log('⏭️ Next track');
   } catch (error) {
-    console.error('❌ Error skipping to next track:', error);
+    console.error('❌ Error playing next track:', error);
   }
 };
 
+//
+// ⏮️ Previous
+//
 export const previousAudio = async (): Promise<void> => {
   try {
-    await soundModule.previous();
+    if (!playlist.length) return;
+
+    currentIndex =
+      (currentIndex - 1 + playlist.length) % playlist.length;
+    await playAudio();
     console.log('⏮️ Previous track');
   } catch (error) {
-    console.error('❌ Error skipping to previous track:', error);
+    console.error('❌ Error playing previous track:', error);
   }
 };
 
+//
+// ⏩ Seek
+//
 export const seekAudio = async (position: number): Promise<void> => {
   try {
-    await soundModule.seekTo(position);
+    if (!currentSound) return;
+
+    currentSound.setCurrentTime(position / 1000); // ms → sec
     console.log(`⏩ Seeked to ${position} ms`);
   } catch (error) {
     console.error('❌ Error seeking audio:', error);
@@ -94,20 +135,25 @@ export const seekAudio = async (position: number): Promise<void> => {
 };
 
 //
-// 🔊 Independent Volume controls
+// 🔊 Volume Up
 //
 export const volumeUp = async (): Promise<void> => {
   try {
-    await soundModule.volumeUp();
+    currentVolume = Math.min(1, currentVolume + 0.1);
+    currentSound?.setVolume(currentVolume);
     console.log('🔊 Volume increased');
   } catch (error) {
     console.error('❌ Error increasing volume:', error);
   }
 };
 
+//
+// 🔉 Volume Down
+//
 export const volumeDown = async (): Promise<void> => {
   try {
-    await soundModule.volumeDown();
+    currentVolume = Math.max(0, currentVolume - 0.1);
+    currentSound?.setVolume(currentVolume);
     console.log('🔉 Volume decreased');
   } catch (error) {
     console.error('❌ Error decreasing volume:', error);
@@ -115,30 +161,57 @@ export const volumeDown = async (): Promise<void> => {
 };
 
 //
-// 🌈 Smooth Fade controls
+// 🌅 Fade In
 //
 export const fadeInAudio = async (): Promise<void> => {
   try {
-    await soundModule.fadeIn();
+    currentVolume = 0;
+    currentSound?.setVolume(0);
+
+    const interval = setInterval(() => {
+      if (currentVolume >= 1) {
+        clearInterval(interval);
+      } else {
+        currentVolume += 0.05;
+        currentSound?.setVolume(currentVolume);
+      }
+    }, 200);
+
     console.log('🌅 Fade-in started');
   } catch (error) {
     console.error('❌ Error during fade-in:', error);
   }
 };
 
+//
+// 🌇 Fade Out
+//
 export const fadeOutAudio = async (): Promise<void> => {
   try {
-    await soundModule.fadeOut();
+    const interval = setInterval(() => {
+      if (currentVolume <= 0) {
+        clearInterval(interval);
+        currentSound?.stop();
+      } else {
+        currentVolume -= 0.05;
+        currentSound?.setVolume(currentVolume);
+      }
+    }, 200);
+
     console.log('🌇 Fade-out started');
   } catch (error) {
     console.error('❌ Error during fade-out:', error);
   }
 };
 
+//
+// 🎚️ Set Volume (0.0 to 1.0)
+//
 export const setVolumeSound = async (value: number): Promise<void> => {
   try {
-    await soundModule.setVolume(value);
-    console.log(`🎚️ Volume set to: ${(value * 100).toFixed(0)}%`);
+    currentVolume = Math.max(0, Math.min(1, value));
+    currentSound?.setVolume(currentVolume);
+    console.log(`🎚️ Volume set to: ${(currentVolume * 100).toFixed(0)}%`);
   } catch (error) {
     console.error('❌ Error setting volume:', error);
   }
