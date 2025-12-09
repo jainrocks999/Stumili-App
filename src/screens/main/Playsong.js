@@ -23,7 +23,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Tts from 'react-native-tts';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Mymodal from '../../components/molecules/Modal';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import {} from 'react-native-gesture-handler';
 import CircularProgress from 'react-native-circular-progress-indicator';
@@ -43,6 +43,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Menu from '../../components/Playlist/Menu';
 import { AffirmationBySelected } from '../../redux/reducer/home';
+
 const data = [
   {
     id: '1',
@@ -69,12 +70,9 @@ const Playsong = ({ route }) => {
     voices,
     ttsStatus,
     selectedVoice,
-
     affirmations,
     readText,
     player,
-
-
     onVoicePress,
     handlePlayPauseClick,
     visibleIndex,
@@ -82,11 +80,18 @@ const Playsong = ({ route }) => {
     flatListRef,
     reset,
   } = useContext(MusicPlayerContext);
-  useEffect(() => {
-    reset();
-  }, []);
+  const { poupu } = route?.params || {};
+
   const dispatch = useDispatch();
-  // const flatListRef = useRef(null);
+  useEffect(() => {
+    if (!poupu) {
+      setIsPaused(true);
+      reset();
+      setTimeout(() => {
+        setIsPaused(false);
+      }, 1000);
+    }
+  }, []);
   const [bgVolume, setBgVolume] = useState(0.1);
 
   const navigation = useNavigation();
@@ -135,15 +140,16 @@ const Playsong = ({ route }) => {
       });
     }
   };
-
-  const currentTimeRef = useRef(0);
-
+  const foccusr = useIsFocused();
   useEffect(() => {
     player('Sleeping.wav');
-    Tts.setDefaultPitch(1);
-    Tts.setDefaultRate(0.35);
-    setIsPaused(false);
-  }, []);
+    Tts.setDefaultPitch(0.9);
+    Tts.setDefaultRate(0.30);
+
+    if (progress === 0) {
+      setIsPaused(true);
+    }
+  }, [foccusr]);
 
   const path = Platform.select({
     android: 'asset:/files/',
@@ -151,9 +157,9 @@ const Playsong = ({ route }) => {
   });
 
   const setVovluem = async value => {
-    // await TrackPlayer.setVolume(value);
     setBgVolume(value);
   };
+
   const getmodified = (array, indexs, bool) => {
     return array.map((item, index) => {
       if (index == indexs) {
@@ -183,6 +189,7 @@ const Playsong = ({ route }) => {
       data: modified,
     });
   };
+
   const removeFavroit = async (item, index) => {
     const items = await storage.getMultipleItems([
       storage.TOKEN,
@@ -202,11 +209,25 @@ const Playsong = ({ route }) => {
       data: modified,
     });
   };
+
   const [selectIndex, setSelectedIndex] = useState(-1);
+
   const onRepeat = () => {
-    setVisibleIndex(0);
-    setProgress(0);
+    // Use context's reset function instead of manually setting states
+    reset();
   };
+
+  // Fix the onViewableItemsChanged function
+  const onViewableItemsChanged = async ({ viewableItems }) => {
+    if (viewableItems.length > 0) {
+      const newIndex = viewableItems[0].index;
+      if (newIndex !== visibleIndex) {
+        setIsPaused(false)
+        setVisibleIndex(newIndex);
+      }
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
@@ -308,20 +329,25 @@ const Playsong = ({ route }) => {
               <TouchableOpacity
                 style={{ zIndex: 2 }}
                 onPress={() => {
-                  !affirmations[visibleIndex].is_favorite
-                    ? handleHeartPress(affirmations[visibleIndex], visibleIndex)
-                    : removeFavroit(affirmations[visibleIndex], visibleIndex);
+                  if (affirmations && affirmations[visibleIndex]) {
+                    !affirmations[visibleIndex].is_favorite
+                      ? handleHeartPress(
+                          affirmations[visibleIndex],
+                          visibleIndex,
+                        )
+                      : removeFavroit(affirmations[visibleIndex], visibleIndex);
+                  }
                 }}
               >
                 <FontAwesome
                   name={
-                    affirmations[visibleIndex]?.is_favorite
+                    affirmations && affirmations[visibleIndex]?.is_favorite
                       ? 'heart'
                       : 'heart-o'
                   }
                   size={30}
                   color={
-                    affirmations[visibleIndex]?.is_favorite
+                    affirmations && affirmations[visibleIndex]?.is_favorite
                       ? '#B72658'
                       : 'white'
                   }
@@ -354,67 +380,73 @@ const Playsong = ({ route }) => {
             </View>
 
             <View style={{ height: hp(100) }}>
-              <FlatList
-                ref={flatListRef}
-                pagingEnabled
-                initialScrollIndex={0}
-                showsVerticalScrollIndicator={false}
-                data={affirmations}
-                renderItem={({ item, index }) =>
-                  true ? (
-                    <View style={{ height: hp(100) }}>
-                      <Menu
-                        onClose={() => {
-                          setSelectedIndex(-1);
-                        }}
-                        selectedItem={item}
-                        visible={index == selectIndex}
-                        selectedIndex={index}
-                        affirmations={affirmations}
-                        loading={false}
-                      />
-                      <View
-                        style={{
-                          justifyContent: 'center',
-                          alignSelf: 'center',
-                          alignItems: 'center',
-                          flexDirection: 'column',
-                          width: wp(70),
-                          position: 'absolute',
-                          top: '10%',
-                        }}
-                      >
-                        <Text numberOfLines={5} style={styles.text}>
-                          {item?.affirmation_text}
-                        </Text>
+              {affirmations && affirmations.length > 0 ? (
+                <FlatList
+                  ref={flatListRef}
+                  pagingEnabled
+                  initialScrollIndex={0}
+                  showsVerticalScrollIndicator={false}
+                  data={affirmations}
+                  renderItem={({ item, index }) =>
+                    true ? (
+                      <View style={{ height: hp(100) }}>
+                        <Menu
+                          onClose={() => {
+                            setSelectedIndex(-1);
+                          }}
+                          selectedItem={item}
+                          visible={index == selectIndex}
+                          selectedIndex={index}
+                          affirmations={affirmations}
+                          loading={false}
+                        />
+                        <View
+                          style={{
+                            justifyContent: 'center',
+                            alignSelf: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            width: wp(70),
+                            position: 'absolute',
+                            top: '10%',
+                          }}
+                        >
+                          <Text numberOfLines={5} style={styles.text}>
+                            {item?.affirmation_text}
+                          </Text>
+                        </View>
                       </View>
-                    </View>
-                  ) : (
-                    <View style={{ height: hp(100) }} />
-                  )
-                }
-                keyExtractor={(item, index) => index.toString()}
-                onViewableItemsChanged={async ({ viewableItems, changed }) => {
-                  const newIndex = viewableItems[0].index;
-                  readText(affirmations[newIndex].affirmation_text); // Read text when view changes
-                  setVisibleIndex(newIndex);
-                  setIsPaused(false);
-                  if (isPaused & (progress >= 100)) {
-                    console.log('here');
-                    setProgress(0);
-                    currentTimeRef.current = 0;
+                    ) : (
+                      <View style={{ height: hp(100) }} />
+                    )
                   }
-                }}
-                onScrollToIndexFailed={info => {
-                  const wait = new Promise(resolve => setTimeout(resolve, 500));
-                  wait.then(() => {
-                    flatListRef.current?.scrollToIndex({
-                      index: info.index,
-                      animated: true,
+                  keyExtractor={(item, index) => index.toString()}
+                  onViewableItemsChanged={onViewableItemsChanged}
+                  onScrollToIndexFailed={info => {
+                    const wait = new Promise(resolve =>
+                      setTimeout(resolve, 500),
+                    );
+                    wait.then(() => {
+                      flatListRef.current?.scrollToIndex({
+                        index: info.index,
+                        animated: true,
+                      });
                     });
-                  });
-                }}
-              />
+                  }}
+                />
+              ) : (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={{ color: 'white', fontSize: hp(2.5) }}>
+                    No affirmations available
+                  </Text>
+                </View>
+              )}
             </View>
             <TouchableOpacity
               onPress={() => handlePlayPauseClick()}
@@ -458,7 +490,6 @@ const Playsong = ({ route }) => {
             <View
               style={{
                 alignItems: 'center',
-
                 height: hp(10),
                 width: wp(100),
                 position: 'absolute',
@@ -550,5 +581,13 @@ const styles = StyleSheet.create({
     width: wp(70),
     textAlign: 'center',
     fontFamily: fonts.medium,
+  },
+  highlightedWord: {
+    backgroundColor: '#B72658',
+    color: '#FFFFFF',
+    borderRadius: 4,
+    // Add some padding for better visibility
+    paddingHorizontal: 2,
+    marginHorizontal: -1, // Compensate for padding
   },
 });

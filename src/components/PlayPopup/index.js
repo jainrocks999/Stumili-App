@@ -31,7 +31,7 @@ const PlayPopup = () => {
       }}>
       <TouchableOpacity
         activeOpacity={0.7}
-        onPress={() => navigation.navigate('playsong')}
+        onPress={() => navigation.navigate('playsong',{poupu:true})}
         style={{marginLeft: '5%', flexDirection: 'row'}}>
         <View style={{elevation: 2, shadowColor: '#fff'}}>
           <Image
