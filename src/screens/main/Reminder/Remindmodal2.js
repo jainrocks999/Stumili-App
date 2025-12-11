@@ -192,7 +192,7 @@ const Remindmodal2 = ({ onPress, selectedReminder }) => {
     const apiData = {
       token,
       data: {
-        user_id: 1,
+        user_id: user_id,
         affirmation_id: 1,
         playlist_id: 1,
         start_at: `${dateStr} ${currentTime1}:00`,

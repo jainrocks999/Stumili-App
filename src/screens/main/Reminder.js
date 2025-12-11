@@ -109,11 +109,11 @@ const Reminder = () => {
   useEffect(() => {
     getAllReminders(true);
   }, []);
-  const [toggleLoading, setToggleLoading] = useState(false);
+  const [toggleLoading, setToggleLoading] = useState(-1);
 
-  const handleToggle = async item => {
+  const handleToggle = async (item,index) => {
     try {
-      setToggleLoading(true);
+      setToggleLoading(index);
       const token = await storage.getItem(storage.TOKEN);
       const response = await Api.API_POST_JSON({
         token: token,
@@ -129,7 +129,7 @@ const Reminder = () => {
       console.log('this is eorroro');
     } finally {
       setTimeout(() => {
-        setToggleLoading(false);
+        setToggleLoading(-1);
       }, 1000);
     }
   };
@@ -180,7 +180,7 @@ const Reminder = () => {
           data={reminders}
           pagingEnabled={false}
           keyExtractor={item => item?.id}
-          renderItem={({ item }) => {
+          renderItem={({ item,index }) => {
             const dayKeys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
             const selectedDays = dayKeys.filter(day => item[day] == 1);
             return (
@@ -273,7 +273,7 @@ const Reminder = () => {
                           : selectedDays.join(', ')
                       }`}
                     </Text>
-                    {toggleLoading ? (
+                    {toggleLoading==index ? (
                       <ActivityIndicator size={'small'} color={'#B72658'} />
                     ) : (
                       <ToggleSwitch
@@ -282,7 +282,7 @@ const Reminder = () => {
                         circleColor={item?.r_status ? '#B72658' : '#191919'}
                         offColor="#DEDEDE"
                         size="medium"
-                        onToggle={() => handleToggle(item)}
+                        onToggle={() => handleToggle(item,index)}
                       />
                     )}
                   </View>

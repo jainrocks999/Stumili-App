@@ -79,7 +79,7 @@
 
 // export default Signup;
 import React, { useState } from 'react';
-import { View, Text, Alert } from 'react-native';
+import { View, Text, Alert, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import Background from './compoents/Background';
@@ -91,6 +91,7 @@ import Social from './compoents/Social';
 import { fonts } from '../../Context/Conctants';
 import Toast from 'react-native-simple-toast';
 import storage from '../../utils/StorageService';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Signup = () => {
   const navigation = useNavigation();
@@ -113,21 +114,21 @@ const Signup = () => {
     data.append('name', name);
     data.append('email', email);
     data.append('password', password);
-    data.append('password_confirmation', confirmPassword); 
+    data.append('password_confirmation', confirmPassword);
 
     let config = {
       method: 'post',
       url: 'https://stimuli.craftsweb.co.in/api/v1/registration',
       headers: {
         'Content-Type': 'multipart/form-data',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
       data: data,
     };
 
     axios
       .request(config)
-      .then(async (response) => {
+      .then(async response => {
         console.log('Response:', response.data);
         if (response.data?.status) {
           Toast.show('Signup Successful! Please login.');
@@ -136,55 +137,73 @@ const Signup = () => {
           Toast.show(response.data?.message || 'Signup failed');
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('Signup Error:', error?.response?.data || error);
         if (error.response?.data?.errors) {
-          Toast.show(error.response.data.errors.join('\n')); 
+          Toast.show(error.response.data.errors.join('\n'));
         } else {
-          console.log("this is the eror",error);
-          
+          console.log('this is the eror', error);
+
           Toast.show('Signup error! Please try again.');
         }
       });
   };
 
-
   return (
     <Background>
-      <Intro title1="Empower" title2="Yourself Now" title3="Let's get you Signed Up" />
-      <View style={{ alignItems: 'center' }}>
-        <Input
-          placeholder="Enter your name"
-          onChangeText={(text) => setName(text)}
+      <SafeAreaView style={{flex:1}}>
+      <ScrollView style={{ flexGrow: 1 }}>
+        <Intro
+          title1="Empower"
+          title2="Yourself Now"
+          title3="Let's get you Signed Up"
         />
-        <Input
-          placeholder="Your Email"
-          keyboardType="email-address"
-          onChangeText={(text) => setEmail(text)}
-        />
-        <Input
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={(text) => setPassword(text)}
-        />
-        <Input
-          placeholder="Confirm Password"
-          secureTextEntry={true}
-          underlineColorAndroid="transparent"
-          onChangeText={text => setConfirmPassword(text)} 
-        />
-        <Buttun title="Sign Up" onPress={handleSignup} />
-      </View>
-      <Line />
-      <View style={{ alignItems: 'center', marginTop: '7%' }}>
-        <Social />
-      </View>
-      <Text style={{ alignSelf: 'center', marginTop: '5%', color: 'white', fontFamily: fonts.medium }}>
-        Already have an account?{' '}
-        <Text onPress={() => navigation.navigate('login')} style={{ color: '#B72658', fontSize: 16, fontWeight: '500' }}>
-          Sign In
+
+        <View style={{ alignItems: 'center',marginTop:-40 }}>
+          <Input
+            placeholder="Enter your name"
+            onChangeText={text => setName(text)}
+          />
+          <Input
+            placeholder="Your Email"
+            keyboardType="email-address"
+            onChangeText={text => setEmail(text)}
+          />
+          <Input
+            placeholder="Password"
+            secureTextEntry={true}
+            onChangeText={text => setPassword(text)}
+          />
+          <Input
+            placeholder="Confirm Password"
+            secureTextEntry={true}
+            underlineColorAndroid="transparent"
+            onChangeText={text => setConfirmPassword(text)}
+          />
+          <Buttun title="Sign Up" onPress={handleSignup} />
+        </View>
+        <Line />
+        <View style={{ alignItems: 'center', marginTop: '7%' }}>
+          <Social />
+        </View>
+        <Text
+          style={{
+            alignSelf: 'center',
+            marginTop: '5%',
+            color: 'white',
+            fontFamily: fonts.medium,
+          }}
+        >
+          Already have an account?{' '}
+          <Text
+            onPress={() => navigation.navigate('login')}
+            style={{ color: '#B72658', fontSize: 16, fontWeight: '500' }}
+          >
+            Sign In
+          </Text>
         </Text>
-      </Text>
+      </ScrollView>
+      </SafeAreaView>
     </Background>
   );
 };
